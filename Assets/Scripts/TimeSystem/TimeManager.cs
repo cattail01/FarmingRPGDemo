@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Enums;
 
-public class TimeManager: SingletonMonoBehavior<TimeManager>
+public class TimeManager : SingletonMonoBehavior<TimeManager>
 {
     private int gameYear = 1;
     private Season gameSeason = Season.Spring;
@@ -78,7 +78,7 @@ public class TimeManager: SingletonMonoBehavior<TimeManager>
 
                         int gs = (int)gameSeason;
                         ++gs;
-                        gameSeason = (Season) gs;
+                        gameSeason = (Season)gs;
 
                         if (gs > 3)
                         {
@@ -98,7 +98,15 @@ public class TimeManager: SingletonMonoBehavior<TimeManager>
                     EventHandler.CallAdvanceGameDayEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour,
                         gameMinute, gameSecond);
                 }
+                EventHandler.CallAdvanceGameHourEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
+
             }
+            EventHandler.CallAdvanceGAmeMinuteEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
+            Debug.Log(
+                $"GameYear: {gameYear}\tGameSeason: {gameSeason.ToString()}\t" +
+                $"GameDay: {gameDay}\tGameDayOfWeek: " +
+                $"{gameDayOfWeek}\tGameHour: {gameHour}\tGameMinute: {gameMinute}");
+
         }
     }
 

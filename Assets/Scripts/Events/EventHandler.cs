@@ -81,6 +81,20 @@ public static class EventHandler
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public static event Action<int, Season, int, string, int, int, int> AdvanceGameHourEvent;
+
+    public static void CallAdvanceGameHourEvent(int gameYear, Season gameSeason, int gameDay, string gameDayOfWeek,
+        int gameHour, int gameMinute, int gameSecond)
+    {
+        if (AdvanceGameHourEvent != null)
+        {
+            AdvanceGameHourEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
+        }
+    }
+
     public static event Action<int, Season, int, string, int, int, int> AdvanceGameDayEvent;
 
     public static void CallAdvanceGameDayEvent(int gameYear, Season gameSeason, int gameDay, string gameDayOfWeek,
@@ -113,6 +127,4 @@ public static class EventHandler
             AdvanceGameYearEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
         }
     }
-
-
 }
