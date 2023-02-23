@@ -3,6 +3,8 @@ using Enums;
 
 public class TimeManager : SingletonMonoBehavior<TimeManager>
 {
+    #region 时间相关参数
+
     private int gameYear = 1;
     private Season gameSeason = Season.Spring;
     private int gameDay = 1;
@@ -11,6 +13,8 @@ public class TimeManager : SingletonMonoBehavior<TimeManager>
     private int gameSecond = 0;
 
     private string gameDayOfWeek = "Mon";
+
+    #endregion
 
     // 游戏时钟是否暂停
     private bool gameClockPaused = false;
@@ -43,10 +47,15 @@ public class TimeManager : SingletonMonoBehavior<TimeManager>
     /// </summary>
     private void GameTick()
     {
+        // 统计增加时间
         gameTick += Time.deltaTime;
+
+        // 如果时间超出指定时间
         if (gameTick >= Settings.SecondsPerGameSecond)
         {
+            // 将计时器回拨指定时间（最精准的做法）
             gameTick -= Settings.SecondsPerGameSecond;
+            // 更新游戏时间
             UpdateGameSecond();
         }
     }
@@ -86,6 +95,13 @@ public class TimeManager : SingletonMonoBehavior<TimeManager>
                             gameSeason = (Season)gs;
 
                             ++gameYear;
+
+                            // 重新调整年份
+                            if (gameYear > 99999)
+                            {
+                                gameYear = 1;
+                            }
+
                             EventHandler.CallAdvanceGameYearEvent(gameYear, gameSeason, gameDay, gameDayOfWeek,
                                 gameHour, gameMinute, gameSecond);
                         }
@@ -102,14 +118,18 @@ public class TimeManager : SingletonMonoBehavior<TimeManager>
 
             }
             EventHandler.CallAdvanceGAmeMinuteEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
-            Debug.Log(
-                $"GameYear: {gameYear}\tGameSeason: {gameSeason.ToString()}\t" +
-                $"GameDay: {gameDay}\tGameDayOfWeek: " +
-                $"{gameDayOfWeek}\tGameHour: {gameHour}\tGameMinute: {gameMinute}");
+            //Debug.Log(
+            //    $"GameYear: {gameYear}\tGameSeason: {gameSeason.ToString()}\t" +
+            //    $"GameDay: {gameDay}\tGameDayOfWeek: " +
+            //    $"{gameDayOfWeek}\tGameHour: {gameHour}\tGameMinute: {gameMinute}");
 
         }
     }
 
+    /// <summary>
+    /// 当天位于星期几
+    /// </summary>
+    /// <returns>星期数（字符串）</returns>
     private string GetDayOfWeek()
     {
         int totalDay = (((int)gameSeason) * 30) + gameDay;
@@ -134,4 +154,30 @@ public class TimeManager : SingletonMonoBehavior<TimeManager>
                 return "";
         }
     }
+
+    #region 时间加速器(仅用于测试)
+
+    /// <summary>
+    /// 前进1个游戏分钟
+    /// </summary>
+    public void TestAdvanceGameMinute()
+    {
+        for (int i = 0; i < 60; ++i)
+        {
+            UpdateGameSecond();
+        }
+    }
+
+    /// <summary>
+    /// 前进一个游戏日
+    /// </summary>
+    public void TestAdvanceGameDay()
+    {
+        for (int i = 0; i < 86400; ++i)
+        {
+            UpdateGameSecond();
+        }
+    }
+
+    #endregion
 }
