@@ -71,7 +71,7 @@ public class GameClock : MonoBehaviour
 		string time = string.Format("{0:00}:{1:00} {2}", gameHour, gameMinute, ampm);
 		string date = string.Format("{0}. {1}", gameDayOfWeek, gameDay);
 		string season = gameSeason.ToString();
-		string year = $"Year + {gameYear}";
+		string year = $"Year {gameYear}";
 
 		// 将时间投放到显示区域
 		timeText.text = time;

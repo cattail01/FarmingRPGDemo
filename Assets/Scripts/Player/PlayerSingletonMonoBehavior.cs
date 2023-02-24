@@ -134,6 +134,9 @@ public class PlayerSingletonMonoBehavior :
     {
         PlayerMovementInput();
         PlayerWalkInput();
+
+        // 用于测试游戏状态的输入
+        PlayerTestInput();
     }
 
     private void PlayerMovementInput()
@@ -327,4 +330,22 @@ public class PlayerSingletonMonoBehavior :
     }
 
     #endregion animator override controller 相关部分
+
+    #region 游戏时间控制（加速）
+
+    // todo remove
+    private void PlayerTestInput()
+    {
+        if (Input.GetKey(KeyCode.T))
+        {
+            TimeManager.Instance.TestAdvanceGameMinute();
+        }
+
+        if (Input.GetKey(KeyCode.G))
+        {
+            TimeManager.Instance.TestAdvanceGameDay();
+        }
+    }
+
+    #endregion
 }
