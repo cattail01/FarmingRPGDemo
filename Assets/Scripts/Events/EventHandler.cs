@@ -33,7 +33,6 @@ public static class EventHandler
         bool isPickingRight, bool isPickingLeft, bool isPickingUp, bool isPickingDown,
         bool isSwingingToolRight, bool isSwingingToolLeft, bool isSwingingToolUp, bool isSwingingToolDown,
         bool idleRight, bool idleLeft, bool idleUp, bool idleDown
-
     )
     {
         if (MovementEvent != null)
@@ -81,9 +80,8 @@ public static class EventHandler
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    #region 游戏事件系统事件
+
     public static event Action<int, Season, int, string, int, int, int> AdvanceGameHourEvent;
 
     public static void CallAdvanceGameHourEvent(int gameYear, Season gameSeason, int gameDay, string gameDayOfWeek,
@@ -127,4 +125,52 @@ public static class EventHandler
             AdvanceGameYearEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
         }
     }
+
+    #endregion
+
+    #region 游戏场景加载事件，属于游戏场景加载系统模块，供全局注册
+
+    // 定义场景卸载淡出之前的事件
+    public static event Action BeforeSceneUnloadFadeOutEvent;
+
+    // 调用场景卸载淡出之前的事件
+    public static void CallBeforeSceneUnloadFadeOutEvent()
+    {
+        if (BeforeSceneUnloadFadeOutEvent == null)
+        {
+            return;
+        }
+
+        BeforeSceneUnloadFadeOutEvent();
+    }
+
+    // 定义场景加载前的事件
+    public static event Action BeforeSceneUnloadEvent;
+
+    // 调用场景加载前的事件
+    public static void CallBeforeSceneUnloadEvent()
+    {
+        if (BeforeSceneUnloadEvent == null)
+        {
+            return;
+        }
+
+        BeforeSceneUnloadEvent();
+    }
+
+    // 定义场景加载后的事件
+    public static event Action AfterSceneUnloadEvent;
+
+    // 调用场景加载后的事件
+    public static void CallAfterSceneUnloadEvent()
+    {
+        if (AfterSceneUnloadEvent == null)
+        {
+            return;
+        }
+        AfterSceneUnloadEvent();
+    }
+
+
+    #endregion 游戏场景加载事件
 }

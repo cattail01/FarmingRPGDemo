@@ -110,6 +110,8 @@
         Count
     }
 
+    #region 游戏时间系统
+
     // 季节
     public enum Season
     {
@@ -120,4 +122,17 @@
         None,
         Count
     }
+
+    #endregion
+
+    #region 游戏场景控制
+
+    public enum SceneName
+    {
+        Scene1_Frame,
+        Scene2_Field,
+        Scene3_Cabin,
+    }
+
+    #endregion
 }
