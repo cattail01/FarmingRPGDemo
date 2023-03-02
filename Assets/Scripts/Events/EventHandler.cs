@@ -129,6 +129,7 @@ public static class EventHandler
     #endregion
 
     #region 游戏场景加载事件，属于游戏场景加载系统模块，供全局注册
+    // test
 
     // 定义场景卸载淡出之前的事件
     public static event Action BeforeSceneUnloadFadeOutEvent;
@@ -174,3 +175,5 @@ public static class EventHandler
 
     #endregion 游戏场景加载事件
 }
+
+
