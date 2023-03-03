@@ -1,5 +1,5 @@
-using UnityEngine;
 using Cinemachine;
+using UnityEngine;
 
 /// <summary>
 /// <para>切换限制地图边界的形状</para>
@@ -10,10 +10,28 @@ using Cinemachine;
 [RequireComponent(typeof(CinemachineConfiner))]
 public class SwitchConfineBoundingShape : MonoBehaviour
 {
-    private void Start()
+
+    private void Awake()
     {
-        SwitchBoundingShape();
+
     }
+
+    //private void Start()
+    //{
+    //    SwitchBoundingShape();
+    //}
+
+    private void OnEnable()
+    {
+        EventHandler.AfterSceneLoadEvent += SwitchBoundingShape;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.AfterSceneLoadEvent -= SwitchBoundingShape;
+    }
+
+
 
     /// <summary>
     /// 切换地图边缘碰撞器

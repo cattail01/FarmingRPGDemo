@@ -32,6 +32,22 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private void Start()
     {
         mainCamera = Camera.main;
+        //parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
+    }
+
+    private void OnEnable()
+    {
+        EventHandler.AfterSceneLoadEvent += SceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.AfterSceneLoadEvent -= SceneLoaded;
+    }
+
+    // 定义场景加载函数，注册事件
+    public void SceneLoaded()
+    {
         parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
     }
 

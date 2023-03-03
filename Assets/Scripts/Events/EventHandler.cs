@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Enums;
+using UnityEngine.Events;       // for UnityEvent
 
 public delegate void MovementDelegate
 (
@@ -129,7 +130,6 @@ public static class EventHandler
     #endregion
 
     #region 游戏场景加载事件，属于游戏场景加载系统模块，供全局注册
-    // test
 
     // 定义场景卸载淡出之前的事件
     public static event Action BeforeSceneUnloadFadeOutEvent;
@@ -145,10 +145,10 @@ public static class EventHandler
         BeforeSceneUnloadFadeOutEvent();
     }
 
-    // 定义场景加载前的事件
+    // 定义场景卸载前的事件
     public static event Action BeforeSceneUnloadEvent;
 
-    // 调用场景加载前的事件
+    // 调用场景卸载前的事件
     public static void CallBeforeSceneUnloadEvent()
     {
         if (BeforeSceneUnloadEvent == null)
@@ -159,10 +159,10 @@ public static class EventHandler
         BeforeSceneUnloadEvent();
     }
 
-    // 定义场景加载后的事件
+    // 定义场景卸载后的事件
     public static event Action AfterSceneUnloadEvent;
 
-    // 调用场景加载后的事件
+    // 调用场景卸载后的事件
     public static void CallAfterSceneUnloadEvent()
     {
         if (AfterSceneUnloadEvent == null)
@@ -172,6 +172,29 @@ public static class EventHandler
         AfterSceneUnloadEvent();
     }
 
+    // 定义场景卸载前的事件
+    public static event Action AfterSceneLoadEvent;
+
+    // 调用场景卸载后的事件
+    public static void CallAfterSceneLoadEvent()
+    {
+        if (AfterSceneLoadEvent != null)
+        {
+            AfterSceneLoadEvent();
+        }
+    }
+
+    // 定义场景加载淡入事件
+    public static event Action AfterSceneLoadFadeInEvent;
+
+    // 调用场景加载淡入事件
+    public static void CallAfterSceneLoadFadeInEvent()
+    {
+        if (AfterSceneLoadEvent != null)
+        {
+            AfterSceneLoadEvent();
+        }
+    }
 
     #endregion 游戏场景加载事件
 }

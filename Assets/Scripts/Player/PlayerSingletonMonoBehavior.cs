@@ -331,21 +331,29 @@ public class PlayerSingletonMonoBehavior :
 
     #endregion animator override controller 相关部分
 
-    #region 游戏时间控制（加速）
+    #region 游戏输入测试
 
     // todo remove
     private void PlayerTestInput()
     {
+        // 按t键加快分钟
         if (Input.GetKey(KeyCode.T))
         {
             TimeManager.Instance.TestAdvanceGameMinute();
         }
 
+        // 按g键加快年份
         if (Input.GetKey(KeyCode.G))
         {
             TimeManager.Instance.TestAdvanceGameDay();
         }
+
+        // 按l测试场景切换
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(), transform.position);
+        }
     }
 
-    #endregion
+    #endregion 游戏输入测试
 }
