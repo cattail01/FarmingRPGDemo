@@ -67,12 +67,12 @@ public class UIInventoryBar : MonoBehaviour
         Vector2 playerPositionToScreen = player.GetPlayerViewPositionOfMainCamera();
         print(playerPositionToScreen.y);
         // 如果玩家的y的位置不在下面，并且inventory bar在上面(不在底部)，将bar再移动回来
-        if (!IsInventoryBarPositionButton && playerPositionToScreen.y > 0.1f)
+        if (!IsInventoryBarPositionButton && playerPositionToScreen.y > 0.3f)
         {
             InventoryBarToButton();
         }
         // 如果玩家的y的位置在下面，并且inventory bar在下面，将bar移动到上面去
-        else if (IsInventoryBarPositionButton && playerPositionToScreen.y <= 0.1f)
+        else if (IsInventoryBarPositionButton && playerPositionToScreen.y <= 0.3f)
         {
             InventoryBarToTop();
         }

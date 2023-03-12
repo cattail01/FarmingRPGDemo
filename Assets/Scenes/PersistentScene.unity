@@ -488,7 +488,7 @@ MonoBehaviour:
   fadeDuration: 1
   faderCanvasGroup: {fileID: 571347994}
   faderImage: {fileID: 571347995}
-  StartingSceneName: 0
+  StartingSceneName: 1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +568,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.93, y: -20.3, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1331,7 +1331,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1520483331}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.93, y: -20.3, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1748,11 +1748,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1106007553010341400, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.93
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1106007553010341400, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -20.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1106007553010341400, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
       propertyPath: m_LocalPosition.z
