@@ -84,7 +84,6 @@ GameObject:
   - component: {fileID: 4209993649992494972}
   - component: {fileID: 2028982580095737306}
   - component: {fileID: 2917205118206571099}
-  - component: {fileID: 8311547441661254790}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -188,45 +187,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equippedItemSpriteRenderer: {fileID: 8910318271579362772}
---- !u!114 &8311547441661254790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 449401826503653934}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3e61b317d9506a42a849b9e45288ec8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputX: 0
-  inputY: 0
-  isWalking: 0
-  isRunning: 0
-  isIdle: 0
-  isCarrying: 0
-  toolEffect: 0
-  isUsingToolRight: 0
-  isUsingToolLeft: 0
-  isUsingToolUp: 0
-  isUsingToolDown: 0
-  isLiftingToolRight: 0
-  isLiftingToolLeft: 0
-  isLiftingToolUp: 0
-  isLiftingToolDown: 0
-  isSwingingToolRight: 0
-  isSwingingToolLeft: 0
-  isSwingingToolUp: 0
-  isSwingingToolDown: 0
-  isPickingRight: 0
-  isPickingLeft: 0
-  isPickingUp: 0
-  isPickingDown: 0
-  idleUp: 0
-  idleDown: 0
-  idleLeft: 0
-  idleRight: 0
 --- !u!1 &3028056054459234987
 GameObject:
   m_ObjectHideFlags: 0
