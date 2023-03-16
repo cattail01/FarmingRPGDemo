@@ -1,5 +1,4 @@
-using Enums;
-using Unity.Mathematics;
+锘縰sing Enums;
 using UnityEngine;
 
 /// <summary>
@@ -38,7 +37,7 @@ public class SceneTeleport : MonoBehaviour
         }
 
         // calculate player's position
-        // 检查定义好的场景位置，如果该位置为0，则将该位置设置为玩家位置；否则则设置为场景位置
+        // 妫�鏌ュ畾涔夊ソ鐨勫満鏅綅缃紝濡傛灉璇ヤ綅缃负0锛屽垯灏嗚浣嶇疆璁剧疆涓虹帺瀹朵綅缃紱鍚﹀垯鍒欒缃负鍦烘櫙浣嶇疆
         float xPosition = Mathf.Approximately(scenePositionGoto.x, 0f)
             ? player.transform.position.x
             : scenePositionGoto.x;
