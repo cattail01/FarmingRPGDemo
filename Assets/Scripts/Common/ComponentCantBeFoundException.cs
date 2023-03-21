@@ -1,9 +1,16 @@
 ﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// 组件无法找到的报错
+/// </summary>
+/// <remarks>
+/// <para>继承自Exception</para>
+/// </remarks>
 public class ComponentCantBeFoundException : Exception
 {
-    //private string massage;
+    // 消息
+    // private string massage;
     public string Massage { get; set; }
 
     public ComponentCantBeFoundException() : base()

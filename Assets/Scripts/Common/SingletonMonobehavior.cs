@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 // ? 不推荐使用单例类型
 // ? 如果想要升级到多人游戏，则单例类可能会失效
@@ -9,7 +9,7 @@ using UnityEngine;
 /// 抽象单例组件
 /// </summary>
 /// <typeparam name="T" type="MonoBehaviour">实现组件的类自己的类型</typeparam>
-public class SingletonMonoBehavior<T> : MonoBehaviour
+public abstract class SingletonMonoBehavior<T> : MonoBehaviour
     where T : MonoBehaviour
 {
     public static T Instance;

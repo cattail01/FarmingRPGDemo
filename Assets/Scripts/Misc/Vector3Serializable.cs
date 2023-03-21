@@ -2,7 +2,7 @@
 
 
 /// <summary>
-/// Vector 3 serializable class
+/// 可序列化的vector3类
 /// </summary>
 /// <remarks>
 /// serializable

@@ -1,11 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Enums;
 
 
 /// <summary>
-/// 描述动画类型的ScriptableObject类（数据类）
-/// 让我们可以在editor中设置动画的类型，以及在代码中读取
+/// 描述动画类型的类
 /// </summary>
+/// <remarks>
+/// <para>继承自ScriptableObject</para>
+/// </remarks>
 [CreateAssetMenu(fileName = "so_AnimationType", menuName = "ScriptableObject/Animation/AnimationType")]
 public class SO_AnimationType : ScriptableObject
 {

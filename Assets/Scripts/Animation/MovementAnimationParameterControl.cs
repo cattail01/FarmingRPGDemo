@@ -1,5 +1,12 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 移动动画参数控制类
+/// </summary>
+/// <remarks>
+/// <para>继承自MonoBehaviour，给动画的每个部分添加该脚本</para>
+/// <para>主角的每个部分的动画控制</para>
+/// </remarks>
 public class MovementAnimationParameterControl : MonoBehaviour
 {
     private Animator animator;

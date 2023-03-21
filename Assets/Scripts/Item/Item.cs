@@ -1,7 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// 物品类
+/// </summary>
 public class Item : MonoBehaviour
 {
+    // 物品编号
     [ItemCodeDescription]
     [SerializeField]
     private int _itemCode;
@@ -12,6 +16,9 @@ public class Item : MonoBehaviour
         set => _itemCode = value;
     }
 
+    /// <summary>
+    /// 物品的精灵渲染组件
+    /// </summary>
     private SpriteRenderer spriteRenderer;
 
     private void Awake()
@@ -27,17 +34,25 @@ public class Item : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 使用填好的资料自动初始化item
+    /// </summary>
+    /// <param name="itemCodeParam">用于初始化item的物品编号</param>
     public void Init(int itemCodeParam)
     {
-        if (itemCodeParam != 0)
+        if (itemCodeParam == 0)
         {
-            ItemCode = itemCodeParam;
-            ItemDetails itemDetails = InventoryManager.Instance.GetItemDetailsByItemCode(ItemCode);
-            spriteRenderer.sprite = itemDetails.ItemSprite;
-            if (itemDetails.ItemType == Enums.ItemType.ReapableScenery)
-            {
-                gameObject.AddComponent<ItemNudge>();
-            }
+            return;
         }
+
+        ItemCode = itemCodeParam;
+
+        ItemDetails itemDetails = InventoryManager.Instance.GetItemDetailsByItemCode(ItemCode);
+        spriteRenderer.sprite = itemDetails.ItemSprite;
+        if (itemDetails.ItemType == Enums.ItemType.ReapableScenery)
+        {
+            gameObject.AddComponent<ItemNudge>();
+        }
+
     }
 }

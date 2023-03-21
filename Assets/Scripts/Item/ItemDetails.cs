@@ -1,10 +1,9 @@
-using Enums;
+﻿using Enums;
 using UnityEngine;
 
 /// <summary>
 /// 物品的细节类
 /// </summary>
-
 [System.Serializable]
 public class ItemDetails
 {

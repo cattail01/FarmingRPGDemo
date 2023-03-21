@@ -19,10 +19,12 @@ public delegate void MovementDelegate
 
 public static class EventHandler
 {
-    // movement event
+    #region 移动事件
+
+    // 移动事件
     public static event MovementDelegate MovementEvent;
 
-    // movement event call for publisher
+    // 定义调用移动事件的方法
     public static void CallMovementEvent
     (
         float inputX, float inputY,
@@ -51,6 +53,11 @@ public static class EventHandler
             );
     }
 
+
+    #endregion
+
+    #region 库存系统
+
     // 库存内容更改事件
     public static event Action<InventoryLocation, List<InventoryItem>> InventoryUpdatedEvent;
 
@@ -63,7 +70,10 @@ public static class EventHandler
         }
     }
 
-    // 时间系统
+    #endregion
+
+    #region 游戏时间系统事件
+
     /// <summary>
     /// 时间系统的Event，传入参数的含义见下方CallAdvanceGAmeMinuteEvent
     /// </summary>
@@ -80,8 +90,6 @@ public static class EventHandler
             AdvanceGameMinuteEvent(gameYear, gameSeason, gameDay, gameDayOfWeek, gameHour, gameMinute, gameSecond);
         }
     }
-
-    #region 游戏事件系统事件
 
     public static event Action<int, Season, int, string, int, int, int> AdvanceGameHourEvent;
 

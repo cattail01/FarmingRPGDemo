@@ -1,12 +1,14 @@
-using Enums;
+﻿using Enums;
 
 /// <summary>
 /// 动画参数结构体
+/// </summary>
+/// <remarks>
 /// 标识了：
 /// 动画属于人物哪一部分、
 /// 动画是否有变体、
 /// 动画变体类型
-/// </summary>
+/// </remarks>
 [System.Serializable]
 public struct CharacterAttribute
 {

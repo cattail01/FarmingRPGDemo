@@ -2,10 +2,16 @@
 using System;
 using Enums;
 
+/// <summary>
+/// 移动的参数
+/// </summary>
+/// <remarks>
+/// <para>note: 打算使用该类替代传递的超多参数</para>
+/// </remarks>
 [Serializable]
 public class MovementAnimationParameters
 {
-    // player animation parameters
+    // 定义玩家动画参数
     public float xInput;
     public float yInput;
     public bool isWalking;
@@ -28,7 +34,7 @@ public class MovementAnimationParameters
     public bool isPickingUp;
     public bool isPickingDown;
 
-    // shared animation Parameters
+    // 定义共有的动画参数
     public bool idleUp;
     public bool idleDown;
     public bool idleLeft;

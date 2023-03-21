@@ -1,11 +1,20 @@
-﻿namespace Enums
+﻿// 定义所有的enum
+namespace Enums
 {
+    #region 角色动画参数
+
+    /// <summary>
+    /// 工具产生的影响
+    /// </summary>
     public enum ToolEffect
     {
         None,
         Watering
     }
 
+    /// <summary>
+    /// 角色移动的方向
+    /// </summary>
     public enum Direction
     {
         Up,
@@ -14,6 +23,10 @@
         Right,
         None,
     }
+
+    #endregion
+
+    #region 库存系统
 
     /// <summary>
     /// 物品类型
@@ -41,6 +54,10 @@
         chest,
         count
     }
+
+    #endregion
+
+    #region 动画变体
 
     // 人物所有的动画名称
     public enum AnimationName
@@ -109,6 +126,8 @@
         WateringCan,
         Count
     }
+
+    #endregion
 
     #region 游戏时间系统
 
