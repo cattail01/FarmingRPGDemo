@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// Scene Save Class
+/// 场景保存类
 /// </summary>
 /// <remarks>
-/// <para>Place object or other something we want to store in scene</para>
+/// <para>用于集中放置场景中的物体状态或其他想要保存的信息</para>
 /// </remarks>
 [Serializable]
 public class SceneSave
 {
-    //  define dictionary for String Name(?) to Scene Item List
-    // string key is an identifier name we choose for this list
-    public Dictionary<string, List<SceneItem>> ListSceneItemDictionary;
+    // 定义名称到场景中物体信息列表的类
+    // string name 是选择好的名称？？？？
+    public Dictionary<string, List<SceneItem>> NameToSceneItemListDictionary;
 
 }

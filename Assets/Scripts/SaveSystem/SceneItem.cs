@@ -2,26 +2,26 @@
 
 
 /// <summary>
-/// Scene Item Massage Class
+/// 场景中的物体的信息类
 /// </summary>
 /// <remarks>
-/// <para>serializable</para>
-/// <para>for remain item massage in scene</para>
+/// <para>可序列化</para>
+/// <para>为了存储场景中物体的信息</para>
 /// </remarks>
 [Serializable]
 public class SceneItem
 {
-    // define code of this item
+    // 定义物体编号
     public int ItemCode;
 
-    // define vector 3 serializable class
-    // for remain position of this item in scene
-    public Vector3Serializable Position;
-
-    // item name
+    // 物体名称
     public string ItemName;
 
-    // initialize
+    // 定义自定义的可序列化的vector3类
+    // 用于记住物体在场景中的位置
+    public Vector3Serializable Position;
+
+    // 构造函数
     public SceneItem()
     {
         Position = new Vector3Serializable();
