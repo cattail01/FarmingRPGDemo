@@ -19,7 +19,8 @@ public class SceneTeleport : MonoBehaviour
 
     #region unity massages
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    //private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
         ChangeSceneAndSetPlayerPosition(collision);
     }

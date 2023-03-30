@@ -1,4 +1,4 @@
-using Enums;
+﻿using Enums;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -41,6 +41,8 @@ public class SceneControllerManager : SingletonMonoBehavior<SceneControllerManag
 
 		EventHandler.CallAfterSceneLoadEvent();
 
+		SaveLoadManager.Instance.RestoreCurrentSceneData();
+
 		yield return StartCoroutine(FadeImageAlphaTo(0f));
 	}
 
@@ -72,6 +74,9 @@ public class SceneControllerManager : SingletonMonoBehavior<SceneControllerManag
 		// 直到黑幕完全变黑再进行下面的操作
 		yield return StartCoroutine(FadeImageAlphaTo(1f));
 
+		// 存储场景数据
+		SaveLoadManager.Instance.StoreCurrentSceneData();
+
 		// 设置游戏角色的位置
 		PlayerSingletonMonoBehavior.Instance.gameObject.transform.position = spawnPosition;
 
@@ -91,6 +96,9 @@ public class SceneControllerManager : SingletonMonoBehavior<SceneControllerManag
 
 		// 调用场景加载结束事件
 		EventHandler.CallAfterSceneLoadEvent();
+
+		// 取消存储场景中的数据，并还原
+		SaveLoadManager.Instance.RestoreCurrentSceneData();
 
 		// 开始将幕布变淡，直到完全消失后执行接下来的代码
 		yield return StartCoroutine(FadeImageAlphaTo(0f));
@@ -145,5 +153,4 @@ public class SceneControllerManager : SingletonMonoBehavior<SceneControllerManag
 
 		yield return null;
 	}
-
 }
