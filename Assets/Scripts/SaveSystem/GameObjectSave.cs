@@ -1,4 +1,4 @@
-﻿using System;
+﻿//using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -7,10 +7,10 @@ using System.Collections.Generic;
 /// <remarks>
 /// <para></para>
 /// </remarks>
-[Serializable]
+[System.Serializable]
 public class GameObjectSave
 {
-    // 定义 场景名称 to 场景保存的字典
+    // 定义 场景名称(string字符串) to 场景保存的字典
     public Dictionary<string, SceneSave> sceneData_SceneNameToSceneSave;
 
     public GameObjectSave()

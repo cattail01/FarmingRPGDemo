@@ -1,6 +1,4 @@
-﻿using System;
-
-
+﻿
 /// <summary>
 /// 场景中的物体的信息类
 /// </summary>
@@ -8,7 +6,7 @@
 /// <para>可序列化</para>
 /// <para>为了存储场景中物体的信息</para>
 /// </remarks>
-[Serializable]
+[System.Serializable]
 public class SceneItem
 {
     // 定义物体编号

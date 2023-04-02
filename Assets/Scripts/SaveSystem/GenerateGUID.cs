@@ -32,7 +32,7 @@ public class GenerateGUID : MonoBehaviour
         if (Application.IsPlaying(gameObject))
             return;
 
-        // 没有GUID则获取
+        // 没有GUID则获取GUID
         if (GUID == string.Empty)
         {
             GUID = System.Guid.NewGuid().ToString();

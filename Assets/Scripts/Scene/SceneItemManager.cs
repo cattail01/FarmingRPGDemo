@@ -18,7 +18,7 @@ public class SceneItemManager : SingletonMonoBehavior<SceneItemManager>, ISaveab
         base.Awake();
 
         SaveableUniqueId = GetComponent<GenerateGUID>().GUID;
-        gameObjectSave = new GameObjectSave();
+        GameObjectSave = new GameObjectSave();
     }
 
     private void OnEnable()
@@ -79,7 +79,7 @@ public class SceneItemManager : SingletonMonoBehavior<SceneItemManager>, ISaveab
     public void SaveableStoreScene(string sceneName)
     {
         // 当该sceneName被记录在gameobjectsave的scene data中时，因为它是旧的场景保存，所以需要删除
-        gameObjectSave.sceneData_SceneNameToSceneSave.Remove(sceneName);
+        GameObjectSave.sceneData_SceneNameToSceneSave.Remove(sceneName);
 
         // 从场景中获取所有的物体
         List<SceneItem> sceneItemList = new List<SceneItem>();
@@ -103,13 +103,16 @@ public class SceneItemManager : SingletonMonoBehavior<SceneItemManager>, ISaveab
         SceneSave sceneSave = new SceneSave();
         sceneSave.NameToSceneItemListDictionary = new Dictionary<string, List<SceneItem>>();
         sceneSave.NameToSceneItemListDictionary.Add("sceneItemList", sceneItemList);
+
+        // 将场景保存添加到 game object save
+        GameObjectSave.sceneData_SceneNameToSceneSave.Add(sceneName, sceneSave);
     }
 
     // 取消存储场景中的所有物体
     public void SaveableRestoreScene(string sceneName)
     {
         SceneSave sceneSave;
-        if (!gameObjectSave.sceneData_SceneNameToSceneSave.TryGetValue(sceneName, out sceneSave))
+        if (!GameObjectSave.sceneData_SceneNameToSceneSave.TryGetValue(sceneName, out sceneSave))
         {
             return;
         }
