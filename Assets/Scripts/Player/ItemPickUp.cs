@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -44,8 +44,8 @@ public class ItemPickUp : MonoBehaviour
             }
 
             // 输出提示
-            print($"[{gameObject.name}: ItemPickUp.OnTriggerEnter2D]: {item.gameObject.name} is around here\n" +
-            $"long description is \"{details.ItemLongDescription}\"");
+            //print($"[{gameObject.name}: ItemPickUp.OnTriggerEnter2D]: {item.gameObject.name} is around here\n" +
+            //$"long description is \"{details.ItemLongDescription}\"");
 
             // // 将物体（实际上是它的组件）的引用加入到周围物体中
             // // items.Add(item);
@@ -66,7 +66,7 @@ public class ItemPickUp : MonoBehaviour
         if (item != null)
         {
             // 如果获取成功，输出提示信息
-            print($"[{gameObject.name}: ItemPickUp.OnTriggerExit2D]: {item.gameObject.name} is exit");
+            //print($"[{gameObject.name}: ItemPickUp.OnTriggerExit2D]: {item.gameObject.name} is exit");
 
             // // 将物体的item组件从items中删除
             // // items.Remove(item);

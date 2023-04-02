@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Enums;
 using UnityEngine;
@@ -65,7 +65,7 @@ public class UIInventoryBar : MonoBehaviour
         // todo 优化：此处计算开销不小，优化时可以选择改成0.5秒或者更多的时间计算并执行一次
         // 获取玩家的视口上的位置
         Vector2 playerPositionToScreen = player.GetPlayerViewPositionOfMainCamera();
-        print(playerPositionToScreen.y);
+        //print(playerPositionToScreen.y);
         // 如果玩家的y的位置不在下面，并且inventory bar在上面(不在底部)，将bar再移动回来
         if (!IsInventoryBarPositionButton && playerPositionToScreen.y > 0.3f)
         {

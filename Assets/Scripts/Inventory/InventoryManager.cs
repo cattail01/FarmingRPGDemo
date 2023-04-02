@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
 using Enums;
@@ -157,7 +157,7 @@ public class InventoryManager : SingletonMonoBehavior<InventoryManager>
         inventoryItem.itemQuantity = quantity + 1;
         inventoryList[itemPosition] = inventoryItem;
         // Debug.ClearDeveloperConsole();
-        Debug.Log($"[InventoryManager.AddItemAtPosition]: \nAdd a new item {itemDetailsDictionary[itemCode].ItemName} to ? inventory list ");
+        //Debug.Log($"[InventoryManager.AddItemAtPosition]: \nAdd a new item {itemDetailsDictionary[itemCode].ItemName} to ? inventory list ");
         DebugPrintInventoryList(inventoryList);
     }
 
@@ -168,8 +168,8 @@ public class InventoryManager : SingletonMonoBehavior<InventoryManager>
         inventoryItem.itemQuantity = 1;
         inventoryList.Add(inventoryItem);
         // Debug.ClearDeveloperConsole();
-        Debug.Log($"[InventoryManager.AddItemAtPosition]: \nAdd a new item {itemDetailsDictionary[itemCode].ItemName} to ? inventory list ");
-        DebugPrintInventoryList(inventoryList);
+        //Debug.Log($"[InventoryManager.AddItemAtPosition]: \nAdd a new item {itemDetailsDictionary[itemCode].ItemName} to ? inventory list ");
+        //DebugPrintInventoryList(inventoryList);
     }
 
     // todo 前期debug使用的print代码段，后期记得优化掉（包括前面的new）
@@ -184,7 +184,7 @@ public class InventoryManager : SingletonMonoBehavior<InventoryManager>
             strBuilder.Append($"item {i} is {itemDetailsDictionary[inventoryList[i].itemCode].ItemName}, ");
             strBuilder.Append($"number is {inventoryList[i].itemQuantity}\n");
         }
-        Debug.Log(strBuilder.ToString());
+        //Debug.Log(strBuilder.ToString());
         strBuilder.Clear();
     }
 
