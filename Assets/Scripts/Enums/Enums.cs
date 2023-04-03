@@ -142,7 +142,7 @@ namespace Enums
         Count
     }
 
-    #endregion
+    #endregion 游戏时间系统
 
     #region 游戏场景控制
 
@@ -154,4 +154,18 @@ namespace Enums
     }
 
     #endregion
+
+    #region 瓦片地图参数信息
+
+    // 瓦片地图参数enum
+    public enum GridBoolProperty
+    {
+        Diggable,   // 可挖掘的
+        CanDropItem,    // 可以扔物体的
+        CanPlaceFurniture, // 可以摆放家具的
+        IsPath, // 是路径
+        IsNpcObstacle,  // 是npc的障碍
+    }
+
+    #endregion 瓦片地图参数信息
 }
