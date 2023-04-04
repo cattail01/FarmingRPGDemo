@@ -157,7 +157,9 @@ namespace Enums
 
     #region 瓦片地图参数信息
 
-    // 瓦片地图参数enum
+    /// <summary>
+    /// 瓦片地图参数enum
+    /// </summary>
     public enum GridBoolProperty
     {
         Diggable,   // 可挖掘的
