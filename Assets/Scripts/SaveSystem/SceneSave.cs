@@ -13,5 +13,8 @@ public class SceneSave
     // 定义名称到场景中物体信息列表的类
     // string name 是选择好的名称？？？？
     // 示例：`sceneSave.NameToSceneItemListDictionary.Add("sceneItemList", sceneItemList);`
-    public Dictionary<string, List<SceneItem>> NameToSceneItemListDictionary;
+    //public Dictionary<string, List<SceneItem>> NameToSceneItemListDictionary;
+
+    // 定义存储SceneItem的列表
+    public List<SceneItem> SceneItemList;
 }

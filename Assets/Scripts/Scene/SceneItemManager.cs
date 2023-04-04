@@ -101,8 +101,9 @@ public class SceneItemManager : SingletonMonoBehavior<SceneItemManager>, ISaveab
 
         // 创建SceneSave对象，创建字典
         SceneSave sceneSave = new SceneSave();
-        sceneSave.NameToSceneItemListDictionary = new Dictionary<string, List<SceneItem>>();
-        sceneSave.NameToSceneItemListDictionary.Add("sceneItemList", sceneItemList);
+        //sceneSave.NameToSceneItemListDictionary = new Dictionary<string, List<SceneItem>>();
+        //sceneSave.NameToSceneItemListDictionary.Add("sceneItemList", sceneItemList);
+        sceneSave.SceneItemList = sceneItemList;
 
         // 将场景保存添加到 game object save
         GameObjectSave.sceneData_SceneNameToSceneSave.Add(sceneName, sceneSave);
@@ -117,14 +118,13 @@ public class SceneItemManager : SingletonMonoBehavior<SceneItemManager>, ISaveab
             return;
         }
 
-        if (sceneSave.NameToSceneItemListDictionary != null &&
-            sceneSave.NameToSceneItemListDictionary.TryGetValue("sceneItemList", out List<SceneItem> sceneItemList))
+        if (sceneSave.SceneItemList != null)
         {
             // 销毁场景中的所有物体
             DestroySceneItem();
 
             // 按照SceneItemList创建物体
-            InstantiateSceneItems(sceneItemList);
+            InstantiateSceneItems(sceneSave.SceneItemList);
         }
     }
 
