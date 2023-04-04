@@ -17,4 +17,7 @@ public class SceneSave
 
     // 定义存储SceneItem的列表
     public List<SceneItem> SceneItemList;
+
+    // 定义string 到 地皮参数细节类 的字典
+    public Dictionary<string, GridPropertyDetails> NameToGridPropertyDetailsDic;
 }
