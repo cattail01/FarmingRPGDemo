@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using Unity.VisualScripting;
+﻿using Enums;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(GenerateGUID))]
 public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager>, ISaveable
 {
-
     #region ISaveable 接口的部分
 
     public string saveableUniqueId;
@@ -36,7 +35,17 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
 
     public void SaveableStoreScene(string sceneName)
     {
-        throw new System.NotImplementedException();
+        // 删除场景保存的信息
+        GameObjectSave.sceneData_SceneNameToSceneSave.Remove(sceneName);
+
+        // 为场景创建场景保存信息
+        SceneSave sceneSave = new SceneSave();
+
+        // 创建并添加 dict grid 参数细节类 字典
+        sceneSave.NameToGridPropertyDetailsDic = nameToGridPropertyDetailsDic;
+
+        // 将 scene save 类 添加到 game object save 类中
+        GameObjectSave.sceneData_SceneNameToSceneSave.Add(sceneName, sceneSave);
     }
 
     public void SaveableRestoreScene(string sceneName)
@@ -71,7 +80,6 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
     {
         SaveableRegister();
         EventHandler.AfterSceneLoadEvent += AfterSceneLoaded;
-
     }
 
     private void OnDisable()
@@ -134,6 +142,25 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         return GetGridPropertyDetails(gridX, gridY, nameToGridPropertyDetailsDic);
     }
 
+    // 通过 grid x、y 向dictionary中添加 GridPropertyDetails
+    public void SetGridPropertyDetails(int gridX, int gridY, GridPropertyDetails gridPropertyDetails,
+        Dictionary<string, GridPropertyDetails> stringToGridPropertyDetailsDic)
+    {
+        // 构造key
+        string key = $"x{gridX}y{gridY}";
+
+        gridPropertyDetails.GridX = gridX;
+        gridPropertyDetails.GridY = gridY;
+
+        // 设置值
+        stringToGridPropertyDetailsDic[key] = gridPropertyDetails;
+    }
+
+    public void SetGridPropertyDetails(int gridX, int gridY, GridPropertyDetails gridPropertyDetails)
+    {
+        SetGridPropertyDetails(gridX, gridY, gridPropertyDetails, nameToGridPropertyDetailsDic);
+    }
+
     // 定义 初始化 cell 参数 的方法
     private void InitialiseGridProperties()
     {
@@ -141,7 +168,58 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         // 对于每一个 SO_GridProperties 实例化对象：
         foreach (SO_GridProperties gridProperties in gridPropertiesArray)
         {
-            
+            // 为 单元参数细节类 创建字典
+            Dictionary<string, GridPropertyDetails> stringToGridPropertyDetailsDic =
+                new Dictionary<string, GridPropertyDetails>();
+
+            // 对 scriptable object gridProperties 中记录的所有方块参数的信息进行遍历
+            foreach (GridProperty gridProperty in gridProperties.GridPropertyList)
+            {
+                GridPropertyDetails gridPropertyDetails;
+
+                // 根据位置和字典获取参数信息
+                gridPropertyDetails = GetGridPropertyDetails(gridProperty.GridCoordinate.x,
+                    gridProperty.GridCoordinate.y, stringToGridPropertyDetailsDic);
+
+                // 如果 gridPropertyDetails 为空，则创建
+                //if (gridPropertyDetails == null)
+                //{
+                //    gridPropertyDetails = new GridPropertyDetails();
+                //}
+                gridPropertyDetails ??= new GridPropertyDetails();
+
+                // 
+                switch (gridProperty.GridBoolProperty)
+                {
+                    case GridBoolProperty.Diggable:
+                        gridPropertyDetails.IsDiggable = gridProperty.GridBoolValue;
+                        break;
+                    case GridBoolProperty.CanPlaceFurniture:
+                        gridPropertyDetails.CanPlaceFurniture = gridProperty.GridBoolValue;
+                        break;
+                    case GridBoolProperty.IsPath:
+                        gridPropertyDetails.IsPath = gridProperty.GridBoolValue;
+                        break;
+                    case GridBoolProperty.IsNpcObstacle:
+                        gridPropertyDetails.IsNpcObstacle = gridProperty.GridBoolValue;
+                        break;
+                    default:
+                        break;
+                }
+
+                SetGridPropertyDetails(gridProperty.GridCoordinate.x, gridProperty.GridCoordinate.y,
+                    gridPropertyDetails, stringToGridPropertyDetailsDic);
+            }
+            SceneSave sceneSave = new SceneSave();
+
+            sceneSave.NameToGridPropertyDetailsDic = stringToGridPropertyDetailsDic;
+
+            if (gridProperties.SceneName.ToString() == SceneControllerManager.Instance.StartingSceneName.ToString())
+            {
+                this.nameToGridPropertyDetailsDic = stringToGridPropertyDetailsDic;
+            }
+
+            GameObjectSave.sceneData_SceneNameToSceneSave.Add(gridProperties.SceneName.ToString(), sceneSave);
         }
     }
 }

@@ -1,27 +1,23 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Enums;
 
-public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler,
+    IPointerExitHandler, IPointerClickHandler
 {
     public Image inventorySlotHighlight;
     public Image inventorySlotImage;
     public TextMeshProUGUI textMeshProUGUI;
-    [HideInInspector]
-    public ItemDetails itemDetails;
-    [HideInInspector]
-    public int itemQuantity;
+    [HideInInspector] public ItemDetails itemDetails;
+    [HideInInspector] public int itemQuantity;
     private Camera mainCamera;
     private Transform parentItem;
-    [SerializeField]
-    private UIInventoryBar inventoryBar;
-    [SerializeField]
-    private GameObject itemPrefab = null;
+    [SerializeField] private UIInventoryBar inventoryBar;
+    [SerializeField] private GameObject itemPrefab = null;
 
-    [SerializeField]
-    private int slotNumber;
+    [SerializeField] private int slotNumber;
 
     private void Awake()
     {
@@ -80,7 +76,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         draggedItem.transform.position = Input.mousePosition;
         print(draggedItem.name);
-        print("draggedItem.transform.position.x" + draggedItem.transform.position.x + "\ndraggedItem.transform.position.y" + draggedItem.transform.position.y);
+        print("draggedItem.transform.position.x" + draggedItem.transform.position.x +
+              "\ndraggedItem.transform.position.y" + draggedItem.transform.position.y);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -108,27 +105,38 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 }
             }
         }
+
         PlayerSingletonMonoBehavior.Instance.EnablePlayerInput();
     }
 
     private void DropSelectedItemAtMousePosition()
     {
-        if (itemDetails != null)
+        if (itemDetails != null && IsSelected)
         {
             // 将鼠标屏幕位置转化为世界位置
             // 因为摄像机z轴为-10，添加物体的目标位置为0，所以应当相对于摄像机坐标 + 10，就是-掉摄像机的z轴位置
-            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
-            // 在世界中创建新item
-            GameObject go = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
-            Item item = go.GetComponent<Item>();
-            item.ItemCode = itemDetails.ItemCode;
+            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                Input.mousePosition.y, -mainCamera.transform.position.z));
 
-            // 从inventory中拿出一个物体
-            InventoryManager.Instance.RemoveOneItem(InventoryLocation.player, item.ItemCode);
+            // 如果能够在该位置放置物体
+            Vector3Int gridPosition = GridPropertiesManager.Instance.Grid.WorldToCell(worldPosition);
+            GridPropertyDetails gridPropertyDetails =
+                GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
 
-            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, item.ItemCode) == -1)
+            if (gridPropertyDetails != null && gridPropertyDetails.CanDropItem)
             {
-                ClearSelectedItem();
+                // 在世界中创建新item
+                GameObject go = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
+                Item item = go.GetComponent<Item>();
+                item.ItemCode = itemDetails.ItemCode;
+
+                // 从inventory中拿出一个物体
+                InventoryManager.Instance.RemoveOneItem(InventoryLocation.player, item.ItemCode);
+
+                if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, item.ItemCode) == -1)
+                {
+                    ClearSelectedItem();
+                }
             }
         }
     }
@@ -141,37 +149,41 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     /// <summary>
     /// inventory text box prefab预制件
     /// </summary>
-    [SerializeField]
-    private GameObject inventoryTextBoxPrefab;
+    [SerializeField] private GameObject inventoryTextBoxPrefab;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (itemQuantity != 0)
         {
             // 通过预制件，创建InventoryTextBox对象
-            inventoryBar.InventoryTextBoxGameObject = Instantiate(inventoryTextBoxPrefab, transform.position, Quaternion.identity);
+            inventoryBar.InventoryTextBoxGameObject =
+                Instantiate(inventoryTextBoxPrefab, transform.position, Quaternion.identity);
             inventoryBar.InventoryTextBoxGameObject.transform.SetParent(parentCanvas.transform, false);
 
-            UIInventoryTextBox inventoryTextBox = inventoryBar.InventoryTextBoxGameObject.GetComponent<UIInventoryTextBox>();
+            UIInventoryTextBox inventoryTextBox =
+                inventoryBar.InventoryTextBoxGameObject.GetComponent<UIInventoryTextBox>();
 
             // 获取itemTypeDescription
             string itemTypeDescription = InventoryManager.Instance.GetItemTypeDescription(itemDetails.ItemType);
 
             // 给inventoryTextBox注入item description
-            inventoryTextBox.SetTextBoxText(itemDetails.ItemName, itemTypeDescription, itemDetails.ItemDescription, itemDetails.ItemLongDescription, string.Empty, string.Empty);
+            inventoryTextBox.SetTextBoxText(itemDetails.ItemName, itemTypeDescription, itemDetails.ItemDescription,
+                itemDetails.ItemLongDescription, string.Empty, string.Empty);
 
             // 设置inventoryTextBox ui 物体的位置
             // 如果inventoryBar在屏幕下方
             if (inventoryBar.IsInventoryBarPositionButton)
             {
                 inventoryBar.InventoryTextBoxGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0f);
-                inventoryBar.InventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y + 50f, transform.position.z);
+                inventoryBar.InventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x,
+                    transform.position.y + 50f, transform.position.z);
             }
             // 如果inventoryBar在屏幕上方
             else
             {
                 inventoryBar.InventoryTextBoxGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
-                inventoryBar.InventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 50f, transform.position.z);
+                inventoryBar.InventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x,
+                    transform.position.y - 50f, transform.position.z);
             }
         }
     }
@@ -187,11 +199,13 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             return;
         }
+
         Destroy(inventoryBar.InventoryTextBoxGameObject);
         inventoryBar.InventoryTextBoxGameObject = null;
     }
 
     [HideInInspector] public bool IsSelected;
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)

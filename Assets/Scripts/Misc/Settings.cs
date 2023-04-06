@@ -128,8 +128,16 @@ public static class Settings
 
     public const float SecondsPerGameSecond = 0.012f;
 
-    #endregion
+    #endregion time system
 
+    #region 瓦片地图
+
+    /// <summary>
+    /// 地图单元大小
+    /// </summary>
+    public const float GridCellSize = 1f;
+
+    #endregion 瓦片地图
 
     // constructor
     static Settings()
