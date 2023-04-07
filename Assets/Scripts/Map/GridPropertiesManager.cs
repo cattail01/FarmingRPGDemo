@@ -72,8 +72,8 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
     {
         base.Awake();
 
-        saveableUniqueId = GetComponent<GenerateGUID>().GUID;
-        GameObjectSave = GetComponent<GameObjectSave>();
+        SaveableUniqueId = GetComponent<GenerateGUID>().GUID;
+        GameObjectSave = new GameObjectSave();
     }
 
     private void OnEnable()
@@ -147,7 +147,7 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         Dictionary<string, GridPropertyDetails> stringToGridPropertyDetailsDic)
     {
         // 构造key
-        string key = $"x{gridX}y{gridY}";
+        string key = "x" + gridX + "y" + gridY;
 
         gridPropertyDetails.GridX = gridX;
         gridPropertyDetails.GridY = gridY;
@@ -169,7 +169,7 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         foreach (SO_GridProperties gridProperties in gridPropertiesArray)
         {
             // 为 单元参数细节类 创建字典
-            Dictionary<string, GridPropertyDetails> stringToGridPropertyDetailsDic =
+            Dictionary<string, GridPropertyDetails> nameToGridPropertyDetailsDic =
                 new Dictionary<string, GridPropertyDetails>();
 
             // 对 scriptable object gridProperties 中记录的所有方块参数的信息进行遍历
@@ -179,7 +179,7 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
 
                 // 根据位置和字典获取参数信息
                 gridPropertyDetails = GetGridPropertyDetails(gridProperty.GridCoordinate.x,
-                    gridProperty.GridCoordinate.y, stringToGridPropertyDetailsDic);
+                    gridProperty.GridCoordinate.y, nameToGridPropertyDetailsDic);
 
                 // 如果 gridPropertyDetails 为空，则创建
                 //if (gridPropertyDetails == null)
@@ -193,6 +193,9 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
                 {
                     case GridBoolProperty.Diggable:
                         gridPropertyDetails.IsDiggable = gridProperty.GridBoolValue;
+                        break;
+                    case GridBoolProperty.CanDropItem:
+                        gridPropertyDetails.CanDropItem = gridProperty.GridBoolValue;
                         break;
                     case GridBoolProperty.CanPlaceFurniture:
                         gridPropertyDetails.CanPlaceFurniture = gridProperty.GridBoolValue;
@@ -208,15 +211,15 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
                 }
 
                 SetGridPropertyDetails(gridProperty.GridCoordinate.x, gridProperty.GridCoordinate.y,
-                    gridPropertyDetails, stringToGridPropertyDetailsDic);
+                    gridPropertyDetails, nameToGridPropertyDetailsDic);
             }
             SceneSave sceneSave = new SceneSave();
 
-            sceneSave.NameToGridPropertyDetailsDic = stringToGridPropertyDetailsDic;
+            sceneSave.NameToGridPropertyDetailsDic = nameToGridPropertyDetailsDic;
 
             if (gridProperties.SceneName.ToString() == SceneControllerManager.Instance.StartingSceneName.ToString())
             {
-                this.nameToGridPropertyDetailsDic = stringToGridPropertyDetailsDic;
+                this.nameToGridPropertyDetailsDic = nameToGridPropertyDetailsDic;
             }
 
             GameObjectSave.sceneData_SceneNameToSceneSave.Add(gridProperties.SceneName.ToString(), sceneSave);

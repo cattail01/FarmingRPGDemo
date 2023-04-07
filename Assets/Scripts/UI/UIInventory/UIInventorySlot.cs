@@ -66,7 +66,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             // 获取拖拽的image
             Image draggedItemImage = draggedItem.GetComponentInChildren<Image>();
             draggedItemImage.sprite = inventorySlotImage.sprite;
-            print(draggedItemImage.sprite.name);
+            //print(draggedItemImage.sprite.name);
 
             SetSelectedItem();
         }
@@ -75,9 +75,9 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnDrag(PointerEventData eventData)
     {
         draggedItem.transform.position = Input.mousePosition;
-        print(draggedItem.name);
-        print("draggedItem.transform.position.x" + draggedItem.transform.position.x +
-              "\ndraggedItem.transform.position.y" + draggedItem.transform.position.y);
+        //print(draggedItem.name);
+        //print("draggedItem.transform.position.x" + draggedItem.transform.position.x +
+        //      "\ndraggedItem.transform.position.y" + draggedItem.transform.position.y);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -126,7 +126,10 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             if (gridPropertyDetails != null && gridPropertyDetails.CanDropItem)
             {
                 // 在世界中创建新item
-                GameObject go = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
+                //GameObject go = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
+                GameObject go = Instantiate(itemPrefab,
+                    new Vector3(worldPosition.x, worldPosition.y - Settings.GridCellSize / 2f, worldPosition.z),
+                    Quaternion.identity, parentItem);
                 Item item = go.GetComponent<Item>();
                 item.ItemCode = itemDetails.ItemCode;
 
