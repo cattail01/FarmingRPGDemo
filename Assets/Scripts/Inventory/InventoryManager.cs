@@ -278,4 +278,31 @@ public class InventoryManager : SingletonMonoBehavior<InventoryManager>
     {
         selectedInventoryItem[(int)inventoryLocation] = -1;
     }
+
+    /// <summary>
+    /// 获取物品栏中选中的物体的 item code
+    /// </summary>
+    /// <param name="inventoryLocation">物品栏类型</param>
+    /// <returns>item code</returns>
+    private int GetSelectedInventoryItem(InventoryLocation inventoryLocation)
+    {
+        return selectedInventoryItem[(int) inventoryLocation];
+    }
+
+    /// <summary>
+    /// 获取物品栏中选中的物体的 item details
+    /// </summary>
+    /// <param name="inventoryLocation">物品栏类型</param>
+    /// <returns>item details</returns>
+    public ItemDetails GetSelectedInventoryItemDetails(InventoryLocation inventoryLocation)
+    {
+        int itemCode = GetSelectedInventoryItem(inventoryLocation);
+
+        if (itemCode == -1)
+        {
+            return null;
+        }
+
+        return GetItemDetailsByItemCode(itemCode);
+    }
 }
