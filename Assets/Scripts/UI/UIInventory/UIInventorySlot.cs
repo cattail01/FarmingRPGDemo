@@ -38,11 +38,13 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private void OnEnable()
     {
         EventHandler.AfterSceneLoadEvent += SceneLoaded;
+        EventHandler.DropSelectedItemEvent += DropSelectedItemAtMousePosition;
     }
 
     private void OnDisable()
     {
         EventHandler.AfterSceneLoadEvent -= SceneLoaded;
+        EventHandler.DropSelectedItemEvent -= DropSelectedItemAtMousePosition;
     }
 
     // 定义场景加载函数，注册事件

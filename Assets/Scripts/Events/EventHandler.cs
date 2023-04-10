@@ -205,6 +205,22 @@ public static class EventHandler
     }
 
     #endregion 游戏场景加载事件
+
+    #region 扔出物体
+
+    public static event Action DropSelectedItemEvent;
+
+    public static void CallDropSelectedItemEvent()
+    {
+        if (DropSelectedItemEvent == null)
+        {
+            return;
+        }
+
+        DropSelectedItemEvent();
+    }
+
+    #endregion 扔出物体
 }
 
 

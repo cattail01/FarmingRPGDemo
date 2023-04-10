@@ -67,6 +67,12 @@ public class PlayerSingletonMonoBehavior :
 
     #endregion
 
+    #region 扔出物体
+
+    private GridCursor gridCursor;
+
+    #endregion
+
     protected override void Awake()
     {
         // 创建单例的自己：instance实例化
@@ -76,6 +82,11 @@ public class PlayerSingletonMonoBehavior :
         mainCamera = Camera.main;
 
         InitializeAnimatorOverrideControllerPart();
+    }
+
+    private void Start()
+    {
+        gridCursor = FindObjectOfType<GridCursor>();
     }
 
     protected void Update()
@@ -107,6 +118,7 @@ public class PlayerSingletonMonoBehavior :
                 idleRight, idleLeft, idleUp, idleDown
             );
         }
+        
     }
 
     private void ResetAnimatorTriggers()
@@ -134,6 +146,8 @@ public class PlayerSingletonMonoBehavior :
     {
         PlayerMovementInput();
         PlayerWalkInput();
+
+        PlayerClickInput();
 
         // 用于测试游戏状态的输入
         PlayerTestInput();
@@ -330,6 +344,67 @@ public class PlayerSingletonMonoBehavior :
     }
 
     #endregion animator override controller 相关部分
+
+    #region 游戏扔出物体部分
+
+    private void PlayerClickInput()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            if (gridCursor.CursorIsEnabled)
+            {
+                ProcessPlayerClickInput();
+            }
+        }
+    }
+
+    private void ProcessPlayerClickInput()
+    {
+        ResetMovement();
+
+        ItemDetails itemDetails = InventoryManager.Instance.GetSelectedInventoryItemDetails(InventoryLocation.player);
+        if (itemDetails == null) { return;}
+
+        switch (itemDetails.ItemType)
+        {
+            case ItemType.Seed:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    ProcessPlayerClickInputSeed(itemDetails);
+                }
+                break;
+            case ItemType.Commodity:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    ProcessPlayerClickInputCommodity(itemDetails);
+                }
+                break;
+            case ItemType.None:
+                break;
+            case ItemType.Count:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void ProcessPlayerClickInputSeed(ItemDetails itemDetails)
+    {
+        if (itemDetails.CanBeDropped && gridCursor.CursorPositionIsValid)
+        {
+            EventHandler.CallDropSelectedItemEvent();
+        }
+    }
+
+    private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)
+    {
+        if (itemDetails.CanBeDropped && gridCursor.CursorPositionIsValid)
+        {
+            EventHandler.CallDropSelectedItemEvent();
+        }
+    }
+
+    #endregion 游戏扔出物体部分
 
     #region 游戏输入测试
 
