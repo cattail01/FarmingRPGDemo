@@ -17,7 +17,10 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     [SerializeField] private UIInventoryBar inventoryBar;
     [SerializeField] private GameObject itemPrefab = null;
 
+
     [SerializeField] private int slotNumber;
+
+    private GridCursor gridCursor;
 
     private void Awake()
     {
@@ -28,6 +31,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private void Start()
     {
         mainCamera = Camera.main;
+        gridCursor = FindObjectOfType<GridCursor>();
         //parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
     }
 
@@ -229,6 +233,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private void ClearSelectedItem()
     {
+        ClearCursors();
+
         inventoryBar.ClearHighlightOnInventorySlot();
         IsSelected = false;
         InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
@@ -242,6 +248,24 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         inventoryBar.ClearHighlightOnInventorySlot();
         IsSelected = true;
         inventoryBar.SetHighlightOnInventorySlot();
+
+        // cursor part
+
+
+        gridCursor.ItemUseGridRadius = itemDetails.ItemUseGridRadius;
+
+        if (itemDetails.ItemUseGridRadius > 0)
+        {
+            gridCursor.EnableCursor();
+        }
+        else
+        {
+            gridCursor.DisableCursor();
+        }
+
+        gridCursor.SelectedItemType = itemDetails.ItemType;
+
+
         InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.ItemCode);
         CallAnimationOverride();
     }
@@ -263,4 +287,15 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
 
     #endregion Animator Override Controller 相关部分
+
+    #region 鼠标游标UI相关部分
+
+    private void ClearCursors()
+    {
+        gridCursor.DisableCursor();
+
+        gridCursor.SelectedItemType = ItemType.None;
+    }
+
+    #endregion
 }
