@@ -113,7 +113,7 @@ public class GridCursor: MonoBehaviour
     // 场景加载事件
     private void SceneLoaded()
     {
-
+        grid = GameObject.FindObjectOfType<Grid>();
     }
 
     /// <summary>

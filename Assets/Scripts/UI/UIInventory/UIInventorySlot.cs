@@ -119,16 +119,21 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             // 将鼠标屏幕位置转化为世界位置
             // 因为摄像机z轴为-10，添加物体的目标位置为0，所以应当相对于摄像机坐标 + 10，就是-掉摄像机的z轴位置
-            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
-                Input.mousePosition.y, -mainCamera.transform.position.z));
+            //Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+            //    Input.mousePosition.y, -mainCamera.transform.position.z));
 
-            // 如果能够在该位置放置物体
-            Vector3Int gridPosition = GridPropertiesManager.Instance.Grid.WorldToCell(worldPosition);
-            GridPropertyDetails gridPropertyDetails =
-                GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
+            //// 如果能够在该位置放置物体
+            //Vector3Int gridPosition = GridPropertiesManager.Instance.Grid.WorldToCell(worldPosition);
+            //GridPropertyDetails gridPropertyDetails =
+            //    GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
 
-            if (gridPropertyDetails != null && gridPropertyDetails.CanDropItem)
+            //if (gridPropertyDetails != null && gridPropertyDetails.CanDropItem)
+            if(gridCursor.CursorPositionIsValid)
             {
+                // 将鼠标屏幕位置转化为世界位置
+                // 因为摄像机z轴为-10，添加物体的目标位置为0，所以应当相对于摄像机坐标 + 10，就是-掉摄像机的z轴位置
+                Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                    Input.mousePosition.y, -mainCamera.transform.position.z));
                 // 在世界中创建新item
                 //GameObject go = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
                 GameObject go = Instantiate(itemPrefab,
