@@ -49,11 +49,20 @@ public static class Settings
 
     #endregion 主角前遮挡物体透明的参数
 
-
     #region 游戏角色的移动参数
 
     public static float RunningSpeed = 5.333f;
     public static float WalkingSpeed = 2.666f;
+
+    /// <summary>
+    /// 使用工具动画暂停时间
+    /// </summary>
+    public static float UseToolAnimationPause = 0.25f;
+
+    /// <summary>
+    /// 用完工具动画的暂停时间
+    /// </summary>
+    public static float AfterUseToolAnimationPause = 0.2f;
 
     #endregion 游戏角色的移动参数
 
@@ -136,6 +145,11 @@ public static class Settings
     /// 地图单元大小
     /// </summary>
     public const float GridCellSize = 1f;
+
+    /// <summary>
+    /// 游标大小
+    /// </summary>
+    public static Vector2 CursorSize = Vector2.one;
 
     #endregion 瓦片地图
 
