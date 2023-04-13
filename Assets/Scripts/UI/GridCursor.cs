@@ -1,4 +1,4 @@
-﻿
+﻿using System.Collections.Generic;
 using Enums;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,21 +10,26 @@ using UnityEngine.UI;
 /// <para>继承 mono behavior 类</para>
 /// <para>是否可以放置物体可视化游标的主类</para>
 /// </remarks>
-public class GridCursor: MonoBehaviour
+public class GridCursor : MonoBehaviour
 {
     // 定义 游标图片
     [SerializeField] private Image cursorImage = null;
+
     // 定义 游标位置
     [SerializeField] private RectTransform cursorRectTransform = null;
+
     // 定义 绿色游标精灵
     [SerializeField] private Sprite greenCursorSprite = null;
+
     // 定义 红色游标精灵
     [SerializeField] private Sprite redCursorSprite = null;
-    
+
     // 定义 画布
     private Canvas canvas;
+
     // 定义 网格
     private Grid grid;
+
     // 定义 主摄像机
     private Camera mainCamera;
 
@@ -93,7 +98,6 @@ public class GridCursor: MonoBehaviour
 
     private void Start()
     {
-
     }
 
     private void Update()
@@ -203,6 +207,7 @@ public class GridCursor: MonoBehaviour
                     SetCursorToInvalid();
                     return;
                 }
+
                 break;
             case ItemType.Commodity:
                 if (!IsCursorValidForCommodity(gridPropertyDetails))
@@ -210,6 +215,15 @@ public class GridCursor: MonoBehaviour
                     SetCursorToInvalid();
                     return;
                 }
+
+                break;
+            case ItemType.HoeingTool:
+                if (!IsCursorValidForTool(gridPropertyDetails, itemDetails))
+                {
+                    SetCursorToInvalid();
+                    return;
+                }
+
                 break;
             case ItemType.None:
                 break;
@@ -218,6 +232,77 @@ public class GridCursor: MonoBehaviour
             default:
                 break;
         }
+    }
+
+    /// <summary>
+    /// （译）将光标设置为目标gridPropertyDetails的工具的有效或无效。i有效时返回true，无效时返回false
+    /// </summary>
+    /// <param name="gridPropertyDetails"></param>
+    /// <param name="itemDetails"></param>
+    /// <returns></returns>
+    private bool IsCursorValidForTool(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
+    {
+        // 选择工具
+        switch (itemDetails.ItemType)
+        {
+            case ItemType.HoeingTool:
+                // 能够挖掘的条件
+                if (gridPropertyDetails.IsDiggable == true && gridPropertyDetails.DaysSinceDug == -1)
+                {
+                    #region 需要在现场获取任何物品，以便我们检查它们是否可回收
+
+                    // 获取游标的世界位置
+                    Vector3 cursorWorldPosition = new Vector3(GetWorldPositionForCursor().x + 0.5f,
+                        GetWorldPositionForCursor().y + 0.5f, 0f);
+
+                    // 定义 在游标位置，所有物体的列表
+                    List<Item> itemList = new List<Item>();
+
+                    // 获取游标位置的所有物体
+                    HelperMethods.TryGetComponentsAtBoxLocation<Item>(out itemList, cursorWorldPosition,
+                        Settings.CursorSize, 0f);
+
+                    #endregion
+
+                    // 循环遍历所找到的items，看看是否有可回收的类型-我们不会让玩家挖掘哪里有可回收的场景
+                    bool foundReapable = false;
+
+                    foreach (Item item in itemList)
+                    {
+                        if (InventoryManager.Instance.GetItemDetailsByItemCode(item.ItemCode).ItemType ==
+                            ItemType.ReapableScenery)
+                        {
+                            foundReapable = true;
+                            break;
+                        }
+                    }
+
+                    if (foundReapable)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+                break;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// 获取游标的世界位置
+    /// </summary>
+    /// <returns>游标的世界位置</returns>
+    private Vector3 GetWorldPositionForCursor()
+    {
+        return grid.CellToWorld(GetGridPositionForCursor());
     }
 
     private void SetCursorToValid()

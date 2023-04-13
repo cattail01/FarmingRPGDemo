@@ -1,6 +1,7 @@
-﻿using Enums;
-using UnityEngine;
+﻿using System.Collections;
+using Enums;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// 游戏主角单例组件
@@ -73,6 +74,19 @@ public class PlayerSingletonMonoBehavior :
 
     #endregion
 
+    #region 使用工具
+
+    // 使用工具暂停的时间
+    private WaitForSeconds useToolAnimationPause;
+
+    // 使用完工具暂停的时间
+    private WaitForSeconds afterUseToolAnimationPause;
+
+    // 主角禁用工具
+    private bool playerToolUseDisable = false;
+
+    #endregion
+
     protected override void Awake()
     {
         // 创建单例的自己：instance实例化
@@ -87,6 +101,9 @@ public class PlayerSingletonMonoBehavior :
     private void Start()
     {
         gridCursor = FindObjectOfType<GridCursor>();
+
+        useToolAnimationPause = new WaitForSeconds(Settings.UseToolAnimationPause);
+        afterUseToolAnimationPause = new WaitForSeconds(Settings.AfterUseToolAnimationPause);
     }
 
     protected void Update()
@@ -118,7 +135,6 @@ public class PlayerSingletonMonoBehavior :
                 idleRight, idleLeft, idleUp, idleDown
             );
         }
-        
     }
 
     private void ResetAnimatorTriggers()
@@ -286,8 +302,8 @@ public class PlayerSingletonMonoBehavior :
     private List<CharacterAttribute> characterAttributeList;
 
     // 在预制件中填充，用于显示举过头顶的物品
-    [Tooltip("Should be populate in the prefab with the equipped item sprite renderer")]
-    [SerializeField] private SpriteRenderer equippedItemSpriteRenderer;
+    [Tooltip("Should be populate in the prefab with the equipped item sprite renderer")] [SerializeField]
+    private SpriteRenderer equippedItemSpriteRenderer;
 
     // 要更改动画的参数
     private CharacterAttribute armsCharacterAttribute;
@@ -304,7 +320,7 @@ public class PlayerSingletonMonoBehavior :
         armsCharacterAttribute =
             new CharacterAttribute(CharacterPartAnimator.arms, PartVariantColour.None, PartVariantType.None);
         toolCharacterAttribute =
-            new CharacterAttribute(CharacterPartAnimator.tool,  PartVariantColour.None, PartVariantType.None);
+            new CharacterAttribute(CharacterPartAnimator.tool, PartVariantColour.None, PartVariantType.None);
     }
 
     public void ShowCarriedItem(int itemCode)
@@ -345,25 +361,39 @@ public class PlayerSingletonMonoBehavior :
 
     #endregion animator override controller 相关部分
 
-    #region 游戏扔出物体部分
+    #region
 
     private void PlayerClickInput()
     {
-        if (Input.GetMouseButton(0))
+        if (!playerToolUseDisable)
         {
-            if (gridCursor.CursorIsEnabled)
+            if (Input.GetMouseButton(0))
             {
-                ProcessPlayerClickInput();
+                if (gridCursor.CursorIsEnabled)
+                {
+                    Vector3Int cursorGridPosition = gridCursor.GetGridPositionForCursor();
+                    Vector3Int playerGridPosition = gridCursor.GetGridPositionForPlayer();
+                    ProcessPlayerClickInput(cursorGridPosition, playerGridPosition);
+                }
             }
         }
     }
 
-    private void ProcessPlayerClickInput()
+    private void ProcessPlayerClickInput(Vector3Int cursorGridPosition, Vector3Int playerGridPosition)
     {
         ResetMovement();
 
+        Vector3Int playerDirection = GetPlayerClickDirection(cursorGridPosition, playerGridPosition);
+
+        // 获取游标位置的网格属性细节(GridCursor验证例程确保网格属性细节不为空)
+        GridPropertyDetails gridPropertyDetails =
+            GridPropertiesManager.Instance.GetGridPropertyDetails(cursorGridPosition.x, cursorGridPosition.y);
+
         ItemDetails itemDetails = InventoryManager.Instance.GetSelectedInventoryItemDetails(InventoryLocation.player);
-        if (itemDetails == null) { return;}
+        if (itemDetails == null)
+        {
+            return;
+        }
 
         switch (itemDetails.ItemType)
         {
@@ -372,12 +402,17 @@ public class PlayerSingletonMonoBehavior :
                 {
                     ProcessPlayerClickInputSeed(itemDetails);
                 }
+
                 break;
             case ItemType.Commodity:
                 if (Input.GetMouseButtonDown(0))
                 {
                     ProcessPlayerClickInputCommodity(itemDetails);
                 }
+
+                break;
+            case ItemType.HoeingTool:
+                ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                 break;
             case ItemType.None:
                 break;
@@ -387,6 +422,7 @@ public class PlayerSingletonMonoBehavior :
                 break;
         }
     }
+
 
     private void ProcessPlayerClickInputSeed(ItemDetails itemDetails)
     {
@@ -401,6 +437,95 @@ public class PlayerSingletonMonoBehavior :
         if (itemDetails.CanBeDropped && gridCursor.CursorPositionIsValid)
         {
             EventHandler.CallDropSelectedItemEvent();
+        }
+    }
+
+    private void ProcessPlayerClickInputTool(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails,
+        Vector3Int playerDirection)
+    {
+        // 选择工具
+        switch (itemDetails.ItemType)
+        {
+            case ItemType.HoeingTool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    HoeGroundAtCursor(gridPropertyDetails, playerDirection);
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void HoeGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
+    {
+        // trigger animation
+        StartCoroutine(HoeGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
+    }
+
+    private IEnumerator HoeGroundAtCursorRoutine(Vector3Int playerDirection, GridPropertyDetails gridPropertyDetails)
+    {
+        PlayerInputIsDisable = true;
+        playerToolUseDisable = true;
+
+        toolCharacterAttribute.partVariantType = PartVariantType.Hoe;
+        characterAttributeList.Clear();
+        characterAttributeList.Add(toolCharacterAttribute);
+        animationOverride.ApplyCharacterCustomisationParameters(characterAttributeList);
+
+        if (playerDirection == Vector3Int.right)
+        {
+            isUsingToolRight = true;
+        }
+        else if(playerDirection == Vector3Int.left)
+        {
+            isUsingToolLeft = true;
+        }
+        else if(playerDirection == Vector3Int.up)
+        {
+            isUsingToolUp = true;
+        }
+        else if(playerDirection == Vector3Int.down)
+        {
+            isUsingToolDown = true;
+        }
+
+        yield return useToolAnimationPause;
+
+        // 设置挖掘状态为挖掘完成
+        if (gridPropertyDetails.DaysSinceDug == -1)
+        {
+            gridPropertyDetails.DaysSinceDug = 0;
+        }
+
+        GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY,
+            gridPropertyDetails);
+
+        yield return afterUseToolAnimationPause;
+
+        PlayerInputIsDisable = false;
+        playerToolUseDisable = false;
+    }
+
+    // 获取主角点击的方向
+    private Vector3Int GetPlayerClickDirection(Vector3Int cursorGridPosition, Vector3Int playerGridPosition)
+    {
+        if (cursorGridPosition.x > playerGridPosition.x)
+        {
+            return Vector3Int.right;
+        }
+        else if (cursorGridPosition.x < playerGridPosition.x)
+        {
+            return Vector3Int.left;
+        }
+        else if (cursorGridPosition.y > playerGridPosition.y)
+        {
+            return Vector3Int.up;
+        }
+        else
+        {
+            return Vector3Int.down;
         }
     }
 
