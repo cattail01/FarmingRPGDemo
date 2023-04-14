@@ -1602,11 +1602,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   saveableUniqueId: 
-  Grid: {fileID: 0}
   gridPropertiesArray:
   - {fileID: 11400000, guid: 8f7a809a833b47049b6353a6e7da7813, type: 2}
   - {fileID: 11400000, guid: fd445c7c1b386ef4896032b1f77891b7, type: 2}
   - {fileID: 11400000, guid: d597197f18de0154a88dffc3745f9175, type: 2}
+  dugGround:
+  - {fileID: 11400000, guid: 39df3489413c0c442ad2e92a6b296e11, type: 2}
+  - {fileID: 11400000, guid: 46e773d8ee4c830499150488064e3ac4, type: 2}
+  - {fileID: 11400000, guid: e0595e4385c118e4f8ede1ddec25d702, type: 2}
+  - {fileID: 11400000, guid: 2cc690b4cdd6e5945a3fb8ffc4dd0a10, type: 2}
+  - {fileID: 11400000, guid: 400cbabce3f753246a1e23aa2dfda4e4, type: 2}
+  - {fileID: 11400000, guid: 89ad88d4115f4b841a6c26207ea04bdf, type: 2}
+  - {fileID: 11400000, guid: dcda1b234d88b934f97e51228c354069, type: 2}
+  - {fileID: 11400000, guid: 4f1e5759d9a87e548a206c3f1e7f57bc, type: 2}
+  - {fileID: 11400000, guid: 849f58304d3f1264cabc4b3e1a4b7a7e, type: 2}
+  - {fileID: 11400000, guid: 91d84274626104b4dbff9f21cc9fdf72, type: 2}
+  - {fileID: 11400000, guid: 2fc98ff97f6f2db4f937f5ab03fc111c, type: 2}
+  - {fileID: 11400000, guid: fa9e3215ffc71d14dbf306d4b69f57c7, type: 2}
+  - {fileID: 11400000, guid: d7ad6b4721ce324408d00f2711d9d125, type: 2}
+  - {fileID: 11400000, guid: 4f769c5552679b04a906f3b7e0a8a777, type: 2}
+  - {fileID: 11400000, guid: 18763e309b7ad9f459682a05db9cfc3b, type: 2}
+  - {fileID: 11400000, guid: fa654cc1fa1e8614c81e9b1eb6909b5a, type: 2}
 --- !u!114 &1456577333
 MonoBehaviour:
   m_ObjectHideFlags: 0
