@@ -502,6 +502,8 @@ public class PlayerSingletonMonoBehavior :
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY,
             gridPropertyDetails);
 
+        GridPropertiesManager.Instance.DisplayDugGround(gridPropertyDetails);
+
         yield return afterUseToolAnimationPause;
 
         PlayerInputIsDisable = false;

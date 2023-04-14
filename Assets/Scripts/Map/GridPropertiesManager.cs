@@ -1,6 +1,8 @@
 ﻿using Enums;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(GenerateGUID))]
 public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager>, ISaveable
@@ -56,12 +58,16 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
             return;
         }
 
-        if (sceneSave.NameToGridPropertyDetailsDic == null)
+        if (sceneSave.NameToGridPropertyDetailsDic != null)
         {
-            return;
+            nameToGridPropertyDetailsDic = sceneSave.NameToGridPropertyDetailsDic;
         }
 
-        nameToGridPropertyDetailsDic = sceneSave.NameToGridPropertyDetailsDic;
+        if (nameToGridPropertyDetailsDic.Count > 0)
+        {
+            ClearDisplayGridPropertyDetails();
+            DisplayGridPropertyDetails();
+        }
     }
 
     #endregion ISaveable 接口的部分
@@ -96,7 +102,7 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
     #endregion 脚本生命周期
 
     // 定义均匀绘制点和线布局的对象
-    public Grid Grid;
+    private Grid grid;
 
     // 定义存储绘制点线参数的数组
     [SerializeField] private SO_GridProperties[] gridPropertiesArray;
@@ -108,7 +114,11 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
     private void AfterSceneLoaded()
     {
         // 获取 grid 游戏对象
-        Grid = GameObject.FindObjectOfType<Grid>();
+        grid = GameObject.FindObjectOfType<Grid>();
+
+        // 获取 tile map
+        groundDecoration1 = GameObject.FindGameObjectWithTag(Tags.GroundDecoration1).GetComponent<Tilemap>();
+        groundDecoration2 = GameObject.FindGameObjectWithTag(Tags.GroundDecoration2).GetComponent<Tilemap>();
     }
 
     // 为所提供的字典在gridlocation处转换gridPropertyDetails，如果location.il上不存在属性则为null
@@ -213,6 +223,7 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
                 SetGridPropertyDetails(gridProperty.GridCoordinate.x, gridProperty.GridCoordinate.y,
                     gridPropertyDetails, nameToGridPropertyDetailsDic);
             }
+
             SceneSave sceneSave = new SceneSave();
 
             sceneSave.NameToGridPropertyDetailsDic = nameToGridPropertyDetailsDic;
@@ -225,4 +236,189 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
             GameObjectSave.sceneData_SceneNameToSceneSave.Add(gridProperties.SceneName.ToString(), sceneSave);
         }
     }
+
+    #region 地面装饰（GroundDecorations）部分
+
+    private Tilemap groundDecoration1;
+    private Tilemap groundDecoration2;
+
+    [SerializeField] private Tile[] dugGround = null;
+
+    public void DisplayDugGround(GridPropertyDetails gridPropertyDetails)
+    {
+        // dug
+        if (gridPropertyDetails.DaysSinceDug > -1)
+        {
+            ConnectDugGround(gridPropertyDetails);
+        }
+    }
+
+    private void ConnectDugGround(GridPropertyDetails gridPropertyDetails)
+    {
+        Tile dugTile0 = SetDugTile(gridPropertyDetails.GridX, gridPropertyDetails.GridY);
+        groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY), dugTile0);
+
+        GridPropertyDetails adjacentGridPropertyDetails;
+
+        adjacentGridPropertyDetails =
+            GetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY + 1);
+        if (adjacentGridPropertyDetails != null && adjacentGridPropertyDetails.DaysSinceDug > -1)
+        {
+            Tile dugTile1 = SetDugTile(gridPropertyDetails.GridX, gridPropertyDetails.GridY + 1);
+            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY + 1, 0),
+                dugTile1);
+        }
+
+        adjacentGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY - 1);
+        if (adjacentGridPropertyDetails != null && adjacentGridPropertyDetails.DaysSinceDug > -1)
+        {
+            Tile dugTile2 = SetDugTile(gridPropertyDetails.GridX, gridPropertyDetails.GridY - 1);
+            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY - 1, 0),
+                dugTile2);
+        }
+
+        adjacentGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.GridX - 1, gridPropertyDetails.GridY);
+        if (adjacentGridPropertyDetails != null && adjacentGridPropertyDetails.DaysSinceDug > -1)
+        {
+            Tile dugTile3 = SetDugTile(gridPropertyDetails.GridX - 1, gridPropertyDetails.GridY);
+            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.GridX - 1, gridPropertyDetails.GridY, 0),
+                dugTile3);
+        }
+
+        adjacentGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.GridX + 1, gridPropertyDetails.GridY);
+        if (adjacentGridPropertyDetails != null && adjacentGridPropertyDetails.DaysSinceDug > -1)
+        {
+            Tile dugTile4 = SetDugTile(gridPropertyDetails.GridX + 1, gridPropertyDetails.GridY);
+            groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.GridX + 1, gridPropertyDetails.GridY, 0),
+                dugTile4);
+        }
+    }
+
+    private Tile SetDugTile(int xGrid, int yGrid)
+    {
+        //return null;
+
+        bool upDug = IsGridSquareDug(xGrid, yGrid + 1);
+        bool downDug = IsGridSquareDug(xGrid, yGrid - 1);
+        bool leftDug = IsGridSquareDug(xGrid - 1, yGrid);
+        bool rightDug = IsGridSquareDug(xGrid + 1, yGrid);
+
+        #region 根据周围的瓷砖是否挖好来设置合适的瓷砖
+
+        if (!upDug && !downDug && !rightDug && !leftDug)
+        {
+            return dugGround[0];
+        }
+        else if (!upDug && downDug && rightDug && !leftDug)
+        {
+            return dugGround[1];
+        }
+        else if (!upDug && downDug && rightDug && leftDug)
+        {
+            return dugGround[2];
+        }
+        else if (!upDug && downDug && !rightDug && leftDug)
+        {
+            return dugGround[3];
+        }
+        else if (!upDug && downDug && !rightDug && !leftDug)
+        {
+            return dugGround[4];
+        }
+        else if (upDug && downDug && rightDug && !leftDug)
+        {
+            return dugGround[5];
+        }
+        else if (upDug && downDug && rightDug && leftDug)
+        {
+            return dugGround[6];
+        }
+
+        else if (upDug && downDug && !rightDug && leftDug)
+        {
+            return dugGround[7];
+        }
+
+        else if (upDug && downDug && !rightDug && !leftDug)
+        {
+            return dugGround[8];
+
+        }
+
+        else if (upDug && !downDug && rightDug && !leftDug)
+        {
+            return dugGround[9];
+
+        }
+        else if (upDug && !downDug && rightDug && leftDug)
+        {
+            return dugGround[10];
+        }
+        else if (upDug && !downDug && !rightDug && leftDug)
+        {
+            return dugGround[11];
+        }
+
+        else if (upDug && !downDug && !rightDug && !leftDug)
+        {
+            return dugGround[12];
+        }
+        else if (!upDug && !downDug && rightDug && !leftDug)
+        {
+            return dugGround[13];
+
+        }
+        else if (!upDug && !downDug && rightDug && leftDug)
+        {
+            return dugGround[14];
+
+        }
+        else if (!upDug && !downDug && !rightDug && leftDug)
+        {
+            return dugGround[15];
+        }
+        return null;
+        #endregion 根据周围的瓷砖是否挖好来设置合适的瓷砖
+    }
+
+    private bool IsGridSquareDug(int xGrid, int yGrid)
+    {
+        GridPropertyDetails gridPropertyDetails = GetGridPropertyDetails(xGrid, yGrid);
+        if (gridPropertyDetails == null)
+        {
+            return false;
+        }
+        else if (gridPropertyDetails.DaysSinceDug > -1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void DisplayGridPropertyDetails()
+    {
+        foreach (KeyValuePair<string, GridPropertyDetails> item in nameToGridPropertyDetailsDic)
+        {
+            GridPropertyDetails gridPropertyDetails = item.Value;
+
+            DisplayDugGround(gridPropertyDetails);
+        }
+    }
+
+    private void ClearDisplayGridPropertyDetails()
+    {
+        ClearDisplayGroundDecorations();
+    }
+
+    private void ClearDisplayGroundDecorations()
+    {
+        // 移除地面覆盖层
+        groundDecoration1.ClearAllTiles();
+        groundDecoration2.ClearAllTiles();
+    }
+
+    #endregion 地面装饰（GroundDecorations）部分
 }
