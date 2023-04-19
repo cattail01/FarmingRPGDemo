@@ -64,6 +64,16 @@ public static class Settings
     /// </summary>
     public static float AfterUseToolAnimationPause = 0.2f;
 
+    /// <summary>
+    /// 浇水动画暂停时间
+    /// </summary>
+    public static float LiftToolAnimationPause = 0.4f;
+
+    /// <summary>
+    /// 浇水完成动画的暂停时间
+    /// </summary>
+    public static float AfterLiftAnimationPause = 0.4f;
+
     #endregion 游戏角色的移动参数
 
     #region 游戏角色动画状态改变参数的哈希值，用于找到游戏角色动画状态改变的参数

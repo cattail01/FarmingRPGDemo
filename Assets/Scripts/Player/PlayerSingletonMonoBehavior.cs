@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Enums;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -76,14 +78,22 @@ public class PlayerSingletonMonoBehavior :
 
     #region 使用工具
 
+    // 主角禁用工具
+    private bool playerToolUseDisable = false;
+
     // 使用工具暂停的时间
     private WaitForSeconds useToolAnimationPause;
 
     // 使用完工具暂停的时间
     private WaitForSeconds afterUseToolAnimationPause;
 
-    // 主角禁用工具
-    private bool playerToolUseDisable = false;
+    // 使用浇水工具暂停的时间
+    private WaitForSeconds liftToolAnimationPause;
+
+    // 使用完浇水工具暂停的时间
+    private WaitForSeconds afterLiftToolAnimationPause;
+
+    //private WaitForSeconds afterSwingToolAnimationPause;
 
     #endregion
 
@@ -104,6 +114,9 @@ public class PlayerSingletonMonoBehavior :
 
         useToolAnimationPause = new WaitForSeconds(Settings.UseToolAnimationPause);
         afterUseToolAnimationPause = new WaitForSeconds(Settings.AfterUseToolAnimationPause);
+
+        liftToolAnimationPause = new WaitForSeconds(Settings.LiftToolAnimationPause);
+
     }
 
     protected void Update()
@@ -412,6 +425,7 @@ public class PlayerSingletonMonoBehavior :
 
                 break;
             case ItemType.HoeingTool:
+            case ItemType.WateringTool:
                 ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                 break;
             case ItemType.None:
@@ -451,7 +465,12 @@ public class PlayerSingletonMonoBehavior :
                 {
                     HoeGroundAtCursor(gridPropertyDetails, playerDirection);
                 }
-
+                break;
+            case ItemType.WateringTool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    WaterGroundAtCursor(gridPropertyDetails, playerDirection);
+                }
                 break;
             default:
                 break;
@@ -462,6 +481,12 @@ public class PlayerSingletonMonoBehavior :
     {
         // trigger animation
         StartCoroutine(HoeGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
+    }
+
+    private void WaterGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
+    {
+        // trigger animation
+        StartCoroutine(WaterGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
     }
 
     private IEnumerator HoeGroundAtCursorRoutine(Vector3Int playerDirection, GridPropertyDetails gridPropertyDetails)
@@ -507,6 +532,51 @@ public class PlayerSingletonMonoBehavior :
         yield return afterUseToolAnimationPause;
 
         PlayerInputIsDisable = false;
+        playerToolUseDisable = false;
+    }
+
+    private IEnumerator WaterGroundAtCursorRoutine(Vector3Int playerDirection, GridPropertyDetails gridPropertyDetails)
+    {
+        PlayerInputIsDisable = true;
+        playerToolUseDisable = true;
+
+        toolCharacterAttribute.partVariantType = PartVariantType.WateringCan;
+        characterAttributeList.Clear();
+        characterAttributeList.Add(toolCharacterAttribute);
+        animationOverride.ApplyCharacterCustomisationParameters(characterAttributeList);
+
+        toolEffect = ToolEffect.Watering;
+
+        if (playerDirection == Vector3Int.right)
+        {
+            isLiftingToolRight = true;
+        }
+        else if (playerDirection == Vector3Int.left)
+        {
+            isLiftingToolLeft = true;
+        }
+        else if (playerDirection == Vector3Int.up)
+        {
+            isLiftingToolUp = true;
+        }
+        else if (playerDirection == Vector3Int.down)
+        {
+            isLiftingToolDown = true;
+        }
+
+        yield return liftToolAnimationPause;
+
+        if (gridPropertyDetails.DaysSinceWatered == -1)
+        {
+            gridPropertyDetails.DaysSinceWatered = 0;
+        }
+
+        GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY,
+            gridPropertyDetails);
+
+        yield return afterLiftToolAnimationPause;
+
+        playerInputIsDisable = false;
         playerToolUseDisable = false;
     }
 

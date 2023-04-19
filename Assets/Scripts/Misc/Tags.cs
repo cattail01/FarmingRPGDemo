@@ -4,6 +4,12 @@
 
     public const string ItemsParentTransform = "ItemsParentTransform";
 
+    /// <summary>
+    /// 地图修饰层1
+    /// </summary>
     public const string GroundDecoration1 = "GroundDecoration1";
+    /// <summary>
+    /// 地图修饰层2
+    /// </summary>
     public const string GroundDecoration2 = "GroundDecoration2";
 }
