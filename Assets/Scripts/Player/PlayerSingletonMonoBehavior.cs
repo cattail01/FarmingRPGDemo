@@ -605,6 +605,16 @@ public class PlayerSingletonMonoBehavior :
 
     #endregion 游戏扔出物体部分
 
+    #region 自由游标部分
+
+    public Vector3 GetPlayerCenterPosition()
+    {
+        return new Vector3(transform.position.x, transform.position.y + Settings.PlayerCenterYOffset,
+            transform.position.z);
+    }
+
+    #endregion
+
     #region 游戏输入测试
 
     // todo remove

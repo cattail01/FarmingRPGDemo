@@ -163,6 +163,12 @@ public static class Settings
 
     #endregion 瓦片地图
 
+    #region 自由游标部分
+
+    public static float PlayerCenterYOffset = 0.875f;
+
+    #endregion
+
     // constructor
     static Settings()
     {
