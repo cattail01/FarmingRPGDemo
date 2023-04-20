@@ -574,6 +574,8 @@ public class PlayerSingletonMonoBehavior :
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY,
             gridPropertyDetails);
 
+        GridPropertiesManager.Instance.DisplayWaterGround(gridPropertyDetails);
+
         yield return afterLiftToolAnimationPause;
 
         playerInputIsDisable = false;

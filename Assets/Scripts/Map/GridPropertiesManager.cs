@@ -1,6 +1,7 @@
 ﻿using Enums;
 using System.Buffers.Text;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -86,12 +87,16 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
     {
         SaveableRegister();
         EventHandler.AfterSceneLoadEvent += AfterSceneLoaded;
+
+        EventHandler.AdvanceGameDayEvent += AdvanceDay;
     }
 
     private void OnDisable()
     {
         SaveableUnregister();
         EventHandler.AfterSceneLoadEvent -= AfterSceneLoaded;
+
+        EventHandler.AdvanceGameDayEvent -= AdvanceDay;
     }
 
     private void Start()
@@ -243,6 +248,7 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
     private Tilemap groundDecoration2;
 
     [SerializeField] private Tile[] dugGround = null;
+    [SerializeField] private Tile[] wateredGround = null;
 
     public void DisplayDugGround(GridPropertyDetails gridPropertyDetails)
     {
@@ -250,6 +256,15 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         if (gridPropertyDetails.DaysSinceDug > -1)
         {
             ConnectDugGround(gridPropertyDetails);
+        }
+    }
+
+    public void DisplayWaterGround(GridPropertyDetails gridPropertyDetails)
+    {
+        // watered
+        if (gridPropertyDetails.DaysSinceWatered > -1)
+        {
+            ConnectWaterGround(gridPropertyDetails);
         }
     }
 
@@ -291,6 +306,51 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
             Tile dugTile4 = SetDugTile(gridPropertyDetails.GridX + 1, gridPropertyDetails.GridY);
             groundDecoration1.SetTile(new Vector3Int(gridPropertyDetails.GridX + 1, gridPropertyDetails.GridY, 0),
                 dugTile4);
+        }
+    }
+
+    private void ConnectWaterGround(GridPropertyDetails gridPropertyDetails)
+    {
+        Tile wateredTile0 = SetWateredTile(gridPropertyDetails.GridX, gridPropertyDetails.GridY);
+        groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY, 0),
+            wateredTile0);
+
+        GridPropertyDetails adjacentGridPropertyDetails;
+
+        // grid x, grid y + 1
+        adjacentGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY + 1);
+        if (adjacentGridPropertyDetails != null && adjacentGridPropertyDetails.DaysSinceWatered > -1)
+        {
+            Tile wateredTile1 = SetWateredTile(gridPropertyDetails.GridX, gridPropertyDetails.GridY + 1);
+            groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY + 1, 0),
+                wateredTile1);
+        }
+
+        // grid x, grid y - 1
+        adjacentGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY - 1);
+        if (adjacentGridPropertyDetails != null && adjacentGridPropertyDetails.DaysSinceWatered > -1)
+        {
+            Tile wateredTile2 = SetWateredTile(gridPropertyDetails.GridX, gridPropertyDetails.GridY - 1);
+            groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY - 1, 0),
+                wateredTile2);
+        }
+
+        // grid x - 1, grid y
+        adjacentGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.GridX - 1, gridPropertyDetails.GridY);
+        if (adjacentGridPropertyDetails != null && adjacentGridPropertyDetails.DaysSinceWatered > -1)
+        {
+            Tile wateredTile3 = SetWateredTile(gridPropertyDetails.GridX - 1, gridPropertyDetails.GridY);
+            groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.GridX - 1, gridPropertyDetails.GridY, 0),
+                wateredTile3);
+        }
+
+        // grid x + 1, grid y
+        adjacentGridPropertyDetails = GetGridPropertyDetails(gridPropertyDetails.GridX + 1, gridPropertyDetails.GridY);
+        if (adjacentGridPropertyDetails != null && adjacentGridPropertyDetails.DaysSinceWatered > -1)
+        {
+            Tile wateredTile4 = SetWateredTile(gridPropertyDetails.GridX + 1, gridPropertyDetails.GridY);
+            groundDecoration2.SetTile(new Vector3Int(gridPropertyDetails.GridX + 1, gridPropertyDetails.GridY, 0),
+                wateredTile4);
         }
     }
 
@@ -381,6 +441,105 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         #endregion 根据周围的瓷砖是否挖好来设置合适的瓷砖
     }
 
+    private Tile SetWateredTile(int xGrid, int yGrid)
+    {
+        bool upWatered = IsGridSquareWatered(xGrid, yGrid + 1);
+        bool downWatered = IsGridSquareWatered(xGrid, yGrid - 1);
+        bool leftWatered = IsGridSquareWatered(xGrid - 1, yGrid);
+        bool rightWatered = IsGridSquareWatered(xGrid + 1, yGrid);
+
+        #region 根据周围是否浇水来设置合适的瓷砖
+
+        //if (upWatered && downWatered && rightWatered && leftWatered)
+        //{
+        //    return wateredGround[];
+        //}
+
+        if (!upWatered && !downWatered && !rightWatered && !leftWatered)
+        {
+            return wateredGround[0];
+        }
+
+        else if (!upWatered && downWatered && rightWatered && !leftWatered)
+        {
+            return wateredGround[1];
+        }
+
+        else if (!upWatered && downWatered && rightWatered && leftWatered)
+        {
+            return wateredGround[2];
+        }
+
+        else if (!upWatered && downWatered && !rightWatered && leftWatered)
+        {
+            return wateredGround[3];
+        }
+
+        else if (!upWatered && downWatered && !rightWatered && !leftWatered)
+        {
+            return wateredGround[4];
+        }
+
+        else if (upWatered && downWatered && rightWatered && !leftWatered)
+        {
+            return wateredGround[5];
+        }
+
+        else if (upWatered && downWatered && rightWatered && leftWatered)
+        {
+            return wateredGround[6];
+        }
+
+        else if (upWatered && downWatered && !rightWatered && leftWatered)
+        {
+            return wateredGround[7];
+        }
+
+        else if (upWatered && downWatered && !rightWatered && !leftWatered)
+        {
+            return wateredGround[8];
+        }
+
+        else if (upWatered && !downWatered && rightWatered && !leftWatered)
+        {
+            return wateredGround[9];
+        }
+
+        else if (upWatered && !downWatered && rightWatered && leftWatered)
+        {
+            return wateredGround[10];
+        }
+
+        else if (upWatered && !downWatered && !rightWatered && leftWatered)
+        {
+            return wateredGround[11];
+        }
+
+        else if (upWatered && !downWatered && !rightWatered && !leftWatered)
+        {
+            return wateredGround[12];
+        }
+
+        else if (!upWatered && !downWatered && rightWatered && !leftWatered)
+        {
+            return wateredGround[13];
+        }
+
+        else if (!upWatered && !downWatered && rightWatered && leftWatered)
+        {
+            return wateredGround[14];
+        }
+
+        else if (!upWatered && !downWatered && !rightWatered && leftWatered)
+        {
+            return wateredGround[15];
+        }
+
+        return null;
+
+        #endregion
+    }
+
     private bool IsGridSquareDug(int xGrid, int yGrid)
     {
         GridPropertyDetails gridPropertyDetails = GetGridPropertyDetails(xGrid, yGrid);
@@ -398,6 +557,23 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         }
     }
 
+    private bool IsGridSquareWatered(int xGrid, int yGrid)
+    {
+        GridPropertyDetails gridPropertyDetails = GetGridPropertyDetails(xGrid, yGrid);
+
+        if (gridPropertyDetails == null)
+        {
+            return false;
+        }
+
+        if (gridPropertyDetails.DaysSinceWatered <= -1)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     private void DisplayGridPropertyDetails()
     {
         foreach (KeyValuePair<string, GridPropertyDetails> item in nameToGridPropertyDetailsDic)
@@ -405,6 +581,8 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
             GridPropertyDetails gridPropertyDetails = item.Value;
 
             DisplayDugGround(gridPropertyDetails);
+
+            DisplayWaterGround(gridPropertyDetails);
         }
     }
 
@@ -420,5 +598,40 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         groundDecoration2.ClearAllTiles();
     }
 
+    private void AdvanceDay(int gameYear, Season gameSeason, int gameDay, string gameDayOfWeek, int gameHour,
+        int gameMinute, int gameSecond)
+    {
+        ClearDisplayGridPropertyDetails();
+
+        foreach (SO_GridProperties gridProperties in gridPropertiesArray)
+        {
+            if (GameObjectSave.sceneData_SceneNameToSceneSave.TryGetValue(gridProperties.SceneName.ToString(),
+                    out SceneSave sceneSave))
+            {
+                if (sceneSave.NameToGridPropertyDetailsDic != null)
+                {
+                    for (int i = sceneSave.NameToGridPropertyDetailsDic.Count - 1; i >= 0; --i)
+                    {
+                        KeyValuePair<string, GridPropertyDetails> items =
+                            sceneSave.NameToGridPropertyDetailsDic.ElementAt(i);
+
+                        GridPropertyDetails gridPropertyDetails = items.Value;
+
+                        if (gridPropertyDetails.DaysSinceWatered > -1)
+                        {
+                            gridPropertyDetails.DaysSinceWatered = -1;
+                        }
+
+                        SetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY,
+                            gridPropertyDetails, sceneSave.NameToGridPropertyDetailsDic);
+                    }
+                }
+            }
+        }
+        DisplayGridPropertyDetails();
+    }
+
     #endregion 地面装饰（GroundDecorations）部分
+
+
 }
