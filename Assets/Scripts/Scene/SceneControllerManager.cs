@@ -100,8 +100,10 @@ public class SceneControllerManager : SingletonMonoBehavior<SceneControllerManag
 		// 取消存储场景中的数据，并还原
 		SaveLoadManager.Instance.RestoreCurrentSceneData();
 
-		// 开始将幕布变淡，直到完全消失后执行接下来的代码
+
+        // 开始将幕布变淡，直到完全消失后执行接下来的代码
 		yield return StartCoroutine(FadeImageAlphaTo(0f));
+
 
 		// 调用场景加载结束后、并且幕布撤下后的时间
 		EventHandler.CallAfterSceneLoadFadeInEvent();

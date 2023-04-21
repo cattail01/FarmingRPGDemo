@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Enums;
 using UnityEngine.Events;       // for UnityEvent
 
@@ -198,9 +199,9 @@ public static class EventHandler
     // 调用场景加载淡入事件
     public static void CallAfterSceneLoadFadeInEvent()
     {
-        if (AfterSceneLoadEvent != null)
+        if (AfterSceneLoadFadeInEvent != null)
         {
-            AfterSceneLoadEvent();
+            AfterSceneLoadFadeInEvent();
         }
     }
 

@@ -109,6 +109,18 @@ public class PlayerSingletonMonoBehavior :
         InitializeAnimatorOverrideControllerPart();
     }
 
+    private void OnEnable()
+    {
+        EventHandler.BeforeSceneUnloadFadeOutEvent += DisablePlayerInputAndResetMovement;
+        EventHandler.AfterSceneLoadFadeInEvent += EnablePlayerInput;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.BeforeSceneUnloadFadeOutEvent -= DisablePlayerInputAndResetMovement;
+        EventHandler.AfterSceneLoadFadeInEvent -= EnablePlayerInput;
+    }
+
     private void Start()
     {
         gridCursor = FindObjectOfType<GridCursor>();
@@ -133,6 +145,7 @@ public class PlayerSingletonMonoBehavior :
 
     private void PlayerMovementController()
     {
+        //print(playerInputIsDisable);
         if (!playerInputIsDisable)
         {
             ResetAnimatorTriggers();
