@@ -169,6 +169,13 @@ public static class Settings
 
     #endregion
 
+    #region 镰刀割草部分
+
+    public const int MaxCollidersToTestPerReapSwing = 15;
+    public const int MaxTargetComponentsToDestroyPerReapSwing = 2;
+
+    #endregion
+
     // constructor
     static Settings()
     {

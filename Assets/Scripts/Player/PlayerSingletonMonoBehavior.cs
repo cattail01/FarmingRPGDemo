@@ -4,6 +4,7 @@ using Enums;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SubsystemsImplementation;
 
 /// <summary>
 /// 游戏主角单例组件
@@ -111,6 +112,7 @@ public class PlayerSingletonMonoBehavior :
     private void Start()
     {
         gridCursor = FindObjectOfType<GridCursor>();
+        cursor = FindObjectOfType<Cursor>();
 
         useToolAnimationPause = new WaitForSeconds(Settings.UseToolAnimationPause);
         afterUseToolAnimationPause = new WaitForSeconds(Settings.AfterUseToolAnimationPause);
@@ -315,7 +317,8 @@ public class PlayerSingletonMonoBehavior :
     private List<CharacterAttribute> characterAttributeList;
 
     // 在预制件中填充，用于显示举过头顶的物品
-    [Tooltip("Should be populate in the prefab with the equipped item sprite renderer")] [SerializeField]
+    [Tooltip("Should be populate in the prefab with the equipped item sprite renderer")]
+    [SerializeField]
     private SpriteRenderer equippedItemSpriteRenderer;
 
     // 要更改动画的参数
@@ -382,7 +385,7 @@ public class PlayerSingletonMonoBehavior :
         {
             if (Input.GetMouseButton(0))
             {
-                if (gridCursor.CursorIsEnabled)
+                if (gridCursor.CursorIsEnabled || cursor.CursorIsEnabled)
                 {
                     Vector3Int cursorGridPosition = gridCursor.GetGridPositionForCursor();
                     Vector3Int playerGridPosition = gridCursor.GetGridPositionForPlayer();
@@ -426,6 +429,7 @@ public class PlayerSingletonMonoBehavior :
                 break;
             case ItemType.HoeingTool:
             case ItemType.WateringTool:
+            case ItemType.ReapingTool:
                 ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                 break;
             case ItemType.None:
@@ -472,6 +476,13 @@ public class PlayerSingletonMonoBehavior :
                     WaterGroundAtCursor(gridPropertyDetails, playerDirection);
                 }
                 break;
+            case ItemType.ReapingTool:
+                if (cursor.CursorPositionIsValid)
+                {
+                    playerDirection = GetPlayerDirection(cursor.GetWorldPositionForCursor(), GetPlayerCenterPosition());
+                    ReapInPlayerDirectionAtCursor(itemDetails, playerDirection);
+                }
+                break;
             default:
                 break;
         }
@@ -489,6 +500,11 @@ public class PlayerSingletonMonoBehavior :
         StartCoroutine(WaterGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
     }
 
+    private void ReapInPlayerDirectionAtCursor(ItemDetails itemDetails, Vector3Int playerDirection)
+    {
+        StartCoroutine(ReapInPlayerDirectionAtCursorRoutine(itemDetails, playerDirection));
+    }
+
     private IEnumerator HoeGroundAtCursorRoutine(Vector3Int playerDirection, GridPropertyDetails gridPropertyDetails)
     {
         PlayerInputIsDisable = true;
@@ -503,15 +519,15 @@ public class PlayerSingletonMonoBehavior :
         {
             isUsingToolRight = true;
         }
-        else if(playerDirection == Vector3Int.left)
+        else if (playerDirection == Vector3Int.left)
         {
             isUsingToolLeft = true;
         }
-        else if(playerDirection == Vector3Int.up)
+        else if (playerDirection == Vector3Int.up)
         {
             isUsingToolUp = true;
         }
-        else if(playerDirection == Vector3Int.down)
+        else if (playerDirection == Vector3Int.down)
         {
             isUsingToolDown = true;
         }
@@ -578,8 +594,86 @@ public class PlayerSingletonMonoBehavior :
 
         yield return afterLiftToolAnimationPause;
 
-        playerInputIsDisable = false;
+        PlayerInputIsDisable = false;
         playerToolUseDisable = false;
+    }
+
+    private IEnumerator ReapInPlayerDirectionAtCursorRoutine(ItemDetails itemDetails, Vector3Int playerDirection)
+    {
+
+        //throw new NotImplementedException();
+
+        PlayerInputIsDisable = true;
+        playerToolUseDisable = true;
+
+        toolCharacterAttribute.partVariantType = PartVariantType.Scythe;
+        characterAttributeList.Clear();
+        characterAttributeList.Add(toolCharacterAttribute);
+        animationOverride.ApplyCharacterCustomisationParameters(characterAttributeList);
+
+        UseToolInPlayerDirection(itemDetails, playerDirection);
+
+        yield return useToolAnimationPause;
+        PlayerInputIsDisable = false;
+        playerToolUseDisable = false;
+    }
+
+    private void UseToolInPlayerDirection(ItemDetails equippedItemDetails, Vector3Int playerDirection)
+    {
+        if (Input.GetMouseButton(0))
+        {
+            switch (equippedItemDetails.ItemType)
+            {
+                case ItemType.ReapingTool:
+                    if (playerDirection == Vector3Int.right)
+                    {
+                        isSwingingToolRight = true;
+                    }
+                    else if (playerDirection == Vector3Int.left)
+                    {
+                        isSwingingToolLeft = true;
+                    }
+                    else if(playerDirection == Vector3Int.up)
+                    {
+                        isSwingingToolUp = true;
+                    }
+                    else if(playerDirection == Vector3Int.down)
+                    {
+                        isSwingingToolDown = true;
+                    }
+                    break;
+            }
+
+            Vector2 point =
+                new Vector2(
+                    GetPlayerCenterPosition().x + (playerDirection.x * (equippedItemDetails.ItemUseRadius / 2f)),
+                    GetPlayerCenterPosition().y + playerDirection.y * (equippedItemDetails.ItemUseRadius / 2f));
+            Vector2 size = new Vector2(equippedItemDetails.ItemUseRadius, equippedItemDetails.ItemUseRadius);
+            Item[] itemArray =
+                HelperMethods.GetComponentsAtBoxLocationNonAlloc<Item>(Settings.MaxCollidersToTestPerReapSwing, point,
+                    size, 0f);
+            int reapableItemCount = 0;
+
+            for (int i = itemArray.Length - 1; i >= 0; --i)
+            {
+                if (itemArray[i] != null)
+                {
+                    if (InventoryManager.Instance.GetItemDetailsByItemCode(itemArray[i].ItemCode).ItemType ==
+                        ItemType.ReapableScenery)
+                    {
+                        Vector3 effectPosition = new Vector3(itemArray[i].transform.position.x,
+                            itemArray[i].transform.position.y + Settings.GridCellSize / 2f,
+                            itemArray[i].transform.position.z);
+                        Destroy(itemArray[i].gameObject);
+                        reapableItemCount++;
+                        if (reapableItemCount >= Settings.MaxTargetComponentsToDestroyPerReapSwing)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // 获取主角点击的方向
@@ -603,9 +697,45 @@ public class PlayerSingletonMonoBehavior :
         }
     }
 
+    private Vector3Int GetPlayerDirection(Vector3 cursorPosition, Vector3 playerPosition)
+    {
+        //throw new NotImplementedException();
+        if (
+            cursorPosition.x > playerPosition.x
+            &&
+            cursorPosition.y < (playerPosition.y + cursor.ItemUseRadius / 2f)
+            &&
+            cursorPosition.y > (playerPosition.y - cursor.ItemUseRadius / 2f)
+        )
+        {
+            return Vector3Int.right;
+        }
+        else if
+        (
+            cursorPosition.x < playerPosition.x
+            &&
+            cursorPosition.y < (playerPosition.y + cursor.ItemUseRadius / 2f)
+            &&
+            cursorPosition.y > (playerPosition.y - cursor.ItemUseRadius / 2f)
+        )
+        {
+            return Vector3Int.left;
+        }
+        else if (cursorPosition.y > playerPosition.y)
+        {
+            return Vector3Int.up;
+        }
+        else
+        {
+            return Vector3Int.down;
+        }
+    }
+
     #endregion 游戏扔出物体部分
 
     #region 自由游标部分
+
+    private Cursor cursor;
 
     public Vector3 GetPlayerCenterPosition()
     {
