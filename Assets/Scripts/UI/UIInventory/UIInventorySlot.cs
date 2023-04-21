@@ -33,6 +33,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         mainCamera = Camera.main;
         gridCursor = FindObjectOfType<GridCursor>();
         //parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
+        cursor = FindObjectOfType<Cursor>();
     }
 
     private void OnEnable()
@@ -258,8 +259,17 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         // cursor part
 
-
+        cursor.ItemUseRadius = itemDetails.ItemUseRadius;
         gridCursor.ItemUseGridRadius = itemDetails.ItemUseGridRadius;
+
+        if (itemDetails.ItemUseRadius > 0f)
+        {
+            cursor.EnableCursor();
+        }
+        else
+        {
+            cursor.DisableCursor();
+        }
 
         if (itemDetails.ItemUseGridRadius > 0)
         {
@@ -270,6 +280,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             gridCursor.DisableCursor();
         }
 
+        cursor.SelectItemType = itemDetails.ItemType;
         gridCursor.SelectedItemType = itemDetails.ItemType;
 
 
@@ -297,12 +308,19 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     #region 鼠标游标UI相关部分
 
+    private Cursor cursor;
+
     private void ClearCursors()
     {
+        cursor.DisableCursor();
         gridCursor.DisableCursor();
 
+        cursor.SelectItemType = ItemType.None;
         gridCursor.SelectedItemType = ItemType.None;
     }
 
+
+
     #endregion
+
 }
