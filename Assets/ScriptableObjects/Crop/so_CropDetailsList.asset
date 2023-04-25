@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94223b9b29a0daa47986b502eafbe3d3, type: 3}
+  m_Name: so_CropDetailsList
+  m_EditorClassIdentifier: 
+  CropDetails:
+  - SeedItemCode: 10006
+    GrowthDays: 0000000001000000010000000100000002000000
+    TotalGrowthDays: 5
+    GrowthPrefab:
+    - {fileID: 4359721301800804079, guid: b1a868f93a2ac0e4ba78bf9909c1a794, type: 3}
+    - {fileID: 4359721301800804079, guid: b1a868f93a2ac0e4ba78bf9909c1a794, type: 3}
+    - {fileID: 4359721301800804079, guid: b1a868f93a2ac0e4ba78bf9909c1a794, type: 3}
+    - {fileID: 4359721301800804079, guid: b1a868f93a2ac0e4ba78bf9909c1a794, type: 3}
+    - {fileID: 4359721301800804079, guid: b1a868f93a2ac0e4ba78bf9909c1a794, type: 3}
+    GrowthSprites:
+    - {fileID: 6634833228405365077, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}
+    - {fileID: -8204859348171178890, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}
+    - {fileID: -4573777506729046043, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}
+    - {fileID: 7041525069147447728, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}
+    - {fileID: 7193783865090184285, guid: 5a1df36ac90cfa242908df77f9674580, type: 3}
+    Seasons: 0000000001000000
+    HarvestedSprite: {fileID: 21300000, guid: 0a1268bf801d5304ebf16458d7309ac1, type: 3}
+    HarvestedTransformItemCode: 0
+    HideCropBeforeHarvestedAnimation: 1
+    DisableCropCollidersBeforeHarvestedAnimation: 0
+    IsHarvestedAnimation: 1
+    IsHarvestActionEffect: 0
+    SpawnCropProducedAtPlayerPosition: 1
+    HarvestActionEffect: 5
+    HarvestToolItemCodes: 1c270000
+    RequiredHarvestActions: 01000000
+    CropProducedItemCode: 17270000
+    CropProducedMinQuantity: 01000000
+    CropProducedMaxQuantity: 01000000
+    DaysToRegrow: 0

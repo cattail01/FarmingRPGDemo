@@ -6,14 +6,16 @@ using UnityEngine;
 [Serializable]
 public class CropDetails
 {
-    [ItemCodeDescription] public int SeedItemCode;
+    //[ItemCodeDescription] 
+    public int SeedItemCode;
     public int[] GrowthDays;
     public int TotalGrowthDays;
     public GameObject[] GrowthPrefab;
     public Sprite[] GrowthSprites;
     public Season[] Seasons;
     public Sprite HarvestedSprite;
-    [ItemCodeDescription] public int HarvestedTransformItemCode;
+    //[ItemCodeDescription] 
+    public int HarvestedTransformItemCode;
     public bool HideCropBeforeHarvestedAnimation;
     public bool DisableCropCollidersBeforeHarvestedAnimation;
     public bool IsHarvestedAnimation;
@@ -21,9 +23,11 @@ public class CropDetails
     public bool SpawnCropProducedAtPlayerPosition;
     public HarvestActionEffect HarvestActionEffect;
 
-    [ItemCodeDescription] public int[] HarvestToolItemCodes;
+    //[ItemCodeDescription] 
+    public int[] HarvestToolItemCodes;
     public int[] RequiredHarvestActions;
-    [ItemCodeDescription] public int[] CropProducedItemCode;
+    //[ItemCodeDescription] 
+    public int[] CropProducedItemCode;
     public int[] CropProducedMinQuantity;
     public int[] CropProducedMaxQuantity;
     public int DaysToRegrow;

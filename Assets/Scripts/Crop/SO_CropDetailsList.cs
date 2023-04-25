@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CropDetailsList", menuName = "ScriptableObject/Crop/CropDetailsList")]
-public class SO_CropDetailsList : MonoBehaviour
+public class SO_CropDetailsList : ScriptableObject
 {
     [SerializeField]
     public List<CropDetails> CropDetails;
