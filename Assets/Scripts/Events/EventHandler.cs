@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Enums;
+using UnityEngine;
 using UnityEngine.Events;       // for UnityEvent
 
 public delegate void MovementDelegate
@@ -222,6 +223,20 @@ public static class EventHandler
     }
 
     #endregion 扔出物体
+
+    #region 收获系统
+
+    public static event Action<Vector3, HarvestActionEffect> HarvestActionEffectEvent;
+
+    public static void CallHarvestActionEffectEvent(Vector3 effectPosition, HarvestActionEffect harvestActionEffect)
+    {
+        if (HarvestActionEffectEvent != null)
+        {
+            HarvestActionEffectEvent(effectPosition, harvestActionEffect);
+        }
+    }
+
+    #endregion
 }
 
 

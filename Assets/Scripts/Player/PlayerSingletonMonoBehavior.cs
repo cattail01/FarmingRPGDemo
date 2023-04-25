@@ -677,6 +677,10 @@ public class PlayerSingletonMonoBehavior :
                         Vector3 effectPosition = new Vector3(itemArray[i].transform.position.x,
                             itemArray[i].transform.position.y + Settings.GridCellSize / 2f,
                             itemArray[i].transform.position.z);
+
+                        // trigger reaping effect
+                        EventHandler.CallHarvestActionEffectEvent(effectPosition, HarvestActionEffect.Reaping);
+
                         Destroy(itemArray[i].gameObject);
                         reapableItemCount++;
                         if (reapableItemCount >= Settings.MaxTargetComponentsToDestroyPerReapSwing)

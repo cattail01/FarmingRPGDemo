@@ -170,4 +170,18 @@ namespace Enums
     }
 
     #endregion 瓦片地图参数信息
+
+    #region 收获部分
+
+    public enum HarvestActionEffect
+    {
+        DeciduousLeavesFalling,
+        PineConesFalling,
+        ChoppingTreeTrunk,
+        BreakingStone,
+        Reaping,
+        None,
+    }
+
+    #endregion
 }
