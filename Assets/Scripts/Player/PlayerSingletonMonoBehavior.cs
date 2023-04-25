@@ -775,12 +775,27 @@ public class PlayerSingletonMonoBehavior :
             TimeManager.Instance.TestAdvanceGameDay();
         }
 
-        // 按l测试场景切换
-        if (Input.GetKeyDown(KeyCode.L))
+        //// 按l测试场景切换
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(), transform.position);
+        //}
+
+        if (Input.GetMouseButtonDown(1))
         {
-            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(), transform.position);
+            GameObject tree = PoolManager.Instance.ReuseObject(CanyonOakTreePrefab,
+                mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
+                    -mainCamera.transform.position.z)), Quaternion.identity);
+            tree.SetActive(true);
         }
     }
 
     #endregion 游戏输入测试
+
+    #region 游戏对象池测试
+
+    public GameObject CanyonOakTreePrefab;
+
+
+    #endregion
 }

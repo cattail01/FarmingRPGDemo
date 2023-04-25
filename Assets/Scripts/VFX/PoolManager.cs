@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoolManager : MonoBehaviour
+public class PoolManager : SingletonMonoBehavior<PoolManager>
 {
-    [System.Serializable]
+    [Serializable]
     public struct Pool
     {
         public int poolSize;
@@ -15,6 +15,11 @@ public class PoolManager : MonoBehaviour
     [SerializeField] private Transform objectPoolTransform = null;
 
     private Dictionary<int, Queue<GameObject>> poolDictionary = new Dictionary<int, Queue<GameObject>>();
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
     private void Start()
     {
@@ -57,12 +62,34 @@ public class PoolManager : MonoBehaviour
         {
             GameObject objectToReuse = GetObjectFromPool(poolKey);
 
-            
+            ResetObject(position, rotation, objectToReuse, prefab);
+            return objectToReuse;
+        }
+        else
+        {
+            Debug.Log($"No object pool for {prefab}");
+            return null;
         }
     }
 
     public GameObject GetObjectFromPool(int poolKey)
     {
-        throw new NotImplementedException();
+        GameObject objectToReuse = poolDictionary[poolKey].Dequeue();
+        poolDictionary[poolKey].Enqueue(objectToReuse);
+
+        if (objectToReuse.activeSelf)
+        {
+            objectToReuse.SetActive(false);
+        }
+
+        return objectToReuse;
+    }
+
+    public static void ResetObject(Vector3 position, Quaternion rotation, GameObject objectToReuse, GameObject prefab)
+    {
+        objectToReuse.transform.position = position;
+        objectToReuse.transform.rotation = rotation;
+
+        objectToReuse.transform.localScale = prefab.transform.localScale;
     }
 }
