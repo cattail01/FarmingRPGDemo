@@ -12,4 +12,9 @@
     /// 地图修饰层2
     /// </summary>
     public const string GroundDecoration2 = "GroundDecoration2";
+
+    /// <summary>
+    /// 作物父物体
+    /// </summary>
+    public const string CropsParentTransform = "CropsParentTransform";
 }

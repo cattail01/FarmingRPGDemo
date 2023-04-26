@@ -429,7 +429,7 @@ public class PlayerSingletonMonoBehavior :
             case ItemType.Seed:
                 if (Input.GetMouseButtonDown(0))
                 {
-                    ProcessPlayerClickInputSeed(itemDetails);
+                    ProcessPlayerClickInputSeed(gridPropertyDetails, itemDetails);
                 }
 
                 break;
@@ -455,12 +455,27 @@ public class PlayerSingletonMonoBehavior :
     }
 
 
-    private void ProcessPlayerClickInputSeed(ItemDetails itemDetails)
+    private void ProcessPlayerClickInputSeed(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
     {
-        if (itemDetails.CanBeDropped && gridCursor.CursorPositionIsValid)
+        if (itemDetails.CanBeDropped && gridCursor.CursorPositionIsValid && gridPropertyDetails.DaysSinceDug > -1 &&
+            gridPropertyDetails.SeedItemCode == -1)
+        {
+            PlantSeedAtCursor(gridPropertyDetails, itemDetails);
+        }
+        else if (itemDetails.CanBeDropped && gridCursor.CursorPositionIsValid)
         {
             EventHandler.CallDropSelectedItemEvent();
         }
+    }
+
+    private void PlantSeedAtCursor(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails)
+    {
+        gridPropertyDetails.SeedItemCode = itemDetails.ItemCode;
+        gridPropertyDetails.GrowthDays = 0;
+
+        GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
+
+        EventHandler.CallRemoveSelectedItemFromInventoryEvent();
     }
 
     private void ProcessPlayerClickInputCommodity(ItemDetails itemDetails)

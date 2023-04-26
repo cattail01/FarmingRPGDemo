@@ -1785,6 +1785,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4db1007daa13f6d48a98a8a2cbe1c8ed, type: 2}
   - {fileID: 11400000, guid: 4a080abbd21ca3841b216d23005fc46f, type: 2}
   - {fileID: 11400000, guid: 28dce4c50810fa44784bb17ea16e4200, type: 2}
+  so_CropDetailsList: {fileID: 11400000, guid: ea95a145ff4acde4ca1a15d14809de89, type: 2}
 --- !u!114 &1456577333
 MonoBehaviour:
   m_ObjectHideFlags: 0
