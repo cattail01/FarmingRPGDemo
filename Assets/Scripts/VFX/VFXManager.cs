@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Enums;
-using Unity.Mathematics;
+﻿using Enums;
+using System.Collections;
 using UnityEngine;
 
 public class VFXManager : SingletonMonoBehavior<VFXManager>
