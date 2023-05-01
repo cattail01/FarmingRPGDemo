@@ -10,7 +10,6 @@ using UnityEngine;
 public static class Settings
 {
 
-    #region InventoryTextBox用到的一些字符串常量
 
     public const string HoeingTool = "Hoe";
     public const string ChoppingTool = "Axe";
@@ -19,18 +18,12 @@ public static class Settings
     public const string WateringTool = "Watering Can";
     public const string CollectingTool = "Basket";
 
-    #endregion
-
-    #region 主角库存系统的相关参数
 
     // 主角的初始仓库大小
     public static int PlayerInitialInventoryCapacity = 24;
     // 主角的最大仓库大小
     public static int PlayerMaxInventoryCapacity = 48;
 
-    #endregion
-
-    #region  主角前遮挡物体透明的参数
 
     /// <summary>
     /// 淡入的时间
@@ -47,9 +40,7 @@ public static class Settings
     /// </summary>
     public const float TargetAlpha = 0.45f;
 
-    #endregion 主角前遮挡物体透明的参数
 
-    #region 游戏角色的移动参数
 
     public static float RunningSpeed = 5.333f;
     public static float WalkingSpeed = 2.666f;
@@ -74,9 +65,9 @@ public static class Settings
     /// </summary>
     public static float AfterLiftAnimationPause = 0.4f;
 
-    #endregion 游戏角色的移动参数
+    public static float PickAnimationPause = 1f;
 
-    #region 游戏角色动画状态改变参数的哈希值，用于找到游戏角色动画状态改变的参数
+    public static float AfterPickAnimationPause = 0.2f;
 
     // player animation parameters
     public static int xInput;
@@ -141,15 +132,9 @@ public static class Settings
         idleRight = Animator.StringToHash("idleRight");
     }
 
-    #endregion 游戏角色动画状态改变参数的哈希值，用于找到游戏角色动画状态改变的参数
-
-    #region time system
 
     public const float SecondsPerGameSecond = 0.012f;
 
-    #endregion time system
-
-    #region 瓦片地图
 
     /// <summary>
     /// 地图单元大小
@@ -161,20 +146,13 @@ public static class Settings
     /// </summary>
     public static Vector2 CursorSize = Vector2.one;
 
-    #endregion 瓦片地图
-
-    #region 自由游标部分
 
     public static float PlayerCenterYOffset = 0.875f;
 
-    #endregion
 
-    #region 镰刀割草部分
 
     public const int MaxCollidersToTestPerReapSwing = 15;
     public const int MaxTargetComponentsToDestroyPerReapSwing = 2;
-
-    #endregion
 
     // constructor
     static Settings()

@@ -4,6 +4,7 @@ using Enums;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SubsystemsImplementation;
 
 /// <summary>
@@ -13,8 +14,6 @@ public class PlayerSingletonMonoBehavior :
     SingletonMonoBehavior<PlayerSingletonMonoBehavior>
 {
     private Camera mainCamera;
-
-    #region Movement Parameters
 
     //private MovementAnimationParameters animationParameters;
     // player animation parameters
@@ -51,15 +50,8 @@ public class PlayerSingletonMonoBehavior :
 
     private float movementSpeed;
 
-    #endregion
-
-    #region Components
-
     private new Rigidbody2D rigidbody2D;
 
-    #endregion
-
-    #region Play Input Controller
 
     private bool playerInputIsDisable = false;
 
@@ -69,15 +61,7 @@ public class PlayerSingletonMonoBehavior :
         set => playerInputIsDisable = value;
     }
 
-    #endregion
-
-    #region 扔出物体
-
     private GridCursor gridCursor;
-
-    #endregion
-
-    #region 使用工具
 
     // 主角禁用工具
     private bool playerToolUseDisable = false;
@@ -96,7 +80,9 @@ public class PlayerSingletonMonoBehavior :
 
     //private WaitForSeconds afterSwingToolAnimationPause;
 
-    #endregion
+    private WaitForSeconds PickAnimationPause;
+
+    private WaitForSeconds AfterPickAnimationPause;
 
     protected override void Awake()
     {
@@ -131,6 +117,8 @@ public class PlayerSingletonMonoBehavior :
 
         liftToolAnimationPause = new WaitForSeconds(Settings.LiftToolAnimationPause);
 
+        PickAnimationPause = new WaitForSeconds(Settings.PickAnimationPause);
+        AfterPickAnimationPause = new WaitForSeconds(Settings.AfterPickAnimationPause);
     }
 
     protected void Update()
@@ -443,6 +431,7 @@ public class PlayerSingletonMonoBehavior :
             case ItemType.HoeingTool:
             case ItemType.WateringTool:
             case ItemType.ReapingTool:
+            case ItemType.CollectingTool:
                 ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                 break;
             case ItemType.None:
@@ -486,6 +475,8 @@ public class PlayerSingletonMonoBehavior :
         }
     }
 
+
+
     private void ProcessPlayerClickInputTool(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails,
         Vector3Int playerDirection)
     {
@@ -511,8 +502,78 @@ public class PlayerSingletonMonoBehavior :
                     ReapInPlayerDirectionAtCursor(itemDetails, playerDirection);
                 }
                 break;
+            case ItemType.CollectingTool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    CollectInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
+                }
+                break;
             default:
                 break;
+        }
+    }
+    
+    private void CollectInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails,
+        Vector3Int playerDirection)
+    {
+        StartCoroutine(CollectInPlayerDirectionRoutine(gridPropertyDetails, equippedItemDetails, playerDirection));
+    }
+
+    private IEnumerator CollectInPlayerDirectionRoutine(GridPropertyDetails gridPropertyDetails,
+        ItemDetails equippedItemDetails, Vector3Int playerDirection)
+    {
+        PlayerInputIsDisable = true;
+        playerToolUseDisable = true;
+
+        ProcessCropWithEquippedItemInPlayerDirection(playerDirection, equippedItemDetails, gridPropertyDetails);
+        yield return PickAnimationPause;
+
+        yield return AfterPickAnimationPause;
+
+        PlayerInputIsDisable = false;
+        playerToolUseDisable = false;
+    }
+
+    private void ProcessCropWithEquippedItemInPlayerDirection(Vector3Int playerDirection,
+        ItemDetails equippedItemDetails, GridPropertyDetails gridPropertyDetails)
+    {
+        switch (equippedItemDetails.ItemType)
+        {
+            case ItemType.CollectingTool:
+                if (playerDirection == Vector3Int.right)
+                {
+                    isPickingRight = true;
+                }
+                else if (playerDirection == Vector3Int.left)
+                {
+                    isPickingLeft = true;
+                }
+                else if(playerDirection == Vector3Int.up)
+                {
+                    isPickingUp  = true;
+                }
+                else if (playerDirection == Vector3Int.down)
+                {
+                    isPickingDown = true;
+                }
+                break;
+            case ItemType.None:
+                break;
+            default:
+                break;
+        }
+
+        Crop crop = GridPropertiesManager.Instance.GetCropObjectAtGridLocation(gridPropertyDetails);
+
+        if (crop != null)
+        {
+            switch (equippedItemDetails.ItemType)
+            {
+                case ItemType.CollectingTool:
+                    crop.ProcessToolAction(equippedItemDetails);
+                    break;
+            
+            }
         }
     }
 

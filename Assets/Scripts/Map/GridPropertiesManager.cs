@@ -1,14 +1,13 @@
 ﻿using Enums;
-using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(GenerateGUID))]
 public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager>, ISaveable
 {
-    #region ISaveable 接口的部分
 
     public string saveableUniqueId;
 
@@ -71,10 +70,6 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         }
     }
 
-    #endregion ISaveable 接口的部分
-
-    #region 脚本生命周期
-
     protected override void Awake()
     {
         base.Awake();
@@ -103,8 +98,6 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
     {
         InitialiseGridProperties();
     }
-
-    #endregion 脚本生命周期
 
     // 定义均匀绘制点和线布局的对象
     private Grid grid;
@@ -241,8 +234,6 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
             GameObjectSave.sceneData_SceneNameToSceneSave.Add(gridProperties.SceneName.ToString(), sceneSave);
         }
     }
-
-    #region 地面装饰（GroundDecorations）部分
 
     private Tilemap groundDecoration1;
     private Tilemap groundDecoration2;
@@ -640,10 +631,6 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         DisplayGridPropertyDetails();
     }
 
-    #endregion 地面装饰（GroundDecorations）部分
-
-    #region 作物系统
-
     private Transform cropParentTransform;
     [SerializeField] private SO_CropDetailsList so_CropDetailsList;
 
@@ -694,9 +681,40 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
 
         cropInstance.GetComponentInChildren<SpriteRenderer>().sprite = growthSprite;
         cropInstance.transform.SetParent(cropParentTransform);
-        cropInstance.GetComponent<Crop>().cropGridPosition =
+        cropInstance.GetComponent<Crop>().CropGridPosition =
             new Vector2Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY);
     }
 
-    #endregion
+    public Crop GetCropObjectAtGridLocation(GridPropertyDetails gridPropertyDetails)
+    {
+        Vector3 worldPosition =
+            grid.GetCellCenterWorld(new Vector3Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY, 0));
+        Collider2D[] collider2DArray = Physics2D.OverlapPointAll(worldPosition);
+
+        Crop crop = null;
+
+        for (int i = 0; i < collider2DArray.Length; ++i)
+        {
+            crop = collider2DArray[i].gameObject.GetComponentInParent<Crop>();
+            if (crop != null && crop.CropGridPosition ==
+                new Vector2Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY))
+            {
+                break;
+            }
+
+            crop = collider2DArray[i].gameObject.GetComponentInChildren<Crop>();
+            if (crop != null && crop.CropGridPosition ==
+                new Vector2Int(gridPropertyDetails.GridX, gridPropertyDetails.GridY))
+            {
+                break;
+            }
+        }
+        return crop;
+    }
+
+    public CropDetails GetCropDetails(int seedItemCode)
+    {
+        return so_CropDetailsList.GetCropDetails(seedItemCode);
+    }
+
 }

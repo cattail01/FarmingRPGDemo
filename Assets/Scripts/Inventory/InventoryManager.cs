@@ -108,6 +108,26 @@ public class InventoryManager : SingletonMonoBehavior<InventoryManager>
         Destroy(gameObjectToDisappear);
     }
 
+    
+
+    public void AddOneItem(InventoryLocation inventoryLocation, int itemCode)
+    {
+        List<InventoryItem> inventoryList = inventoryItemListArray[(int)inventoryLocation];
+
+        int itemPosition = FindItemInInventory(inventoryLocation, itemCode);
+
+        if (itemPosition != 0)
+        {
+            AddOneItemAtPosition(inventoryList, itemCode, itemPosition);
+        }
+        else
+        {
+            AddOneItemAtPosition(inventoryList, itemCode);
+        }
+
+        EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryItemListArray[(int)inventoryLocation]);
+    }
+
     /// <summary>
     /// 向某个库存list中添加物品
     /// </summary>

@@ -12,29 +12,53 @@ using UnityEngine.UI;
 /// </remarks>
 public class GridCursor : MonoBehaviour
 {
-    // 定义 游标图片
+    #region Properties
+
+    #region Serialize filed
+
+    // 游标图片
     [SerializeField] private Image cursorImage = null;
 
-    // 定义 游标位置
+    // 游标变换
     [SerializeField] private RectTransform cursorRectTransform = null;
 
-    // 定义 绿色游标精灵
+    // 绿色游标精灵
     [SerializeField] private Sprite greenCursorSprite = null;
 
-    // 定义 红色游标精灵
+    // 红色游标精灵
     [SerializeField] private Sprite redCursorSprite = null;
 
-    // 定义 画布
+    // 作物信息列表
+    [SerializeField] private SO_CropDetailsList so_CropDetailsList = null;
+
+    #endregion Serialize filed
+
+    #region Private
+
+    // 画布
     private Canvas canvas;
 
-    // 定义 网格
+    // 网格
     private Grid grid;
 
-    // 定义 主摄像机
+    // 主摄像机
     private Camera mainCamera;
 
-    // 定义 游标位置可用标志
+    // 游标位置可用标志
     private bool _cursorPositionIsValid = false;
+
+    // 物体可用的网格半径
+    private int _itemUseGridRadius = 0;
+
+    // 选中的物体类型
+    private ItemType _selectedItemType;
+
+    // 游标启用标志
+    private bool _cursorIsEnabled = false;
+
+    #endregion Private
+
+    #region Public Visitor
 
     /// <summary>
     /// 游标位置可用标志
@@ -45,9 +69,6 @@ public class GridCursor : MonoBehaviour
         set => _cursorPositionIsValid = value;
     }
 
-    // 定义 物体可用的网格半径
-    private int _itemUseGridRadius = 0;
-
     /// <summary>
     /// 物体可用的网格半径
     /// </summary>
@@ -56,9 +77,6 @@ public class GridCursor : MonoBehaviour
         get => _itemUseGridRadius;
         set => _itemUseGridRadius = value;
     }
-
-    // 定义 选中的物体类型
-    private ItemType _selectedItemType;
 
     /// <summary>
     /// 选中的物体类型
@@ -69,14 +87,19 @@ public class GridCursor : MonoBehaviour
         set => _selectedItemType = value;
     }
 
-    // 定义 游标启用标志
-    private bool _cursorIsEnabled = false;
-
+    /// <summary>
+    /// 游标启用标志
+    /// </summary>
     public bool CursorIsEnabled
     {
         get => _cursorIsEnabled;
         set => _cursorIsEnabled = value;
     }
+
+    #endregion Public Visitor
+
+    #endregion Properties
+
 
     #region 脚本生命周期
 
@@ -295,6 +318,7 @@ public class GridCursor : MonoBehaviour
                 {
                     return false;
                 }
+
                 break;
             case ItemType.WateringTool:
                 if (gridPropertyDetails.DaysSinceDug > -1 && gridPropertyDetails.DaysSinceWatered == -1)
@@ -305,10 +329,34 @@ public class GridCursor : MonoBehaviour
                 {
                     return false;
                 }
+
+            case ItemType.CollectingTool:
+                if (gridPropertyDetails.SeedItemCode != -1)
+                {
+                    CropDetails cropDetails = so_CropDetailsList.GetCropDetails(gridPropertyDetails.SeedItemCode);
+                    if (cropDetails != null)
+                    {
+                        if (cropDetails.CanUseToolToHarvestCrop(itemDetails.ItemCode))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+                
                 break;
             default:
                 return false;
         }
+
+        return false;
     }
 
     /// <summary>
