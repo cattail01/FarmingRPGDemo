@@ -653,6 +653,11 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
 
         CropDetails cropDetails = so_CropDetailsList.GetCropDetails(gridPropertyDetails.SeedItemCode);
 
+        if (cropDetails == null)
+        {
+            return;
+        }
+
         GameObject cropPrefab;
 
         int growthStages = cropDetails.GrowthDays.Length;

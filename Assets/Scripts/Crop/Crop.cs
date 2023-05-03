@@ -1,10 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Enums;
+﻿using Enums;
+using System.Collections;
 using UnityEngine;
 
 public class Crop : MonoBehaviour
 {
+    [Tooltip("使用子游戏对象填充")] [SerializeField]
+    private SpriteRenderer cropHarvestedSpriteRenderer;
+
     /// <summary>
     /// 作物在网格中的位置
     /// </summary>
@@ -38,7 +40,6 @@ public class Crop : MonoBehaviour
                 if (cropDetails.SpawnCropProducedAtPlayerPosition)
                 {
                     InventoryManager.Instance.AddOneItem(InventoryLocation.player, cropDetails.CropProducedItemCode[i]);
-                    
                 }
                 else
                 {
@@ -57,20 +58,65 @@ public class Crop : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void HarvestCrop(CropDetails cropDetails, GridPropertyDetails gridPropertyDetails)
+    private IEnumerator ProcessHarvestActionAfterAnimation(CropDetails cropDetails,
+        GridPropertyDetails gridPropertyDetails, Animator animator)
     {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Harvested"))
+        {
+            yield return null;
+        }
+
+        HarvestActions(cropDetails, gridPropertyDetails);
+    }
+
+    private void HarvestCrop(bool isUsingToolRight, bool isUsingToolUp, CropDetails cropDetails,
+        GridPropertyDetails gridPropertyDetails, Animator animator)
+    {
+        if (cropDetails.IsHarvestedAnimation && animator != null)
+        {
+            if (cropDetails.HarvestedSprite != null)
+            {
+                if (cropHarvestedSpriteRenderer != null)
+                {
+                    cropHarvestedSpriteRenderer.sprite = cropDetails.HarvestedSprite;
+                }
+            }
+
+            if (isUsingToolRight || isUsingToolUp)
+            {
+                animator.SetTrigger("harvestright");
+            }
+            else
+            {
+                animator.SetTrigger("harvestleft");
+            }
+        }
+
         gridPropertyDetails.SeedItemCode = -1;
         gridPropertyDetails.GrowthDays = -1;
         gridPropertyDetails.DaysSinceLastHarvest = -1;
         gridPropertyDetails.DaysSinceWatered = -1;
 
+        if (cropDetails.HideCropBeforeHarvestedAnimation)
+        {
+            GetComponentInChildren<SpriteRenderer>().enabled = false;
+        }
+
         GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY,
             gridPropertyDetails);
 
-        HarvestActions(cropDetails, gridPropertyDetails);
+        if (cropDetails.IsHarvestedAnimation && animator != null)
+        {
+            StartCoroutine(ProcessHarvestActionAfterAnimation(cropDetails, gridPropertyDetails, animator));
+        }
+        else
+        {
+            HarvestActions(cropDetails, gridPropertyDetails);
+        }
     }
 
-    public void ProcessToolAction(ItemDetails equippedItemDetails)
+    public void ProcessToolAction(ItemDetails equippedItemDetails, bool isToolRight, bool isToolLeft, bool isToolDown,
+        bool isToolUp)
     {
         GridPropertyDetails gridPropertyDetails =
             GridPropertiesManager.Instance.GetGridPropertyDetails(CropGridPosition.x, CropGridPosition.y);
@@ -92,6 +138,19 @@ public class Crop : MonoBehaviour
             return;
         }
 
+        Animator animator = GetComponentInChildren<Animator>();
+        if (animator != null)
+        {
+            if (isToolRight || isToolUp)
+            {
+                animator.SetTrigger("usetoolright");
+            }
+            else if (isToolLeft || isToolDown)
+            {
+                animator.SetTrigger("usetoolleft");
+            }
+        }
+
         int requiredHarvestActions = cropDetails.RequiredHarvestActionsForTool(equippedItemDetails.ItemCode);
         if (requiredHarvestActions == -1)
         {
@@ -102,7 +161,7 @@ public class Crop : MonoBehaviour
 
         if (harvestActionCount >= requiredHarvestActions)
         {
-            HarvestCrop(cropDetails, gridPropertyDetails);
+            HarvestCrop(isToolRight, isToolUp, cropDetails, gridPropertyDetails, animator);
         }
     }
 }
