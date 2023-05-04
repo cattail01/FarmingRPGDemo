@@ -663,16 +663,17 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         int growthStages = cropDetails.GrowthDays.Length;
 
         int currentGrowthStage = 0;
-        int daysCounter = cropDetails.TotalGrowthDays;
+        //int daysCounter = cropDetails.TotalGrowthDays;
 
         for (int i = growthStages - 1; i >= 0; --i)
         {
-            if (gridPropertyDetails.GrowthDays >= daysCounter)
+            //if (gridPropertyDetails.GrowthDays >= daysCounter)
+            if (gridPropertyDetails.GrowthDays >= cropDetails.GrowthDays[i])
             {
                 currentGrowthStage = i;
                 break;
             }
-            daysCounter = daysCounter - cropDetails.GrowthDays[i];
+            //daysCounter = daysCounter - cropDetails.GrowthDays[i];
         }
 
         cropPrefab = cropDetails.GrowthPrefab[currentGrowthStage];

@@ -173,7 +173,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: -33775583
   m_SortingLayer: 6
-  m_SortingOrder: 0
+  m_SortingOrder: 5
 --- !u!114 &2917205118206571099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,6 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equippedItemSpriteRenderer: {fileID: 8910318271579362772}
+  CanyonOakTreePrefab: {fileID: 0}
 --- !u!1 &3028056054459234987
 GameObject:
   m_ObjectHideFlags: 0

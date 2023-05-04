@@ -9,7 +9,7 @@ public class CropDetails
     //[ItemCodeDescription] 
     public int SeedItemCode;
     public int[] GrowthDays;
-    public int TotalGrowthDays;
+    //public int TotalGrowthDays;
     public GameObject[] GrowthPrefab;
     public Sprite[] GrowthSprites;
     public Season[] Seasons;
