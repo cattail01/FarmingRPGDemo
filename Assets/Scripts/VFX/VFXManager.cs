@@ -14,6 +14,11 @@ public class VFXManager : SingletonMonoBehavior<VFXManager>
     /// </summary>
     [SerializeField] private GameObject deciduousLeavesFallingPrefab;
 
+    /// <summary>
+    /// 砍树桩粒子预制件
+    /// </summary>
+    [SerializeField] private GameObject choppingTreeTrunkPrefab = null;
+
     private WaitForSeconds twoSeconds;
 
 
@@ -50,6 +55,12 @@ public class VFXManager : SingletonMonoBehavior<VFXManager>
                     effectPosition, Quaternion.identity);
                 deciduousLeavesFalling.SetActive(true);
                 StartCoroutine(DisableHarvestActionEffect(deciduousLeavesFalling, twoSeconds));
+                break;
+
+            case HarvestActionEffect.ChoppingTreeTrunk:
+                GameObject choppingTreeTrunk =
+                    PoolManager.Instance.ReuseObject(choppingTreeTrunkPrefab, effectPosition, Quaternion.identity);
+                StartCoroutine(DisableHarvestActionEffect(choppingTreeTrunk, twoSeconds));
                 break;
 
             case HarvestActionEffect.None:

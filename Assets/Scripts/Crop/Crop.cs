@@ -69,9 +69,27 @@ public class Crop : MonoBehaviour
         }
     }
 
+    private void CreateHarvestedTransformCrop(CropDetails cropDetails, GridPropertyDetails gridPropertyDetails)
+    {
+        gridPropertyDetails.SeedItemCode = cropDetails.HarvestedTransformItemCode;
+        gridPropertyDetails.GrowthDays = 0;
+        gridPropertyDetails.DaysSinceLastHarvest = -1;
+        gridPropertyDetails.DaysSinceWatered = -1;
+
+        GridPropertiesManager.Instance.SetGridPropertyDetails(gridPropertyDetails.GridX, gridPropertyDetails.GridY,
+            gridPropertyDetails);
+
+        GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
+    }
+
     private void HarvestActions(CropDetails cropDetails, GridPropertyDetails gridPropertyDetails)
     {
         SpawnHarvestedItems(cropDetails);
+
+        if (cropDetails.HarvestedTransformItemCode > 0)
+        {
+            CreateHarvestedTransformCrop(cropDetails, gridPropertyDetails);
+        }
 
         Destroy(gameObject);
     }
