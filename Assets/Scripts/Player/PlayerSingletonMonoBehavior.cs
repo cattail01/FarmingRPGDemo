@@ -1,22 +1,20 @@
-﻿using System;
+﻿using Enums;
 using System.Collections;
-using Enums;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using UnityEngine.SubsystemsImplementation;
 
 /// <summary>
-/// 游戏主角单例组件
+/// 游戏主角
 /// </summary>
 public class PlayerSingletonMonoBehavior :
     SingletonMonoBehavior<PlayerSingletonMonoBehavior>
 {
-    private Camera mainCamera;
+    #region 属性
 
-    //private MovementAnimationParameters animationParameters;
-    // player animation parameters
+    #region 运动动画参数
+
+
+
     private float xInput;
     private float yInput;
     private bool isWalking;
@@ -43,6 +41,17 @@ public class PlayerSingletonMonoBehavior :
     private bool idleDown;
     private bool idleLeft;
     private bool idleRight;
+
+
+    #endregion 运动动画参数
+
+    #endregion 属性
+
+    /// <summary>
+    /// 主摄像机
+    /// </summary>
+    private Camera mainCamera;
+
 
     private Enums.ToolEffect toolEffect = ToolEffect.None;
 
@@ -309,8 +318,6 @@ public class PlayerSingletonMonoBehavior :
         return mainCamera.WorldToViewportPoint(transform.position);
     }
 
-    #region animator override controller 相关部分
-
     // AnimationOverride组件
     private AnimationOverride animationOverride;
 
@@ -375,11 +382,6 @@ public class PlayerSingletonMonoBehavior :
 
         isCarrying = false;
     }
-
-    #endregion animator override controller 相关部分
-
-    #region
-
     private void PlayerClickInput()
     {
         if (!playerToolUseDisable)
@@ -432,6 +434,7 @@ public class PlayerSingletonMonoBehavior :
             case ItemType.WateringTool:
             case ItemType.ReapingTool:
             case ItemType.CollectingTool:
+            case ItemType.ChoppingTool:
                 ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                 break;
             case ItemType.None:
@@ -512,11 +515,46 @@ public class PlayerSingletonMonoBehavior :
                     CollectInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
                 }
                 break;
+            case ItemType.ChoppingTool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    ChopInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
+                }
+                break;
             default:
                 break;
         }
     }
-    
+
+    private void ChopInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails,
+        Vector3Int playerDirection)
+    {
+        StartCoroutine(ChopInPlayerDirectionRoutine(gridPropertyDetails, equippedItemDetails, playerDirection));
+    }
+
+    private IEnumerator ChopInPlayerDirectionRoutine(GridPropertyDetails gridPropertyDetails,
+        ItemDetails equippedItemDetails, Vector3Int playerDirection)
+    {
+        PlayerInputIsDisable = true;
+        playerToolUseDisable = true;
+
+        toolCharacterAttribute.partVariantType = PartVariantType.Axe;
+        characterAttributeList.Clear();
+        characterAttributeList.Add(toolCharacterAttribute);
+        animationOverride.ApplyCharacterCustomisationParameters(characterAttributeList);
+
+        ProcessCropWithEquippedItemInPlayerDirection(playerDirection, equippedItemDetails, gridPropertyDetails);
+
+        yield return useToolAnimationPause;
+
+        yield return afterUseToolAnimationPause;
+
+        PlayerInputIsDisable = false;
+        playerToolUseDisable = false;
+
+        //yield return null;
+    }
+
     private void CollectInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails,
         Vector3Int playerDirection)
     {
@@ -561,6 +599,28 @@ public class PlayerSingletonMonoBehavior :
                     isPickingDown = true;
                 }
                 break;
+
+            case ItemType.ChoppingTool:
+
+                if (playerDirection == Vector3Int.right)
+                {
+                    isUsingToolRight = true;
+                }
+                else if (playerDirection == Vector3Int.left)
+                {
+                    isUsingToolLeft = true;
+                }
+                else if (playerDirection == Vector3Int.up)
+                {
+                    isUsingToolUp = true;
+                }
+                else if (playerDirection == Vector3Int.down)
+                {
+                    isUsingToolDown = true;
+                }
+
+                break;
+
             case ItemType.None:
                 break;
             default:
@@ -577,7 +637,11 @@ public class PlayerSingletonMonoBehavior :
                     crop.ProcessToolAction(equippedItemDetails, isPickingRight, isPickingLeft, isPickingDown,
                         isPickingUp);
                     break;
-            
+
+                case ItemType.ChoppingTool:
+                    crop.ProcessToolAction(equippedItemDetails, isUsingToolRight, isUsingToolLeft, isUsingToolDown,
+                        isUsingToolUp);
+                    break;
             }
         }
     }
@@ -829,10 +893,6 @@ public class PlayerSingletonMonoBehavior :
         }
     }
 
-    #endregion 游戏扔出物体部分
-
-    #region 自由游标部分
-
     private Cursor cursor;
 
     public Vector3 GetPlayerCenterPosition()
@@ -840,10 +900,6 @@ public class PlayerSingletonMonoBehavior :
         return new Vector3(transform.position.x, transform.position.y + Settings.PlayerCenterYOffset,
             transform.position.z);
     }
-
-    #endregion
-
-    #region 游戏输入测试
 
     // todo remove
     private void PlayerTestInput()
@@ -875,12 +931,5 @@ public class PlayerSingletonMonoBehavior :
         //}
     }
 
-    #endregion 游戏输入测试
-
-    #region 游戏对象池测试
-
     public GameObject CanyonOakTreePrefab;
-
-
-    #endregion
 }

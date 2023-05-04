@@ -329,7 +329,7 @@ public class GridCursor : MonoBehaviour
                 {
                     return false;
                 }
-
+            case ItemType.ChoppingTool:
             case ItemType.CollectingTool:
                 if (gridPropertyDetails.SeedItemCode != -1)
                 {
