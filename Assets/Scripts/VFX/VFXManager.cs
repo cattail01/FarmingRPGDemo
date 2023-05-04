@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class VFXManager : SingletonMonoBehavior<VFXManager>
 {
+    /// <summary>
+    /// 收割粒子预制件
+    /// </summary>
     [SerializeField] private GameObject reapingPrefab;
+
+    /// <summary>
+    /// 落叶粒子预制件
+    /// </summary>
+    [SerializeField] private GameObject deciduousLeavesFallingPrefab;
 
     private WaitForSeconds twoSeconds;
 
@@ -36,8 +44,17 @@ public class VFXManager : SingletonMonoBehavior<VFXManager>
                 reaping.SetActive(true);
                 StartCoroutine(DisableHarvestActionEffect(reaping, twoSeconds));
                 break;
+
+            case HarvestActionEffect.DeciduousLeavesFalling:
+                GameObject deciduousLeavesFalling = PoolManager.Instance.ReuseObject(deciduousLeavesFallingPrefab,
+                    effectPosition, Quaternion.identity);
+                deciduousLeavesFalling.SetActive(true);
+                StartCoroutine(DisableHarvestActionEffect(deciduousLeavesFalling, twoSeconds));
+                break;
+
             case HarvestActionEffect.None:
                 break;
+
             default:
                 break;
         }

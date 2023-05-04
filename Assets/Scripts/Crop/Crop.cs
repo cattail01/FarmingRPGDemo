@@ -4,8 +4,24 @@ using UnityEngine;
 
 public class Crop : MonoBehaviour
 {
-    [Tooltip("使用子游戏对象填充")] [SerializeField]
+    #region 属性
+
+    #region SerializeField private
+
+    /// <summary>
+    /// 收割作物的图片
+    /// </summary>
+    [Tooltip("使用子游戏对象填充")]
+    [SerializeField]
     private SpriteRenderer cropHarvestedSpriteRenderer;
+
+    /// <summary>
+    /// 收割作物的粒子产生点
+    /// </summary>
+    [Tooltip("使用子游戏对象填充")]
+    [SerializeField] private Transform harvestActionEffectTransform = null;
+
+    #endregion SerializeField private
 
     /// <summary>
     /// 作物在网格中的位置
@@ -16,6 +32,8 @@ public class Crop : MonoBehaviour
     /// 收割动作计数器
     /// </summary>
     private int harvestActionCount = 0;
+
+    #endregion 属性
 
     private void SpawnHarvestedItems(CropDetails cropDetails)
     {
@@ -149,6 +167,12 @@ public class Crop : MonoBehaviour
             {
                 animator.SetTrigger("usetoolleft");
             }
+        }
+
+        if (cropDetails.IsHarvestActionEffect)
+        {
+            EventHandler.CallHarvestActionEffectEvent(harvestActionEffectTransform.position,
+                cropDetails.HarvestActionEffect);
         }
 
         int requiredHarvestActions = cropDetails.RequiredHarvestActionsForTool(equippedItemDetails.ItemCode);
