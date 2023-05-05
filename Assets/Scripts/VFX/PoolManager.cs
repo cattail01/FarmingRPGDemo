@@ -60,6 +60,7 @@ public class PoolManager : SingletonMonoBehavior<PoolManager>
 
         if (poolDictionary.ContainsKey(poolKey))
         {
+            //print("find target VFX: " + prefab.name);
             GameObject objectToReuse = GetObjectFromPool(poolKey);
 
             ResetObject(position, rotation, objectToReuse, prefab);

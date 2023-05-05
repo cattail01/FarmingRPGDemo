@@ -92,3 +92,53 @@ MonoBehaviour:
     CropProducedMinQuantity: 02000000
     CropProducedMaxQuantity: 03000000
     DaysToRegrow: 0
+  - SeedItemCode: 10009
+    GrowthDays: 00000000050000000a0000000f00000014000000
+    GrowthPrefab:
+    - {fileID: 4359721301800804079, guid: b1a868f93a2ac0e4ba78bf9909c1a794, type: 3}
+    - {fileID: 4359721301800804079, guid: b1a868f93a2ac0e4ba78bf9909c1a794, type: 3}
+    - {fileID: 4359721301800804079, guid: b1a868f93a2ac0e4ba78bf9909c1a794, type: 3}
+    - {fileID: 4359721301800804079, guid: b1a868f93a2ac0e4ba78bf9909c1a794, type: 3}
+    - {fileID: 5199540507016817349, guid: fc4426c252054d8439b47ad16e6d9e57, type: 3}
+    GrowthSprites:
+    - {fileID: 5616798495908862610, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
+    - {fileID: -6947715560310228016, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
+    - {fileID: 4303850705525679241, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
+    - {fileID: 9217379939570758284, guid: 5d22327a2a3d2a049a8a59a708d527fe, type: 3}
+    - {fileID: 21300000, guid: 89c46045b5f23d840b62099f6f1f6344, type: 3}
+    Seasons: 00000000010000000200000003000000
+    HarvestedSprite: {fileID: 0}
+    HarvestedTransformItemCode: 10011
+    HideCropBeforeHarvestedAnimation: 0
+    DisableCropCollidersBeforeHarvestedAnimation: 0
+    IsHarvestedAnimation: 1
+    IsHarvestActionEffect: 1
+    SpawnCropProducedAtPlayerPosition: 0
+    HarvestActionEffect: 1
+    HarvestToolItemCodes: 15270000
+    RequiredHarvestActions: 07000000
+    CropProducedItemCode: 1827000019270000
+    CropProducedMinQuantity: 0300000001000000
+    CropProducedMaxQuantity: 0600000002000000
+    DaysToRegrow: 0
+  - SeedItemCode: 10011
+    GrowthDays: 00000000
+    GrowthPrefab:
+    - {fileID: 1874380375173676033, guid: 495f640ea4e1c91468968d366720212c, type: 3}
+    GrowthSprites:
+    - {fileID: 21300000, guid: 89c46045b5f23d840b62099f6f1f6344, type: 3}
+    Seasons: 00000000010000000200000003000000
+    HarvestedSprite: {fileID: 0}
+    HarvestedTransformItemCode: 0
+    HideCropBeforeHarvestedAnimation: 0
+    DisableCropCollidersBeforeHarvestedAnimation: 0
+    IsHarvestedAnimation: 1
+    IsHarvestActionEffect: 1
+    SpawnCropProducedAtPlayerPosition: 0
+    HarvestActionEffect: 2
+    HarvestToolItemCodes: 15270000
+    RequiredHarvestActions: 04000000
+    CropProducedItemCode: 18270000
+    CropProducedMinQuantity: 02000000
+    CropProducedMaxQuantity: 03000000
+    DaysToRegrow: 0

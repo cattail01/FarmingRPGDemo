@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 粒子管理器
+/// </summary>
 public class VFXManager : SingletonMonoBehavior<VFXManager>
 {
     /// <summary>
@@ -17,26 +20,19 @@ public class VFXManager : SingletonMonoBehavior<VFXManager>
     /// <summary>
     /// 砍树桩粒子预制件
     /// </summary>
-    [SerializeField] private GameObject choppingTreeTrunkPrefab = null;
+    [SerializeField] private GameObject choppingTreeTrunkPrefab;
+
+    /// <summary>
+    /// 云山树砍树掉松果粒子预制件
+    /// </summary>
+    [SerializeField] private GameObject pineConesFallingPrefab;
 
     private WaitForSeconds twoSeconds;
 
-
-    protected override void Awake()
+    private IEnumerator DisableHarvestActionEffect(GameObject effectGameObject, WaitForSeconds secondsToWait)
     {
-        base.Awake();
-
-        twoSeconds = new WaitForSeconds(2f);
-    }
-
-    private void OnEnable()
-    {
-        EventHandler.HarvestActionEffectEvent += DisplayHarvestActionEffect;
-    }
-
-    private void OnDisable()
-    {
-        EventHandler.HarvestActionEffectEvent -= DisplayHarvestActionEffect;
+        yield return secondsToWait;
+        effectGameObject.SetActive(false);
     }
 
     private void DisplayHarvestActionEffect(Vector3 effectPosition, HarvestActionEffect harvestActionEffect)
@@ -60,7 +56,16 @@ public class VFXManager : SingletonMonoBehavior<VFXManager>
             case HarvestActionEffect.ChoppingTreeTrunk:
                 GameObject choppingTreeTrunk =
                     PoolManager.Instance.ReuseObject(choppingTreeTrunkPrefab, effectPosition, Quaternion.identity);
+                choppingTreeTrunk.SetActive(true);
                 StartCoroutine(DisableHarvestActionEffect(choppingTreeTrunk, twoSeconds));
+                break;
+
+            case HarvestActionEffect.PineConesFalling:
+                GameObject pineConesFalling =
+                    PoolManager.Instance.ReuseObject(pineConesFallingPrefab, effectPosition, Quaternion.identity);
+                //print(pineConesFallingPrefab.GetInstanceID() + "1");
+                pineConesFalling.SetActive(true);
+                StartCoroutine(DisableHarvestActionEffect(pineConesFalling, twoSeconds));
                 break;
 
             case HarvestActionEffect.None:
@@ -71,9 +76,24 @@ public class VFXManager : SingletonMonoBehavior<VFXManager>
         }
     }
 
-    private IEnumerator DisableHarvestActionEffect(GameObject effectGameObject, WaitForSeconds secondsToWait)
+    #region 脚本声明周期函数
+
+    protected override void Awake()
     {
-        yield return secondsToWait;
-        effectGameObject.SetActive(false);
+        base.Awake();
+
+        twoSeconds = new WaitForSeconds(2f);
     }
+
+    private void OnEnable()
+    {
+        EventHandler.HarvestActionEffectEvent += DisplayHarvestActionEffect;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.HarvestActionEffectEvent -= DisplayHarvestActionEffect;
+    }
+
+    #endregion 脚本声明周期函数
 }
