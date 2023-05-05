@@ -1,7 +1,6 @@
 ﻿using Enums;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -25,6 +24,8 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         set => gameObjectSave = value;
     }
 
+    private bool isFirstTimeSceneLoaded = true;
+
     public void SaveableRegister()
     {
         SaveLoadManager.Instance.SaveableObjectList.Add(this);
@@ -46,6 +47,9 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         // 创建并添加 dict grid 参数细节类 字典
         sceneSave.NameToGridPropertyDetailsDic = nameToGridPropertyDetailsDic;
 
+        sceneSave.BoolDictionary = new Dictionary<string, bool>();
+        sceneSave.BoolDictionary.Add("isFirstTimeSceneLoaded", isFirstTimeSceneLoaded);
+
         // 将 scene save 类 添加到 game object save 类中
         GameObjectSave.sceneData_SceneNameToSceneSave.Add(sceneName, sceneSave);
     }
@@ -63,10 +67,26 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
             nameToGridPropertyDetailsDic = sceneSave.NameToGridPropertyDetailsDic;
         }
 
+        if (sceneSave.BoolDictionary != null &&
+            sceneSave.BoolDictionary.TryGetValue("isFirstTimeSceneLoaded", out bool storedIsFirstTimeSceneLoaded))
+        {
+            isFirstTimeSceneLoaded = storedIsFirstTimeSceneLoaded;
+        }
+
+        if (isFirstTimeSceneLoaded)
+        {
+            EventHandler.CallInstantiateCropPrefabsEvent();
+        }
+
         if (nameToGridPropertyDetailsDic.Count > 0)
         {
             ClearDisplayGridPropertyDetails();
             DisplayGridPropertyDetails();
+        }
+
+        if (isFirstTimeSceneLoaded == true)
+        {
+            isFirstTimeSceneLoaded = false;
         }
     }
 
@@ -230,6 +250,9 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
             {
                 this.nameToGridPropertyDetailsDic = nameToGridPropertyDetailsDic;
             }
+
+            sceneSave.BoolDictionary = new Dictionary<string, bool>();
+            sceneSave.BoolDictionary.Add("isFirstTimeSceneLoaded", true);
 
             GameObjectSave.sceneData_SceneNameToSceneSave.Add(gridProperties.SceneName.ToString(), sceneSave);
         }

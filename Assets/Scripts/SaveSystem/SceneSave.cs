@@ -20,4 +20,6 @@ public class SceneSave
 
     // 定义string 到 地皮参数细节类 的字典
     public Dictionary<string, GridPropertyDetails> NameToGridPropertyDetailsDic;
+
+    public Dictionary<string, bool> BoolDictionary;
 }

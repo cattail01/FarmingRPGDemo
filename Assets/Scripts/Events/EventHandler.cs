@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Enums;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Enums;
 using UnityEngine;
-using UnityEngine.Events;       // for UnityEvent
 
 public delegate void MovementDelegate
 (
@@ -21,8 +19,6 @@ public delegate void MovementDelegate
 
 public static class EventHandler
 {
-    #region 移动事件
-
     // 移动事件
     public static event MovementDelegate MovementEvent;
 
@@ -56,9 +52,7 @@ public static class EventHandler
     }
 
 
-    #endregion
 
-    #region 库存系统
 
     // 库存内容更改事件
     public static event Action<InventoryLocation, List<InventoryItem>> InventoryUpdatedEvent;
@@ -72,9 +66,7 @@ public static class EventHandler
         }
     }
 
-    #endregion
 
-    #region 游戏时间系统事件
 
     /// <summary>
     /// 时间系统的Event，传入参数的含义见下方CallAdvanceGAmeMinuteEvent
@@ -137,9 +129,7 @@ public static class EventHandler
         }
     }
 
-    #endregion
 
-    #region 游戏场景加载事件，属于游戏场景加载系统模块，供全局注册
 
     // 定义场景卸载淡出之前的事件
     public static event Action BeforeSceneUnloadFadeOutEvent;
@@ -206,9 +196,7 @@ public static class EventHandler
         }
     }
 
-    #endregion 游戏场景加载事件
 
-    #region 扔出物体
 
     public static event Action DropSelectedItemEvent;
 
@@ -222,9 +210,7 @@ public static class EventHandler
         DropSelectedItemEvent();
     }
 
-    #endregion 扔出物体
 
-    #region 收获系统
 
     public static event Action<Vector3, HarvestActionEffect> HarvestActionEffectEvent;
 
@@ -246,7 +232,14 @@ public static class EventHandler
         }
     }
 
-    #endregion
+
+    public static event Action InstantiateCropPrefabsEvent;
+
+    public static void CallInstantiateCropPrefabsEvent()
+    {
+        if (InstantiateCropPrefabsEvent != null)
+        {
+            InstantiateCropPrefabsEvent();
+        }
+    }
 }
-
-
