@@ -12,7 +12,7 @@ using UnityEngine.UI;
 /// </remarks>
 public class GridCursor : MonoBehaviour
 {
-    #region Properties
+    #region 属性
 
     #region Serialize filed
 
@@ -98,7 +98,7 @@ public class GridCursor : MonoBehaviour
 
     #endregion Public Visitor
 
-    #endregion Properties
+    #endregion 属性
 
 
     #region 脚本生命周期
@@ -331,6 +331,7 @@ public class GridCursor : MonoBehaviour
                 }
             case ItemType.ChoppingTool:
             case ItemType.CollectingTool:
+            case ItemType.BreakingTool:
                 if (gridPropertyDetails.SeedItemCode != -1)
                 {
                     CropDetails cropDetails = so_CropDetailsList.GetCropDetails(gridPropertyDetails.SeedItemCode);

@@ -122,6 +122,7 @@ namespace Enums
         Carry,
         Hoe,
         Axe,
+        PickAxe,
         Scythe,
         WateringCan,
         Count

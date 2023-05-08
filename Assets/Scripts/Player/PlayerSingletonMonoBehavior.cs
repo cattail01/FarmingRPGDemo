@@ -13,8 +13,6 @@ public class PlayerSingletonMonoBehavior :
 
     #region 运动动画参数
 
-    // 
-
     private float xInput;
     private float yInput;
     private bool isWalking;
@@ -41,7 +39,6 @@ public class PlayerSingletonMonoBehavior :
     private bool idleDown;
     private bool idleLeft;
     private bool idleRight;
-
 
     #endregion 运动动画参数
 
@@ -325,8 +322,7 @@ public class PlayerSingletonMonoBehavior :
     private List<CharacterAttribute> characterAttributeList;
 
     // 在预制件中填充，用于显示举过头顶的物品
-    [Tooltip("Should be populate in the prefab with the equipped item sprite renderer")]
-    [SerializeField]
+    [Tooltip("Should be populate in the prefab with the equipped item sprite renderer")] [SerializeField]
     private SpriteRenderer equippedItemSpriteRenderer;
 
     // 要更改动画的参数
@@ -382,6 +378,7 @@ public class PlayerSingletonMonoBehavior :
 
         isCarrying = false;
     }
+
     private void PlayerClickInput()
     {
         if (!playerToolUseDisable)
@@ -435,6 +432,7 @@ public class PlayerSingletonMonoBehavior :
             case ItemType.ReapingTool:
             case ItemType.CollectingTool:
             case ItemType.ChoppingTool:
+            case ItemType.BreakingTool:
                 ProcessPlayerClickInputTool(gridPropertyDetails, itemDetails, playerDirection);
                 break;
             case ItemType.None:
@@ -470,7 +468,6 @@ public class PlayerSingletonMonoBehavior :
             GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
 
             EventHandler.CallRemoveSelectedItemFromInventoryEvent();
-
         }
     }
 
@@ -481,7 +478,6 @@ public class PlayerSingletonMonoBehavior :
             EventHandler.CallDropSelectedItemEvent();
         }
     }
-
 
 
     private void ProcessPlayerClickInputTool(GridPropertyDetails gridPropertyDetails, ItemDetails itemDetails,
@@ -495,12 +491,14 @@ public class PlayerSingletonMonoBehavior :
                 {
                     HoeGroundAtCursor(gridPropertyDetails, playerDirection);
                 }
+
                 break;
             case ItemType.WateringTool:
                 if (gridCursor.CursorPositionIsValid)
                 {
                     WaterGroundAtCursor(gridPropertyDetails, playerDirection);
                 }
+
                 break;
             case ItemType.ReapingTool:
                 if (cursor.CursorPositionIsValid)
@@ -508,22 +506,58 @@ public class PlayerSingletonMonoBehavior :
                     playerDirection = GetPlayerDirection(cursor.GetWorldPositionForCursor(), GetPlayerCenterPosition());
                     ReapInPlayerDirectionAtCursor(itemDetails, playerDirection);
                 }
+
                 break;
             case ItemType.CollectingTool:
                 if (gridCursor.CursorPositionIsValid)
                 {
                     CollectInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
                 }
+
                 break;
             case ItemType.ChoppingTool:
                 if (gridCursor.CursorPositionIsValid)
                 {
                     ChopInPlayerDirection(gridPropertyDetails, itemDetails, playerDirection);
                 }
+
+                break;
+            case ItemType.BreakingTool:
+                if (gridCursor.CursorPositionIsValid)
+                {
+                    BreakInputDirection(gridPropertyDetails, itemDetails, playerDirection);
+                }
                 break;
             default:
                 break;
         }
+    }
+
+    private void BreakInputDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails,
+        Vector3Int playerDirection)
+    {
+        StartCoroutine(BreakInputDirectionRoutine(gridPropertyDetails, equippedItemDetails, playerDirection));
+    }
+
+    private IEnumerator BreakInputDirectionRoutine(GridPropertyDetails gridPropertyDetails,
+        ItemDetails equippedItemDetails, Vector3Int playerDirection)
+    {
+        PlayerInputIsDisable = true;
+        playerToolUseDisable = true;
+
+        toolCharacterAttribute.partVariantType = PartVariantType.PickAxe;
+        characterAttributeList.Clear();
+        characterAttributeList.Add(toolCharacterAttribute);
+        animationOverride.ApplyCharacterCustomisationParameters(characterAttributeList);
+
+        ProcessCropWithEquippedItemInPlayerDirection(playerDirection, equippedItemDetails, gridPropertyDetails);
+
+        yield return useToolAnimationPause;
+
+        yield return afterUseToolAnimationPause;
+
+        PlayerInputIsDisable = false;
+        playerToolUseDisable = false;
     }
 
     private void ChopInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails,
@@ -590,17 +624,19 @@ public class PlayerSingletonMonoBehavior :
                 {
                     isPickingLeft = true;
                 }
-                else if(playerDirection == Vector3Int.up)
+                else if (playerDirection == Vector3Int.up)
                 {
-                    isPickingUp  = true;
+                    isPickingUp = true;
                 }
                 else if (playerDirection == Vector3Int.down)
                 {
                     isPickingDown = true;
                 }
+
                 break;
 
             case ItemType.ChoppingTool:
+            case ItemType.BreakingTool:
 
                 if (playerDirection == Vector3Int.right)
                 {
@@ -634,6 +670,7 @@ public class PlayerSingletonMonoBehavior :
             switch (equippedItemDetails.ItemType)
             {
                 case ItemType.CollectingTool:
+                case ItemType.BreakingTool:
                     crop.ProcessToolAction(equippedItemDetails, isPickingRight, isPickingLeft, isPickingDown,
                         isPickingUp);
                     break;
@@ -758,7 +795,6 @@ public class PlayerSingletonMonoBehavior :
 
     private IEnumerator ReapInPlayerDirectionAtCursorRoutine(ItemDetails itemDetails, Vector3Int playerDirection)
     {
-
         //throw new NotImplementedException();
 
         PlayerInputIsDisable = true;
@@ -791,14 +827,15 @@ public class PlayerSingletonMonoBehavior :
                     {
                         isSwingingToolLeft = true;
                     }
-                    else if(playerDirection == Vector3Int.up)
+                    else if (playerDirection == Vector3Int.up)
                     {
                         isSwingingToolUp = true;
                     }
-                    else if(playerDirection == Vector3Int.down)
+                    else if (playerDirection == Vector3Int.down)
                     {
                         isSwingingToolDown = true;
                     }
+
                     break;
             }
 
