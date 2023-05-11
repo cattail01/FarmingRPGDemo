@@ -10,7 +10,6 @@ using UnityEngine;
 public static class Settings
 {
 
-
     public const string HoeingTool = "Hoe";
     public const string ChoppingTool = "Axe";
     public const string BreakingTool = "Pickaxe";
