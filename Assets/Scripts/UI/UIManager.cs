@@ -15,6 +15,12 @@ public class UIManager : SingletonMonoBehavior<UIManager>
     // 控制菜单页面的所有按钮
     [SerializeField] private Button[] menuButtons;
 
+    // ui 下面的物品栏
+    [SerializeField] private UIInventoryBar uiInventoryBar;
+
+    // 暂停菜单仓库管理
+    [SerializeField] private PauseMenuInventoryManagement pausedMenuInventoryManagement;
+
     // 暂停菜单激活状态
     private bool _pauseMenuOn;
 
@@ -111,6 +117,10 @@ public class UIManager : SingletonMonoBehavior<UIManager>
     /// </summary>
     private void EnablePauseMenu()
     {
+        uiInventoryBar.DestroyCurrentlyDraggedItems();
+
+        uiInventoryBar.ClearCurrentlySelectedItems();
+
         // 设置暂停菜单开启标志为开启
         PauseMenuOn = true;
         // 禁用输入功能
@@ -132,6 +142,8 @@ public class UIManager : SingletonMonoBehavior<UIManager>
     /// </summary>
     public void DisablePauseMenu()
     {
+        pausedMenuInventoryManagement.DestroyCurrentlyDraggedItems();
+
         // 暂停菜单设置状态设置为关闭
         PauseMenuOn = false;
         // 启用输入

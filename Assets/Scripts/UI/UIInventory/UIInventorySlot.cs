@@ -57,7 +57,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
 
     // 因为在slot上拖拽而形成的物体（dragged item）
-    private GameObject draggedItem;
+    public GameObject draggedItem;
 
     // 拖拽开始
     public void OnBeginDrag(PointerEventData eventData)
@@ -241,7 +241,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
     }
 
-    private void ClearSelectedItem()
+    public void ClearSelectedItem()
     {
         ClearCursors();
 
