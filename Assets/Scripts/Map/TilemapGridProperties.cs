@@ -15,6 +15,7 @@ using UnityEngine.Tilemaps;
 [ExecuteAlways]
 public class TilemapGridProperties : MonoBehaviour
 {
+#if UNITY_EDITOR
     [SerializeField] private SO_GridProperties gridProperties;
 
     // 定义瓦片参数enum，默认值为“可挖掘的”
@@ -115,4 +116,5 @@ public class TilemapGridProperties : MonoBehaviour
             }
         }
     }
+#endif
 }

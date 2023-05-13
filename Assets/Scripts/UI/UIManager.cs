@@ -175,6 +175,11 @@ public class UIManager : SingletonMonoBehavior<UIManager>
         }
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     protected override void Awake()
     {
         base.Awake();
