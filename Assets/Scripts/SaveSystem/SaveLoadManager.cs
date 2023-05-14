@@ -1,5 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,10 +13,16 @@ using UnityEngine.SceneManagement;
 /// </remarks>
 public class SaveLoadManager : SingletonMonoBehavior<SaveLoadManager>
 {
-    // 定义可保存对象的列表
+    /// <summary>
+    /// 定义可保存对象的列表
+    /// </summary>
     public List<ISaveable> SaveableObjectList;
 
-    // 初始化
+    public GameSave GameSave;
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
     protected override void Awake()
     {
         base.Awake();
@@ -23,7 +30,9 @@ public class SaveLoadManager : SingletonMonoBehavior<SaveLoadManager>
         SaveableObjectList = new List<ISaveable>();
     }
 
-    // 定义保存当前场景的方法
+    /// <summary>
+    /// 定义保存当前场景的方法
+    /// </summary>
     public void StoreCurrentSceneData()
     {
         foreach (ISaveable saveableObject in SaveableObjectList)
@@ -32,12 +41,63 @@ public class SaveLoadManager : SingletonMonoBehavior<SaveLoadManager>
         }
     }
 
-    // 定义解除存储当前场景的方法
+    /// <summary>
+    /// 定义解除存储当前场景的方法
+    /// </summary>
     public void RestoreCurrentSceneData()
     {
         foreach (ISaveable saveableObject in SaveableObjectList)
         {
             saveableObject.SaveableRestoreScene(SceneManager.GetActiveScene().name);
         }
+    }
+
+    public void LoadDataFromFile()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+
+        if (File.Exists(Application.persistentDataPath + "/WildHopeCreek.dat"))
+        {
+            GameSave = new GameSave();
+
+            FileStream file = File.Open(Application.persistentDataPath + "/WildHopeCreek.dat", FileMode.Open);
+            
+            GameSave = bf.Deserialize(file) as GameSave;
+
+            for (int i = SaveableObjectList.Count - 1; i > -1; --i)
+            {
+                if (GameSave.GameObjectData.ContainsKey(SaveableObjectList[i].SaveableUniqueId))
+                {
+                    SaveableObjectList[i].SaveableLoad(GameSave);
+                }
+                else
+                {
+                    Component component = SaveableObjectList[i] as Component;
+
+                    Destroy(component.gameObject);
+                }
+                file.Close();
+            }
+            UIManager.Instance.DisablePauseMenu();
+        }
+    }
+
+    public void SaveDataToFile()
+    {
+        GameSave = new GameSave();
+        foreach (ISaveable SaveableObject in SaveableObjectList)
+        {
+            GameSave.GameObjectData.Add(SaveableObject.SaveableUniqueId, SaveableObject.SaveableSave());
+        }
+
+        BinaryFormatter bf = new BinaryFormatter();
+
+        FileStream file = File.Open(Application.persistentDataPath + "/WildHopeCreek.dat", FileMode.Create);
+
+        bf.Serialize(file, GameSave);
+
+        file.Close();
+
+        UIManager.Instance.DisablePauseMenu();
     }
 }

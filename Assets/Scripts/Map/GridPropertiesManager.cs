@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(GenerateGUID))]
@@ -88,6 +89,18 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         {
             isFirstTimeSceneLoaded = false;
         }
+    }
+
+    public void SaveableLoad(GameSave gameSave)
+    {
+        GameObjectSave = gameObjectSave;
+        SaveableRestoreScene(SceneManager.GetActiveScene().name);
+    }
+
+    public GameObjectSave SaveableSave()
+    {
+        SaveableStoreScene(SceneManager.GetActiveScene().name);
+        return GameObjectSave;
     }
 
     protected override void Awake()

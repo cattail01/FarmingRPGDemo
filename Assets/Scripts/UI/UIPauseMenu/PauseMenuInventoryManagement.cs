@@ -1,6 +1,5 @@
-﻿using System.Collections;
+﻿using Enums;
 using System.Collections.Generic;
-using Enums;
 using UnityEngine;
 
 public class PauseMenuInventoryManagement : MonoBehaviour

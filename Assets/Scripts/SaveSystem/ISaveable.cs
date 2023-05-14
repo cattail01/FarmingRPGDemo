@@ -20,4 +20,8 @@ public interface ISaveable
 
     // 定义解保存场景的方法
     void SaveableRestoreScene(string sceneName);
+
+    GameObjectSave SaveableSave();
+
+    void SaveableLoad(GameSave gameSave);
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 场景物品管理器
@@ -126,6 +127,21 @@ public class SceneItemManager : SingletonMonoBehavior<SceneItemManager>, ISaveab
             // 按照SceneItemList创建物体
             InstantiateSceneItems(sceneSave.SceneItemList);
         }
+    }
+
+    public void SaveableLoad(GameSave gameSave)
+    {
+        if (gameSave.GameObjectData.TryGetValue(SaveableUniqueId, out GameObjectSave gameObjectSave))
+        {
+            GameObjectSave = gameObjectSave;
+            SaveableRestoreScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    public GameObjectSave SaveableSave()
+    {
+        SaveableStoreScene(SceneManager.GetActiveScene().name);
+        return GameObjectSave;
     }
 
     #endregion ISaveable 的部分

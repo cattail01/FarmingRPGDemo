@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Enums;
+﻿using Enums;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

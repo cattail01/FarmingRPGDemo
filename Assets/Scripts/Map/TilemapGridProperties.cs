@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Enums;
-using UnityEngine;
+﻿using Enums;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 /// <summary>
