@@ -6,7 +6,7 @@ using Enums;
 /// <summary>
 /// 库存管理类：实现物品item中的itemCode与scriptable object中的资料的联系
 /// </summary>
-public class InventoryManager : SingletonMonoBehavior<InventoryManager>
+public class InventoryManager : SingletonMonoBehavior<InventoryManager>, ISaveable
 {
     /// <summary>
     /// 强制在editor中显示所需要的SO_ItemList对象
@@ -32,6 +32,26 @@ public class InventoryManager : SingletonMonoBehavior<InventoryManager>
     [HideInInspector]
     public int[] inventoryListCapacityIntArray;
 
+    private string saveableUniqueId;
+
+    public string SaveableUniqueId
+    {
+        get => saveableUniqueId;
+        set => saveableUniqueId = value;
+    }
+
+    private GameObjectSave gameObjectSave;
+
+    public GameObjectSave GameObjectSave
+    {
+        get => gameObjectSave;
+        set => gameObjectSave = value;
+    }
+
+
+    private UIInventoryBar inventoryBar;
+
+
     protected override void Awake()
     {
         if (itemList == null)
@@ -49,8 +69,95 @@ public class InventoryManager : SingletonMonoBehavior<InventoryManager>
         strBuilder = new StringBuilder();
         CreateItemTypeToDescriptionDic();
         CreateSelectedInventoryItemAwake();
+
+        SaveableUniqueId = GetComponent<GenerateGUID>().GUID;
+
+        GameObjectSave = new GameObjectSave();
     }
 
+    private void Start()
+    {
+        inventoryBar = FindObjectOfType<UIInventoryBar>();
+    }
+
+    private void OnEnable()
+    {
+        SaveableRegister();
+    }
+
+    private void OnDisable()
+    {
+        SaveableUnregister();
+    }
+
+    public void SaveableStoreScene(string sceneName)
+    {
+
+    }
+
+    public void SaveableRestoreScene(string SceneName)
+    {
+
+    }
+
+    public GameObjectSave SaveableSave()
+    {
+        SceneSave sceneSave = new SceneSave();
+
+        GameObjectSave.sceneData_SceneNameToSceneSave.Remove(Settings.PersistentScene);
+
+        sceneSave.ListInvItemArray = inventoryItemListArray;
+
+        sceneSave.intArrayDictionary = new Dictionary<string, int[]>();
+        sceneSave.intArrayDictionary.Add("inventoryListCapacityArray", inventoryListCapacityIntArray);
+
+        GameObjectSave.sceneData_SceneNameToSceneSave.Add(Settings.PersistentScene, sceneSave);
+
+        return GameObjectSave;
+    }
+
+    public void SaveableLoad(GameSave gameSave)
+    {
+        if(gameSave.GameObjectData.TryGetValue(SaveableUniqueId, out GameObjectSave gameObjectSave))
+        {
+            GameObjectSave = gameObjectSave;
+
+            if (gameObjectSave.sceneData_SceneNameToSceneSave.TryGetValue(Settings.PersistentScene,
+                    out SceneSave sceneSave))
+            {
+                if (sceneSave.ListInvItemArray != null)
+                {
+                    inventoryItemListArray = sceneSave.ListInvItemArray;
+
+                    for (int i = 0; i < (int)InventoryLocation.count; ++i)
+                    {
+                        EventHandler.CallInventoryUpdatedEvent((InventoryLocation)i, inventoryItemListArray[i]);
+                    }
+
+                    PlayerSingletonMonoBehavior.Instance.ClearCarriedItem();
+
+                    inventoryBar.ClearHighlightOnInventorySlot();
+                }
+
+                if (sceneSave.intArrayDictionary != null &&
+                    sceneSave.intArrayDictionary.TryGetValue("inventoryListCapacityArray",
+                        out int[] inventoryCapacityArray))
+                {
+                    inventoryListCapacityIntArray = inventoryCapacityArray;
+                }
+            }
+        }
+    }
+
+    public void SaveableRegister()
+    {
+        SaveLoadManager.Instance.SaveableObjectList.Add(this);
+    }
+
+    public void SaveableUnregister()
+    {
+        SaveLoadManager.Instance.SaveableObjectList.Remove(this);
+    }
 
     /// <summary>
     /// 创建ItemDetailsDictionary

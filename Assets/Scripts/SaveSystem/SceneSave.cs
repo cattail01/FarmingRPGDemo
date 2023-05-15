@@ -26,4 +26,8 @@ public class SceneSave
     public Dictionary<string, string> StringDictionary;
 
     public Dictionary<string, Vector3Serializable> Vector3Dictionary;
+
+    public List<InventoryItem>[] ListInvItemArray;
+
+    public Dictionary<string, int[]> intArrayDictionary;
 }
