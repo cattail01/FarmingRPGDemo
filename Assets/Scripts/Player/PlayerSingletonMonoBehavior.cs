@@ -1,13 +1,15 @@
-﻿using Enums;
+﻿using System;
+using Enums;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 游戏主角
 /// </summary>
 public class PlayerSingletonMonoBehavior :
-    SingletonMonoBehavior<PlayerSingletonMonoBehavior>
+    SingletonMonoBehavior<PlayerSingletonMonoBehavior>, ISaveable
 {
     #region 属性
 
@@ -90,6 +92,22 @@ public class PlayerSingletonMonoBehavior :
 
     private WaitForSeconds AfterPickAnimationPause;
 
+    private string saveableUniqueId;
+
+    public string SaveableUniqueId
+    {
+        get => saveableUniqueId;
+        set => saveableUniqueId = value;
+    }
+
+    private GameObjectSave gameObjectSave;
+
+    public GameObjectSave GameObjectSave
+    {
+        get => gameObjectSave;
+        set => gameObjectSave = value;
+    }
+
     protected override void Awake()
     {
         // 创建单例的自己：instance实例化
@@ -99,16 +117,22 @@ public class PlayerSingletonMonoBehavior :
         mainCamera = Camera.main;
 
         InitializeAnimatorOverrideControllerPart();
+
+        SaveableUniqueId = GetComponent<GenerateGUID>().GUID;
+
+        GameObjectSave = new GameObjectSave();
     }
 
     private void OnEnable()
     {
+        SaveableRegister();
         EventHandler.BeforeSceneUnloadFadeOutEvent += DisablePlayerInputAndResetMovement;
         EventHandler.AfterSceneLoadFadeInEvent += EnablePlayerInput;
     }
 
     private void OnDisable()
     {
+        SaveableUnregister();
         EventHandler.BeforeSceneUnloadFadeOutEvent -= DisablePlayerInputAndResetMovement;
         EventHandler.AfterSceneLoadFadeInEvent -= EnablePlayerInput;
     }
@@ -135,6 +159,109 @@ public class PlayerSingletonMonoBehavior :
     private void FixedUpdate()
     {
         PlayerMovement();
+    }
+
+    public void SaveableStoreScene(string sceneName)
+    {
+
+    }
+
+    public void SaveableRestoreScene(string sceneName)
+    {
+
+    }
+
+    private void SetPlayerDirection(Direction playerDirection)
+    {
+        switch (playerDirection)
+        {
+            case Direction.Up:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.None, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, false,
+                    false, true, false);
+                break;
+            case Direction.Down:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.None, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, false,
+                    false, false, true);
+
+                break;
+            case Direction.Left:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.None, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, false,
+                    true, false, false);
+                break;
+            case Direction.Right:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.None, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, true,
+                    false, false, false);
+                break;
+            default:
+                EventHandler.CallMovementEvent(0f, 0f, false, false, false, false, ToolEffect.None, false, false, false,
+                    false, false, false, false, false, false, false, false, false, false, false, false, false, false,
+                    false, false, true);
+                break;
+        }
+    }
+
+    public GameObjectSave SaveableSave()
+    {
+        GameObjectSave.sceneData_SceneNameToSceneSave.Remove(Settings.PersistentScene);
+        SceneSave sceneSave = new SceneSave();
+        sceneSave.Vector3Dictionary = new Dictionary<string, Vector3Serializable>();
+        sceneSave.StringDictionary = new Dictionary<string, string>();
+        Vector3Serializable vector3Serializable =
+            new Vector3Serializable(transform.position.x, transform.position.y, transform.position.z);
+        sceneSave.Vector3Dictionary.Add("playerPosition", vector3Serializable);
+        sceneSave.StringDictionary.Add("currentScene", SceneManager.GetActiveScene().name);
+        sceneSave.StringDictionary.Add("playerDirection", playerDirection.ToString());
+        GameObjectSave.sceneData_SceneNameToSceneSave.Add(Settings.PersistentScene, sceneSave);
+        return GameObjectSave;
+    }
+
+    public void SaveableLoad(GameSave gameSave)
+    {
+        if (gameSave.GameObjectData.TryGetValue(SaveableUniqueId, out GameObjectSave gameObjectSave))
+        {
+            if (gameObjectSave.sceneData_SceneNameToSceneSave.TryGetValue(Settings.PersistentScene,
+                    out SceneSave sceneSave))
+            {
+                if (sceneSave.Vector3Dictionary != null &&
+                    sceneSave.Vector3Dictionary.TryGetValue("playerPosition", out Vector3Serializable playerPosition))
+                {
+                    transform.position = new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
+                }
+
+                if (sceneSave.StringDictionary != null)
+                {
+                    if (sceneSave.StringDictionary.TryGetValue("currentScene", out string currentScene))
+                    {
+                        SceneControllerManager.Instance.FadeAndLoadScene(currentScene, transform.position);
+                    }
+
+                    if (sceneSave.StringDictionary.TryGetValue("playerDirection", out string playerDir))
+                    {
+                        bool playerDirFound = Enum.TryParse<Direction>(playerDir, true, out Direction direction);
+
+                        if (playerDirFound)
+                        {
+                            playerDirection = direction;
+                            SetPlayerDirection(playerDirection);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void SaveableRegister()
+    {
+        SaveLoadManager.Instance.SaveableObjectList.Add(this);
+    }
+
+    public void SaveableUnregister()
+    {
+        SaveLoadManager.Instance.SaveableObjectList.Remove(this);
     }
 
     private void PlayerMovementController()

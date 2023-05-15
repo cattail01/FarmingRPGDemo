@@ -18,7 +18,7 @@ public class SaveLoadManager : SingletonMonoBehavior<SaveLoadManager>
     /// </summary>
     public List<ISaveable> SaveableObjectList;
 
-    public GameSave GameSave;
+    public  GameSave GameSave;
 
     /// <summary>
     /// 初始化
@@ -76,10 +76,12 @@ public class SaveLoadManager : SingletonMonoBehavior<SaveLoadManager>
 
                     Destroy(component.gameObject);
                 }
-                file.Close();
             }
-            UIManager.Instance.DisablePauseMenu();
+            file.Close();
+
         }
+        UIManager.Instance.DisablePauseMenu();
+
     }
 
     public void SaveDataToFile()

@@ -153,6 +153,8 @@ public static class Settings
     public const int MaxCollidersToTestPerReapSwing = 15;
     public const int MaxTargetComponentsToDestroyPerReapSwing = 2;
 
+    public const string PersistentScene = "PersistentScene";
+
     // constructor
     static Settings()
     {

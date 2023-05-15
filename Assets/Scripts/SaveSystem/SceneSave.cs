@@ -22,4 +22,8 @@ public class SceneSave
     public Dictionary<string, GridPropertyDetails> NameToGridPropertyDetailsDic;
 
     public Dictionary<string, bool> BoolDictionary;
+
+    public Dictionary<string, string> StringDictionary;
+
+    public Dictionary<string, Vector3Serializable> Vector3Dictionary;
 }
