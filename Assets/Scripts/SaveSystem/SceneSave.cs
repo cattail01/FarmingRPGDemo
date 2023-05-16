@@ -30,4 +30,7 @@ public class SceneSave
     public List<InventoryItem>[] ListInvItemArray;
 
     public Dictionary<string, int[]> intArrayDictionary;
+
+    public Dictionary<string, int> intDictionary;
+
 }

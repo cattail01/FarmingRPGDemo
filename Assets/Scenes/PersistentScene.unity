@@ -3972,6 +3972,7 @@ GameObject:
   m_Component:
   - component: {fileID: 613191950}
   - component: {fileID: 613191951}
+  - component: {fileID: 613191952}
   m_Layer: 0
   m_Name: InventoryManager
   m_TagString: GameController
@@ -4008,6 +4009,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemList: {fileID: 11400000, guid: 10aa1dfc45cbace4589042a44e47aff2, type: 2}
   inventoryListCapacityIntArray: 
+--- !u!114 &613191952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613191949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47287bc1c469196419960aa41cbb686b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: 8de0be4e-05b5-4982-9d8d-ce613f1bfcd4
 --- !u!1 &619528597
 GameObject:
   m_ObjectHideFlags: 0
@@ -10331,6 +10345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1841701553}
   - component: {fileID: 1841701554}
+  - component: {fileID: 1841701555}
   m_Layer: 0
   m_Name: TimeManager
   m_TagString: Untagged
@@ -10365,6 +10380,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c081d53533ccfb4ea3c9bbee0cfff3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1841701555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841701552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47287bc1c469196419960aa41cbb686b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guid: ecea81bd-f661-4e48-a26a-85f980919665
 --- !u!1001 &1877336548
 PrefabInstance:
   m_ObjectHideFlags: 0
