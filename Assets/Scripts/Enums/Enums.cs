@@ -185,4 +185,16 @@ namespace Enums
     }
 
     #endregion
+
+    #region 换装部分
+
+    public enum Facing
+    {
+        None,
+        Front,
+        Back,
+        Right
+    }
+
+    #endregion
 }

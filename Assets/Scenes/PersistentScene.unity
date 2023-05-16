@@ -12299,6 +12299,14 @@ PrefabInstance:
       propertyPath: CanyonOakTreePrefab
       value: 
       objectReference: {fileID: 3383488871526901921, guid: ac2344aec7a76374aa7d867e041c9d38, type: 3}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: inputSex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: inputShirtStyleNo
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
 --- !u!1001 &4638287506116829771
