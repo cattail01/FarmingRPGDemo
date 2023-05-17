@@ -8,7 +8,6 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(GenerateGUID))]
 public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager>, ISaveable
 {
-
     public string saveableUniqueId;
 
     public string SaveableUniqueId
@@ -429,13 +428,11 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         else if (upDug && downDug && !rightDug && !leftDug)
         {
             return dugGround[8];
-
         }
 
         else if (upDug && !downDug && rightDug && !leftDug)
         {
             return dugGround[9];
-
         }
         else if (upDug && !downDug && rightDug && leftDug)
         {
@@ -453,18 +450,18 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         else if (!upDug && !downDug && rightDug && !leftDug)
         {
             return dugGround[13];
-
         }
         else if (!upDug && !downDug && rightDug && leftDug)
         {
             return dugGround[14];
-
         }
         else if (!upDug && !downDug && !rightDug && leftDug)
         {
             return dugGround[15];
         }
+
         return null;
+
         #endregion 根据周围的瓷砖是否挖好来设置合适的瓷砖
     }
 
@@ -664,6 +661,7 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
                 }
             }
         }
+
         DisplayGridPropertyDetails();
     }
 
@@ -751,6 +749,7 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
                 break;
             }
         }
+
         return crop;
     }
 
@@ -759,4 +758,25 @@ public class GridPropertiesManager : SingletonMonoBehavior<GridPropertiesManager
         return so_CropDetailsList.GetCropDetails(seedItemCode);
     }
 
+    public bool GetGridDimensions(SceneName sceneName, out Vector2Int gridDimensions, out Vector2Int gridOrigin)
+    {
+        gridDimensions = Vector2Int.zero;
+        gridOrigin = Vector2Int.zero;
+
+        foreach (SO_GridProperties soGridProperties in gridPropertiesArray)
+        {
+            if (soGridProperties.SceneName == sceneName)
+            {
+                gridDimensions.x = soGridProperties.GridWidth;
+                gridDimensions.y = soGridProperties.GridHeight;
+
+                gridOrigin.x = soGridProperties.OriginX;
+                gridOrigin.y = soGridProperties.OriginY;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
