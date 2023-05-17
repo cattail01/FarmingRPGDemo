@@ -16,7 +16,6 @@ public class ColorSwap
     }
 }
 
-
 public class ApplyCharacterCustomisation: MonoBehaviour
 {
     [Header("Base Textures")] [SerializeField]
@@ -24,11 +23,14 @@ public class ApplyCharacterCustomisation: MonoBehaviour
 
     [SerializeField] private Texture2D femaleFarmerBaseTexture;
     [SerializeField] private Texture2D shirtsBaseTexture;
+    [SerializeField] private Texture2D hairBaseTexture;
 
     private Texture2D farmerBaseTexture;
 
     [Header("Output Base Texture To Be Used For Animation")] [SerializeField]
     private Texture2D farmerBaseCustomised;
+
+    [SerializeField] private Texture2D hairCustomised;
 
     private Texture2D farmerBaseShirtsUpdated;
     private Texture2D selectedShirt;
@@ -36,10 +38,17 @@ public class ApplyCharacterCustomisation: MonoBehaviour
     [Header("Select Shirt Style")] [Range(0, 1)] [SerializeField]
     private int inputShirtStyleNo;
 
+    [Header("Select Hair Style")] [Range(0, 2)] [SerializeField]
+    private int inputHairStyleNo;
+
     [Header("Select Sex: 0-Male, 1-Female")]
     [Range(0, 1)]
     [SerializeField]
     private int inputSex;
+
+
+    [SerializeField] private Color inputTrouserColor = Color.blue;
+    [SerializeField] private Color inputHairColor = Color.black;
 
     private Facing[,] bodyFacingArray;
     private Vector2Int[,] bodyShirtOffsetArray;
@@ -55,11 +64,16 @@ public class ApplyCharacterCustomisation: MonoBehaviour
     private int shirtSpriteHeight = 9;
     private int shirtStylesInSpriteWidth = 16;
 
+    private int hairTextureWidth = 16;
+    private int hairTextureHeight = 96;
+    private int hairStylesInSpriteWidth = 8;
+
     private List<ColorSwap> colorSwapList;
 
     private Color32 armTargetColor1 = new Color32(77, 13, 13, 255);
     private Color32 armTargetColor2 = new Color32(138, 41, 41, 255);
     private Color32 armTargetColor3 = new Color32(172, 50, 50, 255);
+
 
     private void MergeColourArray(Color[] baseArray, Color[] mergeArray)
     {
@@ -88,7 +102,8 @@ public class ApplyCharacterCustomisation: MonoBehaviour
     {
         Color[] farmerShirtPixels =
             farmerBaseShirtsUpdated.GetPixels(0, 0, bodyColumns * farmerSpriteWidth, farmerBaseTexture.height);
-        Color[] farmerTrouserPixelsSelection = farmerBaseTexture.GetPixels(288, 0, 96, farmerBaseTexture.height);
+        //Color[] farmerTrouserPixelsSelection = farmerBaseTexture.GetPixels(288, 0, 96, farmerBaseTexture.height);
+        Color[] farmerTrouserPixelsSelection = farmerBaseCustomised.GetPixels(288, 0, 96, farmerBaseTexture.height);
         Color[] farmerBodyPixels =
             farmerBaseCustomised.GetPixels(0, 0, bodyColumns * farmerSpriteWidth, farmerBaseTexture.height);
         MergeColourArray(farmerBodyPixels, farmerTrouserPixelsSelection);
@@ -561,11 +576,54 @@ public class ApplyCharacterCustomisation: MonoBehaviour
         farmerBaseCustomised.Apply();
     }
 
+    private void TintPixelColors(Color[] basePixelArray, Color tintColor)
+    {
+        for (int i = 0; i < basePixelArray.Length; ++i)
+        {
+            basePixelArray[i].r = basePixelArray[i].r * tintColor.r;
+            basePixelArray[i].g = basePixelArray[i].g * tintColor.g;
+            basePixelArray[i].b = basePixelArray[i].b * tintColor.b;
+        }
+    }
+
+    private void ProcessTrousers()
+    {
+        Color[] farmerTrouserPixels = farmerBaseTexture.GetPixels(288, 0, 96, farmerBaseTexture.height);
+        TintPixelColors(farmerTrouserPixels, inputTrouserColor);
+        farmerBaseCustomised.SetPixels(288, 0, 96, farmerBaseTexture.height, farmerTrouserPixels);
+        farmerBaseCustomised.Apply();
+    }
+
+    private void AddHairToTexture(int hairStyleNo)
+    {
+        int y = (hairStyleNo / hairStylesInSpriteWidth) * hairTextureHeight;
+        int x = (hairStyleNo % hairStylesInSpriteWidth) * hairTextureWidth;
+
+        Color[] hairPixels = hairBaseTexture.GetPixels(x, y, hairTextureWidth, hairTextureHeight);
+
+        hairCustomised.SetPixels(hairPixels);
+        hairCustomised.Apply();
+    }
+
+    private void ProcessHair()
+    {
+        AddHairToTexture(inputHairStyleNo);
+
+        Color[] farmerSelectedHairPixels = hairCustomised.GetPixels();
+
+        TintPixelColors(farmerSelectedHairPixels, inputHairColor);
+
+        hairCustomised.SetPixels(farmerSelectedHairPixels);
+        hairCustomised.Apply();
+    }
+
     private void ProcessCustomisation()
     {
         ProcessGender();
         ProcessShirt();
         ProcessArms();
+        ProcessTrousers();
+        ProcessHair();
         MergeCustomisations();
     }
 

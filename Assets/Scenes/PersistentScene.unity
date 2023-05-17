@@ -12304,7 +12304,43 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: hairCustomised
+      value: 
+      objectReference: {fileID: 2800000, guid: 3fdea510f6c395642bec63c0e92feb05, type: 3}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: hairBaseTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 9982bf9edb0201b4583055eb8b80c925, type: 3}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: inputHairColor.b
+      value: 0.29300457
+      objectReference: {fileID: 0}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: inputHairColor.g
+      value: 0.29300457
+      objectReference: {fileID: 0}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: inputHairColor.r
+      value: 0.8773585
+      objectReference: {fileID: 0}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: inputHairStyleNo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
       propertyPath: inputShirtStyleNo
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: inputTrouserColor.b
+      value: 0.708725
+      objectReference: {fileID: 0}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: inputTrouserColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5461506654142447150, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
