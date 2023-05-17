@@ -24,6 +24,7 @@ public class ApplyCharacterCustomisation: MonoBehaviour
     [SerializeField] private Texture2D femaleFarmerBaseTexture;
     [SerializeField] private Texture2D shirtsBaseTexture;
     [SerializeField] private Texture2D hairBaseTexture;
+    [SerializeField] private Texture2D hatsBaseTexture;
 
     private Texture2D farmerBaseTexture;
 
@@ -31,6 +32,7 @@ public class ApplyCharacterCustomisation: MonoBehaviour
     private Texture2D farmerBaseCustomised;
 
     [SerializeField] private Texture2D hairCustomised;
+    [SerializeField] private Texture2D hatsCustomised;
 
     private Texture2D farmerBaseShirtsUpdated;
     private Texture2D selectedShirt;
@@ -48,6 +50,10 @@ public class ApplyCharacterCustomisation: MonoBehaviour
     [Range(0, 1)]
     [SerializeField]
     private int inputSex;
+
+    [Header("Select Hat Style")]
+    [Range(0, 1)]
+    [SerializeField] private int inputHatStyleNo;
 
 
     [SerializeField] private Color inputTrouserColor = Color.blue;
@@ -70,6 +76,10 @@ public class ApplyCharacterCustomisation: MonoBehaviour
     private int hairTextureWidth = 16;
     private int hairTextureHeight = 96;
     private int hairStylesInSpriteWidth = 8;
+
+    private int hatTextureWidth = 20;
+    private int hatTextureHeight = 80;
+    private int hatStylesInSpriteWidth = 12;
 
     private List<ColorSwap> colorSwapList;
 
@@ -672,6 +682,22 @@ public class ApplyCharacterCustomisation: MonoBehaviour
         farmerBaseCustomised.Apply();
     }
 
+    private void AddHatToTexture(int hatStyleNo)
+    {
+        int y = (hatStyleNo / hatStylesInSpriteWidth) * hatTextureHeight;
+        int x = (hatStyleNo % hatStylesInSpriteWidth) * hatTextureWidth;
+
+        Color[] hatPixels = hatsBaseTexture.GetPixels(x, y, hatTextureWidth, hatTextureHeight);
+
+        hatsCustomised.SetPixels(hatPixels);
+        hatsCustomised.Apply();
+    }
+
+    private void ProcessHat()
+    {
+        AddHatToTexture(inputHatStyleNo);
+    }
+
     private void ProcessCustomisation()
     {
         ProcessGender();
@@ -680,6 +706,7 @@ public class ApplyCharacterCustomisation: MonoBehaviour
         ProcessTrousers();
         ProcessHair();
         ProcessSkin();
+        ProcessHat();
         MergeCustomisations();
     }
 

@@ -12388,9 +12388,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2800000, guid: 3fdea510f6c395642bec63c0e92feb05, type: 3}
     - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: hatsCustomised
+      value: 
+      objectReference: {fileID: 2800000, guid: 3f98ab3abed1cec40b1c2e61bead43d6, type: 3}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
       propertyPath: hairBaseTexture
       value: 
       objectReference: {fileID: 2800000, guid: 9982bf9edb0201b4583055eb8b80c925, type: 3}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: hatsBaseTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: bfd5930cb171ad448883f9eca56c9e08, type: 3}
+    - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
+      propertyPath: inputHatStyleNo
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4928582619293249485, guid: 5a7aad72c05b9a746ae8169fb139e13e, type: 3}
       propertyPath: inputHairColor.b
       value: 0.29300457
