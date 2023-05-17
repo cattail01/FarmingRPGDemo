@@ -7538,7 +7538,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   observeMovementPenalties: 1
   pathMovementPenalty: 0
-  defaultMovementPenalty: 0
+  defaultMovementPenalty: 5
 --- !u!114 &1247574947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7546,12 +7546,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1247574944}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2acd06ec212e65b4eb1b2a5df703366d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPosition: {x: 25, y: 5}
+  startPosition: {x: -6, y: 30}
   finishPosition: {x: -19, y: -4}
   tileMapToDisplayPathOn: {fileID: 1936163978}
   tileToUseToDisplayPath: {fileID: 11400000, guid: 68bee61b13c560744b8f7fbae125aee4, type: 2}
