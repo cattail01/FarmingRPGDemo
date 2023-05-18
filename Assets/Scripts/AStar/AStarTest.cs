@@ -1,4 +1,35 @@
-﻿
+﻿using Enums;
+using UnityEngine;
+
+public class AStarTest : MonoBehaviour
+{
+    [SerializeField] private NPCPath npcPath = null;
+    [SerializeField] private bool moveNPC = false;
+    [SerializeField] private Vector2Int finishPosition;
+    [SerializeField] private AnimationClip idleDownAnimationClip;
+    [SerializeField] private AnimationClip eventAnimationClip;
+    private NPCMovement npcMovement;
+
+    private void Start()
+    {
+        npcMovement = npcPath.GetComponent<NPCMovement>();
+        npcMovement.NpcFacingDirectionAtDestination = Direction.Down;
+        npcMovement.NpcTargetAnimationClip = idleDownAnimationClip;
+    }
+
+    private void Update()
+    {
+        if (moveNPC)
+        {
+            moveNPC = false;
+            NPCScheduleEvent npcScheduleEvent = new NPCScheduleEvent(0, 0, 0, 0, Weather.None, Season.None,
+                SceneName.Scene1_Farm, new GridCoordinate(finishPosition.x, finishPosition.y), eventAnimationClip);
+            npcPath.BuildPath(npcScheduleEvent);
+        }
+    }
+}
+
+/*
 using System;
 using System.Collections.Generic;
 using Enums;
@@ -77,3 +108,4 @@ public class AStarTest : MonoBehaviour
     }
 
 }
+*/

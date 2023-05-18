@@ -197,4 +197,13 @@ namespace Enums
     }
 
     #endregion
+
+    #region 游戏天气系统
+
+    public enum Weather
+    {
+        None,
+    }
+
+    #endregion
 }

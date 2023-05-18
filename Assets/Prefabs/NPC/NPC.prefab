@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 781034217321631412}
   - component: {fileID: 781034217321631413}
   - component: {fileID: 1229575079356575968}
+  - component: {fileID: 6013677415654461448}
+  - component: {fileID: 8286297042380932853}
+  - component: {fileID: 7434661448472098833}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -167,4 +170,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47287bc1c469196419960aa41cbb686b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guid: 
+  guid: c7527af0-8e56-423f-8a45-1bd9b348760a
+--- !u!114 &6013677415654461448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781034217321631305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce532c1ede6f82b488482e02e0b504be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8286297042380932853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781034217321631305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c60ab3928d3faab45b90288da2708153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7434661448472098833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781034217321631305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 156ad83f8d10d2f4a9d885fad3915089, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NpcNormalSpeed: 2
+  npcMinSpeed: 1
+  npcMaxSpeed: 3
+  blankAnimation: {fileID: 7400000, guid: de73329f78eb6d645a9a70faf2bddfce, type: 2}
+  NpcCurrentScene: 0
+  NpcTargetScene: 0
+  NpcCurrentGridPosition: {x: 0, y: 0, z: 0}
+  NpcTargetGridPosition: {x: 0, y: 0, z: 0}
+  NpcTargetWorldPosition: {x: 0, y: 0, z: 0}
+  NpcFacingDirectionAtDestination: 0
+  NpcTargetAnimationClip: {fileID: 0}
+  npcActiveInScene: 0

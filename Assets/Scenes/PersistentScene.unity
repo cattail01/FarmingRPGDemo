@@ -7539,6 +7539,7 @@ GameObject:
   - component: {fileID: 1247574945}
   - component: {fileID: 1247574946}
   - component: {fileID: 1247574947}
+  - component: {fileID: 1247574948}
   m_Layer: 0
   m_Name: NPCManager
   m_TagString: Untagged
@@ -7588,12 +7589,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2acd06ec212e65b4eb1b2a5df703366d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPosition: {x: -6, y: 30}
-  finishPosition: {x: -19, y: -4}
-  tileMapToDisplayPathOn: {fileID: 1936163978}
-  tileToUseToDisplayPath: {fileID: 11400000, guid: 68bee61b13c560744b8f7fbae125aee4, type: 2}
-  displayStartAndFinish: 0
-  displayPath: 0
+  npcPath: {fileID: 781034217888035896}
+  moveNPC: 0
+  finishPosition: {x: -6, y: 29}
+  idleDownAnimationClip: {fileID: 7400000, guid: cb83867c6252b5c4a8e8758697474f88, type: 2}
+  eventAnimationClip: {fileID: 7400000, guid: bc72b54e068840044a4b381c76eec014, type: 2}
+--- !u!114 &1247574948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247574944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b2454eedd933b546bfc960c7728e21c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcArray: []
 --- !u!1 &1264461338
 GameObject:
   m_ObjectHideFlags: 0
@@ -12685,6 +12698,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC_Butch
       objectReference: {fileID: 0}
+    - target: {fileID: 781034217321631412, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 781034217321631412, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 781034217321631412, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 781034217321631412, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 781034217321631412, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 781034217321631412, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
+      propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 781034217321631414, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
       propertyPath: m_Controller
       value: 
@@ -12707,6 +12744,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
+--- !u!114 &781034217888035896 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8286297042380932853, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
+  m_PrefabInstance: {fileID: 781034217888035895}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c60ab3928d3faab45b90288da2708153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4638287506116829771
 PrefabInstance:
   m_ObjectHideFlags: 0

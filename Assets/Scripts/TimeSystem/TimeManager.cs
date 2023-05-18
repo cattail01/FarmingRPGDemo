@@ -320,4 +320,10 @@ public class TimeManager : SingletonMonoBehavior<TimeManager>, ISaveable
     {
         gameClockPaused = true;
     }
+
+    public TimeSpan GetGameTime()
+    {
+        TimeSpan gameTime = new TimeSpan(gameHour, gameMinute, gameSecond);
+        return gameTime;
+    }
 }

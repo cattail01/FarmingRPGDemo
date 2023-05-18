@@ -97,12 +97,27 @@ public static class Settings
     public static int idleLeft;
     public static int idleRight;
 
+    public const float GridCellDiagonalSize = 1.41f;
+    public static float PixelSize = 0.0625f;
+
+    public static int WalkUp;
+    public static int WalkDown;
+    public static int WalkLeft;
+    public static int WalkRight;
+    public static int EventAnimation;
+
     /// <summary>
     /// 将animator 中的animation转换参数Parameters中的string转换为hashcode，
     /// 以便于更快的查找到该参数
     /// </summary>
     private static void AnimationTransitionParametersToHashCodeInt()
     {
+        WalkUp = Animator.StringToHash("walkUp");
+        WalkDown = Animator.StringToHash("walkDown");
+        WalkLeft = Animator.StringToHash("walkLeft");
+        WalkRight = Animator.StringToHash("walkRight");
+        EventAnimation = Animator.StringToHash("eventAnimation");
+
         xInput = Animator.StringToHash("xInput");
         yInput = Animator.StringToHash("yInput");
         isWalking = Animator.StringToHash("isWalking");
