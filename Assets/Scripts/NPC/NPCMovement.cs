@@ -371,4 +371,21 @@ public class NPCMovement : MonoBehaviour
             }
         }
     }
+
+    public void CancelNPCMovement()
+    {
+        npcPath.ClearPath();
+        npcNextGridPosition = Vector3Int.zero;
+        npcNextWorldPosition = Vector3.zero;
+        npcIsMoving = false;
+        if (moveToGridPositionRoutine != null)
+        {
+            StopCoroutine(moveToGridPositionRoutine);
+        }
+
+        ResetMoveAnimation();
+        ClearNPCEventAnimation();
+        NpcTargetAnimationClip = null;
+        ResetIdleAnimation();
+    }
 }
