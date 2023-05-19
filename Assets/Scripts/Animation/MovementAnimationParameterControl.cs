@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Enums;
+using UnityEngine;
 
 /// <summary>
 /// 移动动画参数控制类
@@ -106,6 +107,6 @@ public class MovementAnimationParameterControl : MonoBehaviour
     /// </summary>
     private void AnimationEventPlayFootstepSound()
     {
-
+        AudioManager.Instance.PlaySound(SoundName.EffectFootsStepHardGround);
     }
 }

@@ -210,4 +210,33 @@ namespace Enums
     }
 
     #endregion
+
+    #region 声音系统
+
+    public enum SoundName
+    {
+        None = 0,
+        EffectFootsStepSoftGround = 10,
+        EffectFootsStepHardGround = 20,
+        EffectAxe = 30,
+        EffectPickaxe = 40,
+        EffectScythe = 50,
+        EffectHoe = 60,
+        EffectWateringCan = 70,
+        EffectBasket = 80,
+        EffectPickupSound = 90,
+        EffectRustle = 100,
+        EffectTreeFalling = 110,
+        EffectPlantingSound = 120,
+        EffectPluck = 130,
+        EffectStoneShatter = 140,
+        EffectWoodSplinters = 150,
+        AmbientCountryside1 = 1000,
+        AmbientCountryside2 = 1010,
+        AmbientIndoors1 = 1020,
+        MusicCalm3 = 2000,
+        MusicCalm1 = 2010,
+    }
+
+    #endregion
 }
