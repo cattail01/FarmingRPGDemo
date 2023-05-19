@@ -73,13 +73,59 @@ public class NPCPath : MonoBehaviour
             Vector2Int npcTargetGridPosition = (Vector2Int)npcScheduleEvent.ToGridCoordinate;
             NPCManager.Instance.BuildPath(npcScheduleEvent.ToSceneName, npcCurrentGridPosition, npcTargetGridPosition,
                 NpcMovementStepStack);
+        }
 
-            if (NpcMovementStepStack.Count > 1)
+        else if (npcScheduleEvent.ToSceneName != npcMovement.NpcCurrentScene)
+        {
+            SceneRoute sceneRoute;
+            sceneRoute = NPCManager.Instance.GetSceneRoute(npcMovement.NpcCurrentScene.ToString(),
+                npcScheduleEvent.ToSceneName.ToString());
+            if (sceneRoute != null)
             {
-                UpdateTimesOnPath();
-                NpcMovementStepStack.Pop();
-                npcMovement.SetScheduleEventDetails(npcScheduleEvent);
+                for (int i = sceneRoute.ScenePathList.Count - 1; i >= 0; --i)
+                {
+                    int toGridX, toGridY, fromGridX, fromGridY;
+                    ScenePath scenePath = sceneRoute.ScenePathList[i];
+
+                    if (scenePath.ToGridCell.x >= Settings.MaxGridWidth ||
+                        scenePath.ToGridCell.y >= Settings.MaxGridHeight)
+                    {
+                        toGridX = npcScheduleEvent.ToGridCoordinate.x;
+                        toGridY = npcScheduleEvent.ToGridCoordinate.y;
+                    }
+                    else
+                    {
+                        toGridX = scenePath.ToGridCell.x;
+                        toGridY = scenePath.ToGridCell.y;
+                    }
+
+                    if (scenePath.FromGridCell.x >= Settings.MaxGridWidth ||
+                        scenePath.FromGridCell.y >= Settings.MaxGridHeight)
+                    {
+                        fromGridX = npcMovement.NpcCurrentGridPosition.x;
+                        fromGridY = npcMovement.NpcCurrentGridPosition.y;
+                    }
+
+                    else
+                    {
+                        fromGridX = scenePath.FromGridCell.x;
+                        fromGridY = scenePath.FromGridCell.y;
+                    }
+
+                    Vector2Int fromGridPosition = new Vector2Int(fromGridX, fromGridY);
+                    Vector2Int toGridPosition = new Vector2Int(toGridX, toGridY);
+
+                    NPCManager.Instance.BuildPath(scenePath.SceneName, fromGridPosition, toGridPosition,
+                        NpcMovementStepStack);
+                }
             }
+        }
+
+        if (NpcMovementStepStack.Count > 1)
+        {
+            UpdateTimesOnPath();
+            NpcMovementStepStack.Pop();
+            npcMovement.SetScheduleEventDetails(npcScheduleEvent);
         }
     }
 

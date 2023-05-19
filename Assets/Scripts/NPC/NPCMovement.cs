@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Enums;
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using Enums;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
@@ -223,6 +220,8 @@ public class NPCMovement : MonoBehaviour
             SetNPCInactiveInScene();
         }
 
+        npcPreviousMovementStepScene = NpcCurrentScene;
+
         NpcCurrentGridPosition = GetGridPosition(transform.position);
         npcNextGridPosition = NpcCurrentGridPosition;
         NpcTargetGridPosition = NpcCurrentGridPosition;
@@ -320,6 +319,16 @@ public class NPCMovement : MonoBehaviour
                 {
                     NPCMovementStep npcMovementStep = npcPath.NpcMovementStepStack.Peek();
                     NpcCurrentScene = npcMovementStep.SceneName;
+
+                    if (NpcCurrentScene != npcPreviousMovementStepScene)
+                    {
+                        NpcCurrentGridPosition = (Vector3Int)npcMovementStep.GridCoordinate;
+                        npcNextGridPosition = NpcCurrentGridPosition;
+                        transform.position = GetWorldPosition(NpcCurrentGridPosition);
+                        npcPreviousMovementStepScene = NpcCurrentScene;
+                        npcPath.UpdateTimesOnPath();
+                    }
+
                     if (NpcCurrentScene.ToString() == SceneManager.GetActiveScene().name)
                     {
                         SetNPCActiveInScene();
@@ -329,7 +338,27 @@ public class NPCMovement : MonoBehaviour
                             npcMovementStep.Second);
                         MoveToGridPosition(npcNextGridPosition, npcMovementStepTime,
                             TimeManager.Instance.GetGameTime());
+                    }
 
+                    else
+                    {
+                        SetNPCInactiveInScene();
+
+                        NpcCurrentGridPosition = (Vector3Int)npcMovementStep.GridCoordinate;
+                        npcNextGridPosition = NpcCurrentGridPosition;
+                        transform.position = GetWorldPosition(NpcCurrentGridPosition);
+
+                        TimeSpan npcMovementStepTime = new TimeSpan(npcMovementStep.Hour, npcMovementStep.Minute,
+                            npcMovementStep.Second);
+                        TimeSpan gameTime = TimeManager.Instance.GetGameTime();
+
+                        if (npcMovementStepTime < gameTime)
+                        {
+                            npcMovementStep = npcPath.NpcMovementStepStack.Pop();
+                            NpcCurrentGridPosition = (Vector3Int)npcMovementStep.GridCoordinate;
+                            npcNextGridPosition = NpcCurrentGridPosition;
+                            transform.position = GetGridPosition(NpcCurrentGridPosition);
+                        }
                     }
                 }
 

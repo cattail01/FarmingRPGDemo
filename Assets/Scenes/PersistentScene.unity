@@ -7594,6 +7594,7 @@ MonoBehaviour:
   finishPosition: {x: -6, y: 29}
   idleDownAnimationClip: {fileID: 7400000, guid: cb83867c6252b5c4a8e8758697474f88, type: 2}
   eventAnimationClip: {fileID: 7400000, guid: bc72b54e068840044a4b381c76eec014, type: 2}
+  sceneName: 1
 --- !u!114 &1247574948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7606,6 +7607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b2454eedd933b546bfc960c7728e21c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soSceneRouteList: {fileID: 11400000, guid: 1af18e8ca8b612548b7aaedc030d30e5, type: 2}
   npcArray: []
 --- !u!1 &1264461338
 GameObject:

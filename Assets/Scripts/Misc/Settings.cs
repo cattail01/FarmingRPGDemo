@@ -106,6 +106,9 @@ public static class Settings
     public static int WalkRight;
     public static int EventAnimation;
 
+    public const int MaxGridWidth = 99999;
+    public const int MaxGridHeight = 99999;
+
     /// <summary>
     /// 将animator 中的animation转换参数Parameters中的string转换为hashcode，
     /// 以便于更快的查找到该参数

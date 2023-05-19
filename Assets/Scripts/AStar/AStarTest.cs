@@ -8,6 +8,7 @@ public class AStarTest : MonoBehaviour
     [SerializeField] private Vector2Int finishPosition;
     [SerializeField] private AnimationClip idleDownAnimationClip;
     [SerializeField] private AnimationClip eventAnimationClip;
+    [SerializeField] private SceneName sceneName = SceneName.Scene1_Farm;
     private NPCMovement npcMovement;
 
     private void Start()
@@ -23,7 +24,7 @@ public class AStarTest : MonoBehaviour
         {
             moveNPC = false;
             NPCScheduleEvent npcScheduleEvent = new NPCScheduleEvent(0, 0, 0, 0, Weather.None, Season.None,
-                SceneName.Scene1_Farm, new GridCoordinate(finishPosition.x, finishPosition.y), eventAnimationClip);
+                sceneName, new GridCoordinate(finishPosition.x, finishPosition.y), eventAnimationClip);
             npcPath.BuildPath(npcScheduleEvent);
         }
     }
