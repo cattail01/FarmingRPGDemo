@@ -1706,6 +1706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f26570b9eef33046a9c015e0de8f52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentWeather: 0
 --- !u!1 &268095874
 GameObject:
   m_ObjectHideFlags: 0
@@ -12744,6 +12745,10 @@ PrefabInstance:
       propertyPath: guid
       value: 8d308056-595b-4792-bc49-69fdc9b5db4c
       objectReference: {fileID: 0}
+    - target: {fileID: 4404728939538034576, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
+      propertyPath: soNpcScheduleEventList
+      value: 
+      objectReference: {fileID: 11400000, guid: 5f61da38d5508e84eb1ac18bcfb2ca08, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1012f85f2dc35342b3c9af40c512410, type: 3}
 --- !u!114 &781034217888035896 stripped

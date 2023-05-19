@@ -1,0 +1,32 @@
+﻿using System.Collections.Generic;
+
+public class NPCScheduleEventSort : IComparer<NPCScheduleEvent>
+{
+    public int Compare(NPCScheduleEvent npcScheduleEvent1, NPCScheduleEvent npcScheduleEvent2)
+    {
+        if (npcScheduleEvent1?.Time == npcScheduleEvent2?.Time)
+        {
+            if (npcScheduleEvent1?.Priority < npcScheduleEvent2?.Priority)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+        else if (npcScheduleEvent1?.Time >npcScheduleEvent2?.Time)
+        {
+            return 1;
+        }
+        else if (npcScheduleEvent1?.Time < npcScheduleEvent2?.Time)
+        {
+            return -1;
+        }
+
+        else
+        {
+            return 0;
+        }
+    }
+}

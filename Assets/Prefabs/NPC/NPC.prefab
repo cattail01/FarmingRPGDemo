@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6013677415654461448}
   - component: {fileID: 8286297042380932853}
   - component: {fileID: 7434661448472098833}
+  - component: {fileID: 4404728939538034576}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -219,3 +220,16 @@ MonoBehaviour:
   NpcFacingDirectionAtDestination: 0
   NpcTargetAnimationClip: {fileID: 0}
   npcActiveInScene: 0
+--- !u!114 &4404728939538034576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781034217321631305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a0c35a8f1279b4ca9bfa762be2ef97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soNpcScheduleEventList: {fileID: 0}

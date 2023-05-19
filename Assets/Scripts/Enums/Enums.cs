@@ -202,7 +202,11 @@ namespace Enums
 
     public enum Weather
     {
+        Dry,
+        Raining,
+        Snowing,
         None,
+        Count
     }
 
     #endregion
