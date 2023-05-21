@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d9d6379e47c3c5409f5c91a7cd147d9, type: 3}
+  m_Name: soSceneSoundsList
+  m_EditorClassIdentifier: 
+  SceneSoundsDetails:
+  - SceneName: 0
+    AmbientSoundForScene: 1000
+    MusicForScene: 2000
+  - SceneName: 1
+    AmbientSoundForScene: 1010
+    MusicForScene: 2000
+  - SceneName: 2
+    AmbientSoundForScene: 1020
+    MusicForScene: 2010

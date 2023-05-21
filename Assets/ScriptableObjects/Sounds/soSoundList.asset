@@ -120,7 +120,7 @@ MonoBehaviour:
     soundDescription: Sound effect from freesound cc0
     SoundPitchRandomVariationMin: 1
     SoundPitchRandomVariationMax: 1
-    SoundVolume: 0.55
+    SoundVolume: 0.75
   - SoundName: 2000
     SoundClip: {fileID: 8300000, guid: 2b541905ca3cd9347a56ffc11193c35a, type: 3}
     soundDescription: Sound effect from freesound cc0
