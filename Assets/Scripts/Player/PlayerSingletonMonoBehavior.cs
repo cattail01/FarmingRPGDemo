@@ -595,6 +595,8 @@ public class PlayerSingletonMonoBehavior :
             GridPropertiesManager.Instance.DisplayPlantedCrop(gridPropertyDetails);
 
             EventHandler.CallRemoveSelectedItemFromInventoryEvent();
+
+            AudioManager.Instance.PlaySound(SoundName.EffectPlantingSound);
         }
     }
 
@@ -663,6 +665,8 @@ public class PlayerSingletonMonoBehavior :
     private void BreakInputDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails,
         Vector3Int playerDirection)
     {
+        AudioManager.Instance.PlaySound(SoundName.EffectPickaxe);
+
         StartCoroutine(BreakInputDirectionRoutine(gridPropertyDetails, equippedItemDetails, playerDirection));
     }
 
@@ -690,6 +694,8 @@ public class PlayerSingletonMonoBehavior :
     private void ChopInPlayerDirection(GridPropertyDetails gridPropertyDetails, ItemDetails equippedItemDetails,
         Vector3Int playerDirection)
     {
+        AudioManager.Instance.PlaySound(SoundName.EffectAxe);
+
         StartCoroutine(ChopInPlayerDirectionRoutine(gridPropertyDetails, equippedItemDetails, playerDirection));
     }
 
@@ -812,12 +818,16 @@ public class PlayerSingletonMonoBehavior :
 
     private void HoeGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
     {
+        AudioManager.Instance.PlaySound(SoundName.EffectHoe);
+
         // trigger animation
         StartCoroutine(HoeGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
     }
 
     private void WaterGroundAtCursor(GridPropertyDetails gridPropertyDetails, Vector3Int playerDirection)
     {
+        AudioManager.Instance.PlaySound(SoundName.EffectWateringCan);
+
         // trigger animation
         StartCoroutine(WaterGroundAtCursorRoutine(playerDirection, gridPropertyDetails));
     }
@@ -989,6 +999,8 @@ public class PlayerSingletonMonoBehavior :
 
                         // trigger reaping effect
                         EventHandler.CallHarvestActionEffectEvent(effectPosition, HarvestActionEffect.Reaping);
+
+                        AudioManager.Instance.PlaySound(SoundName.EffectScythe);
 
                         Destroy(itemArray[i].gameObject);
                         reapableItemCount++;

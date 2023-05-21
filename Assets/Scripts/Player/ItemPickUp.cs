@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Enums;
 using UnityEngine;
 
 /// <summary>
@@ -51,10 +52,12 @@ public class ItemPickUp : MonoBehaviour
             // // items.Add(item);
 
             // 如果该物体可以被捡起，且背包没满，执行捡起item的方法
-            // todo 将背包检查放到inventory manager的对应方法中
+             // // todo 将背包检查放到inventory manager的对应方法中
             if (inventoryManager.ItemDetailsDictionary[item.ItemCode].CanBePickedUp && inventoryList.Count < inventoryManager.inventoryListCapacityIntArray[(int)Enums.InventoryLocation.player])
             {
                 inventoryManager.AddOneItem(Enums.InventoryLocation.player, item, item.gameObject);
+
+                AudioManager.Instance.PlaySound(SoundName.EffectPickupSound);
             }
         }
     }

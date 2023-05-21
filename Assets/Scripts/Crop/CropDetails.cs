@@ -32,6 +32,8 @@ public class CropDetails
     public int[] CropProducedMaxQuantity;
     public int DaysToRegrow;
 
+    public SoundName HarvestSound;
+
     public bool CanUseToolToHarvestCrop(int toolItemCode)
     {
         if (RequiredHarvestActionsForTool(toolItemCode) == -1)

@@ -158,6 +158,11 @@ public class Crop : MonoBehaviour
         {
             HarvestActions(cropDetails, gridPropertyDetails);
         }
+
+        if (cropDetails.HarvestSound != SoundName.None)
+        {
+            AudioManager.Instance.PlaySound(cropDetails.HarvestSound);
+        }
     }
 
     public void ProcessToolAction(ItemDetails equippedItemDetails, bool isToolRight, bool isToolLeft, bool isToolDown,

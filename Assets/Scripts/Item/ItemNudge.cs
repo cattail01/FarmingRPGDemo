@@ -1,4 +1,5 @@
-using System.Collections;
+﻿using System.Collections;
+using Enums;
 using UnityEngine;
 
 
@@ -36,6 +37,11 @@ public class ItemNudge : MonoBehaviour
             {
                 StartCoroutine(RotateClock());
             }
+
+            if (other.gameObject.tag == "Player")
+            {
+                AudioManager.Instance.PlaySound(SoundName.EffectRustle);
+            }
         }
     }
 
@@ -52,6 +58,11 @@ public class ItemNudge : MonoBehaviour
             else
             {
                 StartCoroutine(RotateClock());
+            }
+
+            if (other.gameObject.tag == "Player")
+            {
+                AudioManager.Instance.PlaySound(SoundName.EffectRustle);
             }
         }
     }
